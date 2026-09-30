@@ -11,6 +11,7 @@
 		"build": "turbo run build",
 		"check-types": "turbo run check-types",
 		"check-types:fumadocs": "pnpm --filter fumadocs run types:check",
+		"check:packages": "pnpm -r --filter \"./packages/*\" run check:package",
 		"check": "biome check --write .",
 		"lint:staged": "lint-staged",
 		"prepare": "husky"

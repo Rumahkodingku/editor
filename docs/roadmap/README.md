@@ -8,8 +8,8 @@ Details for each phase will be saved in separate files in this folder.
 
 | Phase | Name                                    | Status        |
 | ----- | --------------------------------------- | ------------- |
-| 00    | Repository Foundation & Agent Readiness | 🟡 In Progress |
-| 01    | Build & Package Infrastructure          | ⬜             |
+| 00    | Repository Foundation & Agent Readiness | ✅ Done       |
+| 01    | Build & Package Infrastructure          | 🟡 In Progress |
 | 02    | Test Infrastructure                     | ⬜             |
 | 03    | Editor Core                             | ⬜             |
 | 04    | React Adapter                           | ⬜             |
@@ -21,9 +21,10 @@ Details for each phase will be saved in separate files in this folder.
 
 ## Current Phase
 
-**Phase 00 — Repository Foundation & Agent Readiness**
+**Phase 01 — Build & Package Infrastructure**
 
-After Phase 00 is completed, implementation will proceed to Phase 01 and subsequent phases.
+Phase 00 is complete. Implementation is in progress on Phase 01; after its exit
+criteria are met, work proceeds to Phase 02 and subsequent phases.
 
 ## Phase Documents
 

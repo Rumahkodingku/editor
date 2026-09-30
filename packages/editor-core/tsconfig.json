@@ -1,0 +1,7 @@
+{
+	"extends": "@editor/config/tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true
+	},
+	"include": ["src", "tsdown.config.ts"]
+}

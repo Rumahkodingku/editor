@@ -1,0 +1,14 @@
+/*
+ * Style foundation for RumahKodingku Editor.
+ *
+ * Framework-agnostic CSS variables only, no Tailwind. The full default
+ * stylesheet and theming are implemented in Phase 04.
+ */
+
+:root {
+	--rk-editor-background: #ffffff;
+	--rk-editor-foreground: #18181b;
+	--rk-editor-border: #e4e4e7;
+	--rk-editor-muted: #71717a;
+	--rk-editor-radius: 0.375rem;
+}

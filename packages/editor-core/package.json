@@ -1,0 +1,45 @@
+{
+	"name": "@rumahkodingku/editor-core",
+	"version": "0.0.0",
+	"description": "Framework-independent core for RumahKodingku Editor.",
+	"type": "module",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/RumahKodingku/editor.git",
+		"directory": "packages/editor-core"
+	},
+	"sideEffects": false,
+	"files": [
+		"dist"
+	],
+	"engines": {
+		"node": ">=22"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsdown",
+		"dev": "tsdown --watch",
+		"check-types": "tsc --noEmit",
+		"check:package": "publint && attw --pack . --profile esm-only"
+	},
+	"peerDependencies": {
+		"@tiptap/core": "^3.31.3",
+		"@tiptap/pm": "^3.31.3"
+	},
+	"devDependencies": {
+		"@arethetypeswrong/cli": "^0.18.5",
+		"@editor/config": "workspace:*",
+		"@tiptap/core": "^3.31.3",
+		"@tiptap/pm": "^3.31.3",
+		"@types/node": "^26.4.1",
+		"publint": "^0.3.24",
+		"tsdown": "^0.23.0",
+		"typescript": "^6.0.3"
+	}
+}

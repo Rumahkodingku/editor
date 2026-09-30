@@ -7,8 +7,9 @@ The project is a TypeScript monorepo. `editor-core` is designed to stay
 framework-independent so adapters (React first, Vue later) remain thin. React
 is the first supported UI framework.
 
-> This repository is in **Phase 00 — Repository Foundation**. The editor
-> packages do not exist yet; see the roadmap below.
+> This repository is in **Phase 01 — Build & Package Infrastructure**. The editor
+> packages exist as buildable skeletons but contain no features yet; see the
+> roadmap below.
 
 ## Repository Structure
 
@@ -21,11 +22,15 @@ editor/
 ├── apps/
 │   └── fumadocs/            # documentation app (Next.js + Fumadocs)
 ├── docs/
+│   ├── adr/                 # architecture decision records (empty until the first ADR)
 │   └── roadmap/             # implementation roadmap
 ├── packages/
-│   └── config/              # @editor/config — shared tsconfig (internal, not published)
+│   ├── config/              # @editor/config — shared tsconfig (internal, not published)
+│   ├── editor-core/         # @rumahkodingku/editor-core — tsdown build, no features yet
+│   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
 ├── AGENTS.md                # operational rules for AI agents and contributors
 ├── ARCHITECTURE.md          # architecture and constraints
+├── LICENSE                  # MIT
 ├── PRD.md                   # product requirements
 ├── README.md
 ├── biome.json
@@ -40,9 +45,11 @@ editor/
 └── turbo.json
 ```
 
-The target structure (`editor-core`, `editor-react`, `playground`, `docs/adr/`,
-`LICENSE`, `.changeset/`) is defined in `ARCHITECTURE.md` §3.2. Those packages
-and files are created in later phases and do not exist yet.
+`editor-core` and `editor-react` are Phase 01 skeletons: they build to ESM with
+type declarations, expose explicit `exports`, and declare Tiptap/React peer
+contracts, but contain **no editor features yet**. `apps/playground` and
+`.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
+phases.
 
 ## Development
 
@@ -69,18 +76,22 @@ The documentation app (Fumadocs) is served on http://localhost:4000.
 Run from the repository root:
 
 ```bash
+pnpm install                      # Install and regenerate the lockfile
 pnpm run check                    # Biome formatting and linting (mutates files)
-pnpm run check-types              # Turbo type-check across workspaces
+pnpm run check-types              # Turbo type-check (editor-core, editor-react)
 pnpm run check-types:fumadocs     # Fumadocs type-check (next typegen && tsc --noEmit)
 pnpm run build                    # Turbo build
+pnpm run check:packages           # publint + attw for the published packages
 ```
 
 Notes:
 
 - `pnpm run check` runs `biome check --write .` and rewrites files; review the diff.
-- `check-types` covers workspace packages that define a `check-types` script.
-  The Fumadocs app names its script `types:check`, so it is verified separately
-  with `check-types:fumadocs`.
+- `check-types` covers workspace packages that define a `check-types` script
+  (`editor-core`, `editor-react`). The Fumadocs app names its script
+  `types:check`, so it is verified separately with `check-types:fumadocs`.
+- `pnpm run build` builds the package graph in dependency order
+  (`editor-core` before `editor-react`) and then the docs app.
 - `pnpm run test` **does not exist yet**; Vitest is introduced in Phase 02.
 
 ## Documentation

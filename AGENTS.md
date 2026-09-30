@@ -16,8 +16,9 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 ## What actually exists today
 
 - `apps/fumadocs` (Next.js 16 + Fumadocs docs site) and `packages/config` (`@editor/config`, shared tsconfig only).
-- `packages/editor-core`, `packages/editor-react`, `apps/playground`, `.changeset/`, `LICENSE` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` exists but no ADR has been written yet.
-- Root `README.md` was rewritten in Phase 00 and describes RumahKodingku Editor (pnpm, Node >=22, docs on port 4000). The scaffold Varlock workflow and `bunfig.toml` have been removed. Trust `package.json` / `apps/fumadocs/package.json` when the README disagrees.
+- Published packages `packages/editor-core` (`@rumahkodingku/editor-core`) and `packages/editor-react` (`@rumahkodingku/editor-react`) exist as Phase 01 skeletons: tsdown build, explicit `exports`, metadata, Tiptap/React peer contracts, and a placeholder `styles.css`. They contain **no editor API or features yet** — the core API is Phase 03, the React adapter is Phase 04.
+- `apps/playground` and `.changeset/` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` exists but no ADR has been written yet.
+- `LICENSE` (MIT) and root `README.md` (RumahKodingku Editor, pnpm, Node >=22, docs on port 4000) exist. The scaffold Varlock workflow and `bunfig.toml` were removed in Phase 00. `packages/config` (`@editor/config`) still provides the shared tsconfig only.
 
 ## Commands
 
@@ -27,15 +28,16 @@ pnpm only (`packageManager: pnpm@10.34.5`), Node >= 22.
 | ---------------------------------------- | --------------------------------------------------------------------- |
 | `pnpm run dev`                           | turbo dev; fumadocs on `http://localhost:4000`                        |
 | `pnpm run check`                         | `biome check --write .` — **mutates files**, run it before committing |
-| `pnpm run check-types`                   | turbo `check-types` — does **not** cover `apps/fumadocs`              |
+| `pnpm run check-types`                   | turbo `check-types`; covers `editor-core`/`editor-react`, not fumadocs |
 | `pnpm run check-types:fumadocs`          | wrapper for `pnpm --filter fumadocs run types:check`                  |
 | `pnpm --filter fumadocs run types:check` | the real app typecheck (`next typegen && tsc --noEmit`); use this     |
 | `pnpm run build`                         | turbo build, `dependsOn: ["^build"]`                                  |
+| `pnpm run check:packages`                | `publint` + `attw` for `packages/*` (esm-only profile)                |
 | `pnpm run test`                          | **does not exist yet** (Vitest is an open implementation gate, §26.3) |
 
-Trap: the fumadocs package names its script `types:check`, not `check-types`, so turbo's `check-types` task does not cover `apps/fumadocs` (no workspace package defines `check-types` yet). Use `pnpm run check-types:fumadocs` for the app. If you add a library package, name its script `check-types` so turbo picks it up.
+Trap: the fumadocs package names its script `types:check`, not `check-types`, so turbo's `check-types` task does not cover `apps/fumadocs`. The published packages define `check-types`, so `pnpm run check-types` does cover them. Run both `pnpm run check-types` and `pnpm run check-types:fumadocs` for full coverage, and name any new package's script `check-types`.
 
-Verification order: `pnpm run check` → `pnpm --filter fumadocs run types:check` → `pnpm run build`.
+Verification order: `pnpm run check` → `pnpm run check-types` → `pnpm run check-types:fumadocs` → `pnpm run build` → `pnpm run check:packages`.
 
 ## Style / commit conventions
 

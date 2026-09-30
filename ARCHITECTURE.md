@@ -1,7 +1,7 @@
 # RumahKodingku Editor — Architecture
 
 > **Status:** Approved
-> **Version:** 1.0
+> **Version:** 1.1
 > **Last Updated:** 2026-09-30
 > **Applies to:** `Rumahkodingku/editor`
 
@@ -80,29 +80,44 @@ editor-vue (future) ─────► editor-core
 
 ### 3.1 Current state (as of this version)
 
-The repository was scaffolded with Better-T-Stack. The root currently contains:
+After Phase 00 (repository foundation) and Phase 01 (build and package
+infrastructure), the repository contains:
 
 ```text
 editor/
+├── .agents/
 ├── .husky/
 ├── apps/
-│   └── fumadocs/
+│   └── fumadocs/            # documentation app (Next.js + Fumadocs)
+├── docs/
+│   ├── adr/                 # empty; created with the first ADR
+│   └── roadmap/
 ├── packages/
-│   └── config/              # shared configuration (e.g. tsconfig)
-├── bts.jsonc                # scaffold metadata
-├── bunfig.toml
+│   ├── config/              # @editor/config — shared tsconfig (internal, not published)
+│   ├── editor-core/         # @rumahkodingku/editor-core — tsdown build, no features yet
+│   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
+├── AGENTS.md
+├── ARCHITECTURE.md
+├── LICENSE                  # MIT
+├── PRD.md
+├── README.md
 ├── biome.json
+├── bts.jsonc                # scaffold metadata
 ├── commitlint.config.mjs
 ├── lint-staged.config.mjs
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
+├── skills-lock.json
 ├── tsconfig.json
-├── turbo.json
-└── README.md
+└── turbo.json
 ```
 
-`editor-core`, `editor-react`, and `playground` do **not** exist yet.
+`editor-core` and `editor-react` exist as Phase 01 skeletons: package metadata,
+explicit `exports`, ESM and declaration output through tsdown, Tiptap/React peer
+contracts, and a placeholder stylesheet. They contain **no editor API or features
+yet**. `apps/playground`, `.changeset/`, and any ADR do **not** exist yet.
+`bunfig.toml` and the scaffold Varlock workflow were removed in Phase 00.
 
 ### 3.2 Target structure (Proposed)
 
@@ -117,12 +132,12 @@ editor/
 │   ├── editor-react/
 │   └── editor-vue/          # future
 ├── docs/adr/                # created with the first ADR
-├── PRD.md                   # to be created
+├── PRD.md
 ├── ARCHITECTURE.md
-├── AGENTS.md                # to be created (short operational rules for AI agents)
+├── AGENTS.md                # operational rules for AI agents
 ├── CONTRIBUTING.md          # to be created
-├── CHANGELOG.md / .changeset/
-└── LICENSE                  # MIT (to be added, see §26.3)
+├── CHANGELOG.md / .changeset/   # to be created (Phase 09)
+└── LICENSE                  # MIT
 ```
 
 Files listed as "to be created" MUST exist before any rule refers to them as mandatory reading.
@@ -573,18 +588,20 @@ The npm scope availability MUST be verified before the first publish (§26.4). T
 
 ### 19.1 Current scripts
 
-| Script                 | Purpose                                    |
-| ---------------------- | ------------------------------------------ |
-| `pnpm run dev`         | Start all applications in development mode |
-| `pnpm run build`       | Build all workspaces                       |
-| `pnpm run check-types` | Type-check all workspaces                  |
-| `pnpm run check`       | Biome formatting and linting               |
+| Script                              | Purpose                                          |
+| ----------------------------------- | ------------------------------------------------ |
+| `pnpm run dev`                      | Start all applications in development mode       |
+| `pnpm run build`                    | Build all workspaces                             |
+| `pnpm run check-types`              | Type-check all workspaces                        |
+| `pnpm run check-types:fumadocs`     | Type-check the Fumadocs app                      |
+| `pnpm run check:packages`           | Validate published packages (publint + attw)     |
+| `pnpm run check`                    | Biome formatting and linting                     |
 
 `pnpm run test` is **planned** and is added together with Vitest. This document MUST use the real script names above.
 
 ### 19.2 Local tooling
 
-Biome (lint/format), Husky, lint-staged, and commitlint are already configured. **pnpm is the official package manager** pinned through the `packageManager` field in `package.json`. `bunfig.toml` is scaffold metadata. Bun is not part of the required development, CI, or release toolchain, and the file is removed as an implementation task once the env setup is confirmed not to depend on it (§26.3).
+Biome (lint/format), Husky, lint-staged, and commitlint are already configured. **pnpm is the official package manager** pinned through the `packageManager` field in `package.json`. Bun is not part of the required development, CI, or release toolchain; `bunfig.toml` was removed in Phase 00 because nothing depended on it.
 
 ### 19.3 Minimum CI checks
 
@@ -742,10 +759,10 @@ The architectural questions that previously blocked implementation are resolved 
 - **OQ-2.** The exact patch version is pinned through package manifests and `pnpm-lock.yaml` when Tiptap is added. React integration uses `@tiptap/react`, `@tiptap/pm`, and `@tiptap/starter-kit`.
 - **OQ-3.** Peer ranges MUST match the supported Tiptap 3.x line. Tiptap packages are versioned together and may pin each other to matching versions, so the Installation documentation MUST provide one copy-paste install command that lists every required Tiptap peer with the supported version range. This mitigates the install burden that peer dependencies place on consumers.
 - **OQ-4.** tsdown is designed for library bundling, supports ESM output and declaration generation, and externalizes dependencies declared in package manifests.
-- **OQ-5.** Independent versions let `editor-core` and `editor-react` release separately. Changesets MUST record dependency updates when a package consumes a new version of another workspace package.
+- **OQ-5.** Independent versions let `editor-core` and `editor-react` release separately. Changesets MUST record dependency updates when a package consumes a new version of another workspace package. The **decision** is approved; **implementation is deferred to Phase 09 (Release Engineering)**. Changesets MUST NOT be configured during Phases 00–08.
 - **OQ-6.** One canonical structured representation avoids dual controlled-state semantics.
-- **OQ-7.** The repository does not contain a `LICENSE` file yet. It is added during implementation (§26.3).
-- **OQ-8.** `bunfig.toml` is scaffold metadata and is removed once nothing depends on it (§26.3).
+- **OQ-7.** The MIT `LICENSE` file was added to the repository root in Phase 01 (§26.3). `@rumahkodingku` is the intended npm scope (availability remains a pre-publish check).
+- **OQ-8.** `bunfig.toml` was scaffold metadata and was removed in Phase 00 because nothing depended on it (§26.3). pnpm is the official package manager.
 - **OQ-9.** Avoids maintaining duplicate public examples. The playground MAY hold scenarios that are intentionally not public.
 - **OQ-10.** Makes schema migrations explicit and lets persisted content outlive individual package versions. The component itself works with plain `JSONContent` (§7.4).
 
@@ -753,15 +770,20 @@ The architectural questions that previously blocked implementation are resolved 
 
 Completed during initial implementation. They do not block approval of this document.
 
-1. `packages/editor-core` exists and follows §4 and §6.1.
-2. `packages/editor-react` exists and follows §4 and §6.2.
-3. Tiptap 3.x is installed, and the dependency graph is verified to contain a single compatible Tiptap/ProseMirror installation.
-4. The first library build uses tsdown and produces valid ESM output and type declarations.
-5. The MIT `LICENSE` file is added to the repository root.
-6. Changesets is configured (`.changeset/`, independent versions).
-7. Vitest is wired so `pnpm run test` exists and CI runs it.
-8. `bunfig.toml` is removed, or a documented reason to keep it is added.
-9. `AGENTS.md` and `PRD.md` are created (Appendix A refers to them).
+Phase 01 (build and package infrastructure) ownership:
+
+1. `packages/editor-core` exists and follows §4 and §6.1. — **done (Phase 01)**
+2. `packages/editor-react` exists and follows §4 and §6.2. — **done (Phase 01)**
+3. Tiptap 3.x is installed, and the dependency graph is verified to contain a single compatible Tiptap/ProseMirror installation. — **done (Phase 01)**
+4. The first library build uses tsdown and produces valid ESM output and type declarations. — **done (Phase 01)**
+5. The MIT `LICENSE` file is added to the repository root. — **done (Phase 01)**
+6. `bunfig.toml` is removed, or a documented reason to keep it is added. — **done (Phase 00)**
+7. `AGENTS.md` and `PRD.md` are created (Appendix A refers to them). — **done (Phase 00)**
+
+Deferred to the phase roadmap (explicitly **not** Phase 01):
+
+8. Vitest is wired so `pnpm run test` exists and CI runs it. — **Phase 02**
+9. Changesets is configured (`.changeset/`, independent versions). — **Phase 09**
 
 ### 26.4 Pre-publish gates
 
@@ -820,3 +842,4 @@ pnpm run build
 | 0.2     | 2026-09-30 | Draft    | Reviewed rewrite: current vs target structure, Tiptap contract, API contracts, SSR, security, open questions                                                |
 | 0.3     | 2026-09-30 | Draft    | Open questions resolved into decisions (OQ-1 to OQ-10)                                                                                                      |
 | 1.0     | 2026-09-30 | Approved | Removed leaked citation artifacts, fixed §26 table, aligned stale references, separated approval from implementation and pre-publish gates, set Node `>=22` |
+| 1.1     | 2026-09-30 | Approved | Phase 01: realigned §26.3 gates (Vitest → Phase 02, Changesets → Phase 09), refreshed §3.1/§3.2 current state, documented build/package infrastructure (tsdown, exports, peer contracts, CSS artifact, `LICENSE`) |
