@@ -1,0 +1,35 @@
+{
+	"version": 1,
+	"skills": {
+		"code-review": {
+			"source": "mattpocock/skills",
+			"sourceType": "github",
+			"skillPath": "skills/engineering/code-review/SKILL.md",
+			"computedHash": "caa9a086baaf9e0f7cd71f64edfa83da6821c05e826b083221f3d02e3d6a1905"
+		},
+		"executing-plans": {
+			"source": "obra/superpowers",
+			"sourceType": "github",
+			"skillPath": "skills/executing-plans/SKILL.md",
+			"computedHash": "5d587b5a8ed12c3d6808bce1561d9a72eab37a9b44d51d9dff99232decaae78e"
+		},
+		"tiptap": {
+			"source": "ueberdosis/tiptap",
+			"sourceType": "github",
+			"skillPath": "skills/tiptap/SKILL.md",
+			"computedHash": "772943440276fedbc27339a57ad35ccd3c2bc19c1df3c7ba5237cc5d88f3604a"
+		},
+		"webapp-testing": {
+			"source": "anthropics/skills",
+			"sourceType": "github",
+			"skillPath": "skills/webapp-testing/SKILL.md",
+			"computedHash": "ad5b1fc52807e9afa4635e59218a026b164dc58b6c3f41b0f7c644dcd6ccf572"
+		},
+		"writing-plans": {
+			"source": "obra/superpowers",
+			"sourceType": "github",
+			"skillPath": "skills/writing-plans/SKILL.md",
+			"computedHash": "c2647b5bf067be353a893e5a39a632cbbeb7ad81e61fa5ae227ece5490029073"
+		}
+	}
+}
