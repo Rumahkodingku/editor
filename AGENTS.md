@@ -16,8 +16,8 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 ## What actually exists today
 
 - `apps/fumadocs` (Next.js 16 + Fumadocs docs site) and `packages/config` (`@editor/config`, shared tsconfig only).
-- `packages/editor-core`, `packages/editor-react`, `apps/playground`, `PRD.md`, `docs/adr/`, `LICENSE` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them.
-- Root `README.md` is stale: it documents Varlock (`env:generate`, `.env.schema`, `src/env.ts`) and a port-3000 dev server. No Varlock env schema exists in this repo and the dev server is on **port 4000**. Trust `package.json` / `apps/fumadocs/package.json` over the README.
+- `packages/editor-core`, `packages/editor-react`, `apps/playground`, `.changeset/`, `LICENSE` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` exists but no ADR has been written yet.
+- Root `README.md` was rewritten in Phase 00 and describes RumahKodingku Editor (pnpm, Node >=22, docs on port 4000). The scaffold Varlock workflow and `bunfig.toml` have been removed. Trust `package.json` / `apps/fumadocs/package.json` when the README disagrees.
 
 ## Commands
 
@@ -28,11 +28,12 @@ pnpm only (`packageManager: pnpm@10.34.5`), Node >= 22.
 | `pnpm run dev`                           | turbo dev; fumadocs on `http://localhost:4000`                        |
 | `pnpm run check`                         | `biome check --write .` — **mutates files**, run it before committing |
 | `pnpm run check-types`                   | turbo `check-types` — does **not** cover `apps/fumadocs`              |
+| `pnpm run check-types:fumadocs`          | wrapper for `pnpm --filter fumadocs run types:check`                  |
 | `pnpm --filter fumadocs run types:check` | the real app typecheck (`next typegen && tsc --noEmit`); use this     |
 | `pnpm run build`                         | turbo build, `dependsOn: ["^build"]`                                  |
 | `pnpm run test`                          | **does not exist yet** (Vitest is an open implementation gate, §26.3) |
 
-Trap: the fumadocs package names its script `types:check`, not `check-types`, so the root script type-checks only `@editor/config`. If you add a library package, name its script `check-types` so turbo picks it up.
+Trap: the fumadocs package names its script `types:check`, not `check-types`, so turbo's `check-types` task does not cover `apps/fumadocs` (no workspace package defines `check-types` yet). Use `pnpm run check-types:fumadocs` for the app. If you add a library package, name its script `check-types` so turbo picks it up.
 
 Verification order: `pnpm run check` → `pnpm --filter fumadocs run types:check` → `pnpm run build`.
 

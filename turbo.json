@@ -4,7 +4,7 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"inputs": ["$TURBO_DEFAULT$"],
 			"outputs": ["dist/**"]
 		},
 		"lint": {
@@ -24,8 +24,6 @@
 		"VERCEL",
 		"VERCEL_ENV",
 		"VERCEL_PROJECT_PRODUCTION_URL",
-		"VERCEL_URL",
-		"_VARLOCK_ENV_KEY"
-	],
-	"globalDependencies": [".env*", "apps/*/.env*", "packages/*/.env*"]
+		"VERCEL_URL"
+	]
 }

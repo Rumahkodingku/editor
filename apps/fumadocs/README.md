@@ -1,45 +1,39 @@
-# fumadocs
+# RumahKodingku Editor — Documentation
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+Fumadocs (Next.js) documentation site for **RumahKodingku Editor**. This app is
+the canonical public home for documentation and live examples.
 
-Run development server:
+## Development
+
+pnpm is the package manager. Run from the repository root:
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+pnpm run dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+The docs site is served on http://localhost:4000.
 
-## Explore
+To run only this app:
 
-In the project, you can see:
+```bash
+pnpm --filter fumadocs run dev
+```
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+## Typecheck
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+```bash
+pnpm --filter fumadocs run types:check
+```
 
-### Fumadocs MDX
+From the repository root, the same check is available as
+`pnpm run check-types:fumadocs`.
 
-Collections are defined with the [Macro API](https://fumadocs.dev/docs/mdx/macro) in `lib/source.ts`.
+## Structure
 
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+- `content/docs/` — MDX documentation pages (require `title` and `description` frontmatter)
+- `src/lib/source.ts` — content source adapter and collections
+- `src/lib/shared.ts` — route paths, app name, and GitHub config
+- `src/lib/layout.shared.tsx` — shared layout options
+- `src/app/` — routes (home, docs, search, llms, og)
 
-## Learn More
-
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+Full documentation content is built in Phase 08.
