@@ -11,7 +11,7 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 
 ## RumahKodingku Editor — agent notes
 
-`ARCHITECTURE.md` (Approved, v1.0) is the binding source of truth. Read it before coding. This file only holds operational shortcuts; where the two disagree, `ARCHITECTURE.md` wins.
+`ARCHITECTURE.md` (Approved, v1.2) is the binding source of truth. Read it before coding. This file only holds operational shortcuts; where the two disagree, `ARCHITECTURE.md` wins.
 
 ## What actually exists today
 
@@ -19,6 +19,7 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 - Published packages `packages/editor-core` (`@rumahkodingku/editor-core`) and `packages/editor-react` (`@rumahkodingku/editor-react`) exist as Phase 01 skeletons: tsdown build, explicit `exports`, metadata, Tiptap/React peer contracts, and a placeholder `styles.css`. They contain **no editor API or features yet** — the core API is Phase 03, the React adapter is Phase 04.
 - `apps/playground` and `.changeset/` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` exists but no ADR has been written yet.
 - `LICENSE` (MIT) and root `README.md` (RumahKodingku Editor, pnpm, Node >=22, docs on port 4000) exist. The scaffold Varlock workflow and `bunfig.toml` were removed in Phase 00. `packages/config` (`@editor/config`) still provides the shared tsconfig only.
+- Testing infrastructure exists (Phase 02): Vitest (+ jsdom, React Testing Library) per package, Playwright browser tests in `tests/browser/`, and GitHub Actions CI in `.github/workflows/ci.yml`. See the Testing section below.
 
 ## Commands
 
@@ -33,11 +34,41 @@ pnpm only (`packageManager: pnpm@10.34.5`), Node >= 22.
 | `pnpm --filter fumadocs run types:check` | the real app typecheck (`next typegen && tsc --noEmit`); use this     |
 | `pnpm run build`                         | turbo build, `dependsOn: ["^build"]`                                  |
 | `pnpm run check:packages`                | `publint` + `attw` for `packages/*` (esm-only profile)                |
-| `pnpm run test`                          | **does not exist yet** (Vitest is an open implementation gate, §26.3) |
+| `pnpm run test`                          | Vitest unit + component + type tests (`turbo run test`)               |
+| `pnpm run test:coverage`                 | Vitest with v8 coverage (`turbo run test:coverage`)                   |
+| `pnpm run test:browser`                  | Playwright + axe (Chromium; targets fumadocs on port 4000)            |
+| `pnpm run check:ci`                      | `biome ci .` — read-only variant of `check`, used by CI               |
 
 Trap: the fumadocs package names its script `types:check`, not `check-types`, so turbo's `check-types` task does not cover `apps/fumadocs`. The published packages define `check-types`, so `pnpm run check-types` does cover them. Run both `pnpm run check-types` and `pnpm run check-types:fumadocs` for full coverage, and name any new package's script `check-types`.
 
-Verification order: `pnpm run check` → `pnpm run check-types` → `pnpm run check-types:fumadocs` → `pnpm run build` → `pnpm run check:packages`.
+Verification order: `pnpm run check` → `pnpm run check-types` → `pnpm run check-types:fumadocs` → `pnpm run test` → `pnpm run test:coverage` → `pnpm run build` → `pnpm run check:packages` → `pnpm run test:browser`.
+
+## Testing
+
+Tooling and responsibilities:
+
+| Tool                                | Responsibility                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| Vitest                              | Unit, integration, and type tests (`*.test.ts`, `*.test-d.ts`)            |
+| React Testing Library + jsdom       | React component tests in `editor-react`                                   |
+| Playwright                          | Real-browser tests in `tests/browser/*.spec.ts`                           |
+| axe-core (`@axe-core/playwright`)   | Accessibility checks in the browser                                        |
+| `webapp-testing` skill              | AI-agent browser testing workflow against a local server                  |
+| `agent-browser`                     | Optional AI-agent browser interaction — **not** a repository dependency   |
+
+Rules:
+
+- Unit tests are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`); type tests are `src/**/*.test-d.ts`; browser tests live in `tests/browser/`.
+- `editor-core` tests run in a **node** environment and must not touch React or browser globals; `editor-react` tests run in **jsdom**.
+- `pnpm run test` must never launch a browser; browser behavior uses `pnpm run test:browser`.
+- Browser tests run against the docs app's **production build** (`next build` + `next start`, started automatically by `playwright.config.ts`); the dev server is not used because it is not deterministic under parallel workers.
+- jsdom cannot model selection, layout, or IME — verify that behavior with Playwright, never with jsdom.
+- Mock only external boundaries. Prefer real package behavior; do not mock Tiptap/ProseMirror internals.
+- Tests must be deterministic and offline: no production APIs, real uploads, external databases, or credentials.
+- `packages/editor-react/vitest.config.ts` forces `NODE_ENV=test` because `React.act` (used by RTL) only exists in React's development build.
+- Coverage artifacts (`coverage/`, `playwright-report/`, `test-results/`) are excluded from Biome and git.
+- Public API changes must ship tests (§24.2).
+- Known accessibility findings in the Fumadocs scaffold are listed explicitly in `tests/browser/a11y.spec.ts`; the WCAG 2.2 AA audit is Phase 07.
 
 ## Style / commit conventions
 

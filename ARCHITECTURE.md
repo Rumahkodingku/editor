@@ -1,7 +1,7 @@
 # RumahKodingku Editor — Architecture
 
 > **Status:** Approved
-> **Version:** 1.1
+> **Version:** 1.2
 > **Last Updated:** 2026-09-30
 > **Applies to:** `Rumahkodingku/editor`
 
@@ -503,17 +503,20 @@ Future capability. It MUST NOT complicate the MVP architecture.
 
 ## 16. Testing Architecture
 
-| Level                 | Scope                                                                               | Tooling (Proposed)                       |
-| --------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------- |
-| Unit                  | content utilities, config, toolbar definitions, upload contract, extension behavior | Vitest                                   |
-| Component/integration | initialization, formatting, serialization, callbacks, React integration             | Vitest + React Testing Library           |
-| Browser e2e           | typing, selection, paste, drag-drop upload, IME                                     | Playwright                               |
-| Accessibility         | keyboard interaction, roles, labels                                                 | axe-core (in Playwright) + manual checks |
-| Type tests            | public API types                                                                    | `expect-type` or `tsd`                   |
-| Package validity      | `exports`, types resolution                                                         | `publint`, `@arethetypeswrong/cli`       |
-| Size                  | bundle budget for each package                                                      | `size-limit`                             |
+| Level                 | Scope                                                                               | Tooling                                |
+| --------------------- | ----------------------------------------------------------------------------------- | -------------------------------------- |
+| Unit                  | content utilities, config, toolbar definitions, upload contract, extension behavior | Vitest (node environment)              |
+| Component/integration | initialization, formatting, serialization, callbacks, React integration             | Vitest + React Testing Library (jsdom) |
+| Browser e2e           | typing, selection, paste, drag-drop upload, IME                                     | Playwright (Chromium)                  |
+| Accessibility         | keyboard interaction, roles, labels                                                 | `@axe-core/playwright` + manual checks |
+| Type tests            | public API types                                                                    | Vitest `expectTypeOf` (`*.test-d.ts`)  |
+| Coverage              | line/branch coverage per package                                                    | `@vitest/coverage-v8`                  |
+| Package validity      | `exports`, types resolution                                                         | `publint`, `@arethetypeswrong/cli`     |
+| Size                  | bundle budget for each package                                                      | `size-limit` (Phase 09)                |
 
 jsdom cannot model layout, selection, or IME reliably, so behavior that depends on them MUST be verified in a real browser. The playground is used for rapid visual validation.
+
+Unit and type tests are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`, `src/**/*.test-d.ts`); browser tests live in `tests/browser/*.spec.ts`. Coverage thresholds are introduced only when meaningful implementation exists.
 
 ---
 
@@ -595,9 +598,13 @@ The npm scope availability MUST be verified before the first publish (§26.4). T
 | `pnpm run check-types`              | Type-check all workspaces                        |
 | `pnpm run check-types:fumadocs`     | Type-check the Fumadocs app                      |
 | `pnpm run check:packages`           | Validate published packages (publint + attw)     |
+| `pnpm run test`                     | Run unit/integration/type tests (Vitest)         |
+| `pnpm run test:coverage`            | Run tests with coverage                          |
+| `pnpm run test:browser`             | Run Playwright browser and accessibility tests   |
 | `pnpm run check`                    | Biome formatting and linting                     |
+| `pnpm run check:ci`                 | Read-only Biome check used by CI                 |
 
-`pnpm run test` is **planned** and is added together with Vitest. This document MUST use the real script names above.
+`pnpm run test` and the other test scripts are implemented (Phase 02). This document MUST use the real script names above.
 
 ### 19.2 Local tooling
 
@@ -607,13 +614,17 @@ Biome (lint/format), Husky, lint-staged, and commitlint are already configured. 
 
 ```text
 pnpm install --frozen-lockfile
-pnpm run check
+pnpm run check:ci
 pnpm run check-types
-pnpm run test        # once available
+pnpm run check-types:fumadocs
+pnpm run test
+pnpm run test:coverage
 pnpm run build
+pnpm run check:packages
+pnpm run test:browser   # after `playwright install --with-deps chromium`
 ```
 
-Turborepo executes these tasks across the workspace with caching.
+Turborepo executes these tasks across the workspace with caching. The workflow is implemented in `.github/workflows/ci.yml`.
 
 ---
 
@@ -782,7 +793,7 @@ Phase 01 (build and package infrastructure) ownership:
 
 Deferred to the phase roadmap (explicitly **not** Phase 01):
 
-8. Vitest is wired so `pnpm run test` exists and CI runs it. — **Phase 02**
+8. Vitest is wired so `pnpm run test` exists and CI runs it. — **done (Phase 02)**
 9. Changesets is configured (`.changeset/`, independent versions). — **Phase 09**
 
 ### 26.4 Pre-publish gates
@@ -843,3 +854,4 @@ pnpm run build
 | 0.3     | 2026-09-30 | Draft    | Open questions resolved into decisions (OQ-1 to OQ-10)                                                                                                      |
 | 1.0     | 2026-09-30 | Approved | Removed leaked citation artifacts, fixed §26 table, aligned stale references, separated approval from implementation and pre-publish gates, set Node `>=22` |
 | 1.1     | 2026-09-30 | Approved | Phase 01: realigned §26.3 gates (Vitest → Phase 02, Changesets → Phase 09), refreshed §3.1/§3.2 current state, documented build/package infrastructure (tsdown, exports, peer contracts, CSS artifact, `LICENSE`) |
+| 1.2     | 2026-09-30 | Approved | Phase 02: documented the testing architecture as implemented (§16 tooling, coverage, type tests), added the test scripts to §19.1/§19.3, and marked the Vitest/CI gate (§26.3 #8) done |

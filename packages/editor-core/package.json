@@ -25,6 +25,8 @@
 	"scripts": {
 		"build": "tsdown",
 		"dev": "tsdown --watch",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
 		"check-types": "tsc --noEmit",
 		"check:package": "publint && attw --pack . --profile esm-only"
 	},
@@ -38,8 +40,11 @@
 		"@tiptap/core": "^3.31.3",
 		"@tiptap/pm": "^3.31.3",
 		"@types/node": "^26.4.1",
+		"@vitest/coverage-v8": "^5.0.2",
 		"publint": "^0.3.24",
 		"tsdown": "^0.23.0",
-		"typescript": "^6.0.3"
+		"typescript": "^6.0.3",
+		"vite": "^8.3.1",
+		"vitest": "^5.0.2"
 	}
 }

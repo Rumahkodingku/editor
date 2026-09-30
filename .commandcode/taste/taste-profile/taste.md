@@ -11,3 +11,4 @@
 - Prefers all responses and deliverables written in Bahasa Indonesia. Confidence: 0.9
 - When multiple options exist, wants each option explained plus a recommended best choice with reasoning. Confidence: 0.85
 - Prefers plans delivered in a fixed, numbered section outline (current state, task, plan, files affected, dependency/config impact, risks, verification, acceptance criteria, open questions). Confidence: 0.8
+- Once a plan is approved and execution begins, expects the agent to drive the full todo list through to completion rather than stopping midway and asking to continue. Confidence: 0.7

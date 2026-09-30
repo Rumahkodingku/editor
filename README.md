@@ -7,9 +7,9 @@ The project is a TypeScript monorepo. `editor-core` is designed to stay
 framework-independent so adapters (React first, Vue later) remain thin. React
 is the first supported UI framework.
 
-> This repository is in **Phase 01 — Build & Package Infrastructure**. The editor
-> packages exist as buildable skeletons but contain no features yet; see the
-> roadmap below.
+> This repository is in **Phase 02 — Test Infrastructure**. The editor packages
+> build and are covered by a working test foundation, but contain no features
+> yet; see the roadmap below.
 
 ## Repository Structure
 
@@ -18,6 +18,7 @@ Current state:
 ```text
 editor/
 ├── .agents/skills/          # repo-local agent skills (pinned in skills-lock.json)
+├── .github/workflows/       # CI (check, types, tests, build, packages, browser)
 ├── .husky/                  # git hooks (pre-commit, commit-msg)
 ├── apps/
 │   └── fumadocs/            # documentation app (Next.js + Fumadocs)
@@ -28,6 +29,8 @@ editor/
 │   ├── config/              # @editor/config — shared tsconfig (internal, not published)
 │   ├── editor-core/         # @rumahkodingku/editor-core — tsdown build, no features yet
 │   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
+├── tests/
+│   └── browser/             # Playwright browser + accessibility tests
 ├── AGENTS.md                # operational rules for AI agents and contributors
 ├── ARCHITECTURE.md          # architecture and constraints
 ├── LICENSE                  # MIT
@@ -38,6 +41,7 @@ editor/
 ├── commitlint.config.mjs
 ├── lint-staged.config.mjs
 ├── package.json
+├── playwright.config.ts     # Playwright configuration (Chromium, fumadocs on :4000)
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── skills-lock.json
@@ -47,8 +51,9 @@ editor/
 
 `editor-core` and `editor-react` are Phase 01 skeletons: they build to ESM with
 type declarations, expose explicit `exports`, and declare Tiptap/React peer
-contracts, but contain **no editor features yet**. `apps/playground` and
-`.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
+contracts, but contain **no editor features yet**. Phase 02 added the test
+foundation (Vitest, React Testing Library, Playwright, axe-core). `apps/playground`
+and `.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
 phases.
 
 ## Development
@@ -78,21 +83,41 @@ Run from the repository root:
 ```bash
 pnpm install                      # Install and regenerate the lockfile
 pnpm run check                    # Biome formatting and linting (mutates files)
+pnpm run check:ci                 # Read-only Biome check (used by CI)
 pnpm run check-types              # Turbo type-check (editor-core, editor-react)
 pnpm run check-types:fumadocs     # Fumadocs type-check (next typegen && tsc --noEmit)
+pnpm run test                     # Vitest (unit, component, type tests)
+pnpm run test:coverage            # Vitest with v8 coverage
 pnpm run build                    # Turbo build
 pnpm run check:packages           # publint + attw for the published packages
+pnpm run test:browser             # Playwright + axe (Chromium)
 ```
 
 Notes:
 
 - `pnpm run check` runs `biome check --write .` and rewrites files; review the diff.
+  CI uses `check:ci` (`biome ci .`), which never writes.
 - `check-types` covers workspace packages that define a `check-types` script
   (`editor-core`, `editor-react`). The Fumadocs app names its script
   `types:check`, so it is verified separately with `check-types:fumadocs`.
 - `pnpm run build` builds the package graph in dependency order
   (`editor-core` before `editor-react`) and then the docs app.
-- `pnpm run test` **does not exist yet**; Vitest is introduced in Phase 02.
+
+## Testing
+
+- **Vitest** runs unit, integration, and type tests per package.
+  `editor-core` tests run in a **node** environment; `editor-react` tests run in
+  **jsdom** with React Testing Library.
+- **Playwright** runs real-browser tests from `tests/browser/` against the
+  production build of the Fumadocs app on http://localhost:4000. It builds and
+  starts the app automatically; the dev server is not used (it compiles on
+  demand and is not deterministic).
+- **axe-core** (`@axe-core/playwright`) provides accessibility checks and runs as
+  part of `pnpm run test:browser`.
+- Install the browser before the first browser run: `pnpm exec playwright install chromium`.
+- Unit test files are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`);
+  type tests use `*.test-d.ts`; browser tests live in `tests/browser/`.
+- `pnpm run test` never launches a browser. Details and agent rules live in `AGENTS.md`.
 
 ## Documentation
 
