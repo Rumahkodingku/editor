@@ -7,9 +7,9 @@ The project is a TypeScript monorepo. `editor-core` is designed to stay
 framework-independent so adapters (React first, Vue later) remain thin. React
 is the first supported UI framework.
 
-> This repository is in **Phase 02 — Test Infrastructure**. The editor packages
-> build and are covered by a working test foundation, but contain no features
-> yet; see the roadmap below.
+> This repository is in **Phase 03 — Editor Core**. `editor-core` now exposes the
+> framework-independent editor API; the React adapter (Phase 04) and the
+> playground are not implemented yet. See the roadmap below.
 
 ## Repository Structure
 
@@ -23,11 +23,11 @@ editor/
 ├── apps/
 │   └── fumadocs/            # documentation app (Next.js + Fumadocs)
 ├── docs/
-│   ├── adr/                 # architecture decision records (empty until the first ADR)
+│   ├── adr/                 # architecture decision records (ADRs 0002–0004)
 │   └── roadmap/             # implementation roadmap
 ├── packages/
 │   ├── config/              # @editor/config — shared tsconfig (internal, not published)
-│   ├── editor-core/         # @rumahkodingku/editor-core — tsdown build, no features yet
+│   ├── editor-core/         # @rumahkodingku/editor-core — core API implemented (Phase 03)
 │   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
 ├── tests/
 │   └── browser/             # Playwright browser + accessibility tests
@@ -49,11 +49,14 @@ editor/
 └── turbo.json
 ```
 
-`editor-core` and `editor-react` are Phase 01 skeletons: they build to ESM with
-type declarations, expose explicit `exports`, and declare Tiptap/React peer
-contracts, but contain **no editor features yet**. Phase 02 added the test
-foundation (Vitest, React Testing Library, Playwright, axe-core). `apps/playground`
-and `.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
+`editor-core` implements the framework-independent core API (Phase 03): editor
+creation, the default extension preset, the RumahKodingku image-upload
+extension, content utilities, JSON/HTML serialization, persistence schema
+versioning, the upload contract, toolbar definitions, and editor labels. It
+builds to ESM with type declarations and declares its Tiptap peer contracts.
+`editor-react` is still a Phase 01 skeleton. Phase 02 added the test foundation
+(Vitest, React Testing Library, Playwright, axe-core). `apps/playground` and
+`.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
 phases.
 
 ## Development

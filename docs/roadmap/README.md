@@ -11,7 +11,7 @@ Details for each phase will be saved in separate files in this folder.
 | 00    | Repository Foundation & Agent Readiness | Done        |
 | 01    | Build & Package Infrastructure          | Done        |
 | 02    | Test Infrastructure                     | Done        |
-| 03    | Editor Core                             | ⬜          |
+| 03    | Editor Core                             | Done        |
 | 04    | React Adapter                           | ⬜          |
 | 05    | Playground                              | ⬜          |
 | 06    | Editor MVP                              | ⬜          |
@@ -21,11 +21,14 @@ Details for each phase will be saved in separate files in this folder.
 
 ## Current Phase
 
-**Phase 02 — Test Infrastructure**
+**Phase 03 — Editor Core**
 
-Phases 00 and 01 are complete and Phase 02 is complete. The test foundation
-(Vitest, React Testing Library, type tests, coverage, Playwright, axe-core, CI)
-is in place; work proceeds to Phase 03 and subsequent phases.
+Phases 00–03 are complete. `editor-core` now provides the framework-independent
+core API (editor creation, default extensions, the RK image-upload extension,
+content utilities, JSON/HTML serialization, persistence schema versioning, the
+upload contract, toolbar definitions, and editor labels), verified by unit,
+integration, and type tests plus package validation. ADRs 0002–0004 are recorded.
+Work proceeds to Phase 04 (React adapter).
 
 ## Phase Documents
 

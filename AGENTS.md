@@ -16,8 +16,8 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 ## What actually exists today
 
 - `apps/fumadocs` (Next.js 16 + Fumadocs docs site) and `packages/config` (`@editor/config`, shared tsconfig only).
-- Published packages `packages/editor-core` (`@rumahkodingku/editor-core`) and `packages/editor-react` (`@rumahkodingku/editor-react`) exist as Phase 01 skeletons: tsdown build, explicit `exports`, metadata, Tiptap/React peer contracts, and a placeholder `styles.css`. They contain **no editor API or features yet** — the core API is Phase 03, the React adapter is Phase 04.
-- `apps/playground` and `.changeset/` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` exists but no ADR has been written yet.
+- `packages/editor-core` (`@rumahkodingku/editor-core`) now implements the **Phase 03 core API**: editor creation, the default extension preset (`StarterKit` + `Placeholder` + the RK `ImageUpload` extension), extension composition, content utilities, JSON/HTML serialization (including server-safe `jsonToHTML`), persistence schema versioning, the image-upload contract, toolbar definitions, and editor labels. `packages/editor-react` (`@rumahkodingku/editor-react`) is still a **Phase 01 skeleton** — it contains no editor API or features yet; the React adapter is Phase 04.
+- `apps/playground` and `.changeset/` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` now contains ADRs `0002`–`0004` (Tiptap public API, framework-agnostic core, JSON-canonical content).
 - `LICENSE` (MIT) and root `README.md` (RumahKodingku Editor, pnpm, Node >=22, docs on port 4000) exist. The scaffold Varlock workflow and `bunfig.toml` were removed in Phase 00. `packages/config` (`@editor/config`) still provides the shared tsconfig only.
 - Testing infrastructure exists (Phase 02): Vitest (+ jsdom, React Testing Library) per package, Playwright browser tests in `tests/browser/`, and GitHub Actions CI in `.github/workflows/ci.yml`. See the Testing section below.
 
@@ -59,7 +59,8 @@ Tooling and responsibilities:
 Rules:
 
 - Unit tests are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`); type tests are `src/**/*.test-d.ts`; browser tests live in `tests/browser/`.
-- `editor-core` tests run in a **node** environment and must not touch React or browser globals; `editor-react` tests run in **jsdom**.
+- `editor-core` tests default to a **node** environment and must not touch React or browser globals. Tests that actually create an editor (editor creation, toolbar commands, image upload) opt in per file with `// @vitest-environment jsdom`; keep that annotation limited to those files. `editor-react` tests run in **jsdom**.
+- `editor-core` declares its Tiptap packages (`@tiptap/core`, `@tiptap/pm`, `@tiptap/starter-kit`, `@tiptap/extension-image`, `@tiptap/extensions`, `@tiptap/html`) as `peerDependencies`; `happy-dom` is an **optional** peer required only for server-side `jsonToHTML`. Keep them on one Tiptap version line.
 - `pnpm run test` must never launch a browser; browser behavior uses `pnpm run test:browser`.
 - Browser tests run against the docs app's **production build** (`next build` + `next start`, started automatically by `playwright.config.ts`); the dev server is not used because it is not deterministic under parallel workers.
 - jsdom cannot model selection, layout, or IME — verify that behavior with Playwright, never with jsdom.

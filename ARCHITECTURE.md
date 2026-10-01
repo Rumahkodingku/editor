@@ -1,8 +1,8 @@
 # RumahKodingku Editor — Architecture
 
 > **Status:** Approved
-> **Version:** 1.2
-> **Last Updated:** 2026-09-30
+> **Version:** 1.3
+> **Last Updated:** 2026-10-01
 > **Applies to:** `Rumahkodingku/editor`
 
 This document records the architectural decisions for RumahKodingku Editor and the rules that implementation must follow.
@@ -90,11 +90,11 @@ editor/
 ├── apps/
 │   └── fumadocs/            # documentation app (Next.js + Fumadocs)
 ├── docs/
-│   ├── adr/                 # empty; created with the first ADR
+│   ├── adr/                 # ADRs (0001+); created with the first ADR
 │   └── roadmap/
 ├── packages/
 │   ├── config/              # @editor/config — shared tsconfig (internal, not published)
-│   ├── editor-core/         # @rumahkodingku/editor-core — tsdown build, no features yet
+│   ├── editor-core/         # @rumahkodingku/editor-core — core API implemented (Phase 03)
 │   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
 ├── AGENTS.md
 ├── ARCHITECTURE.md
@@ -113,10 +113,14 @@ editor/
 └── turbo.json
 ```
 
-`editor-core` and `editor-react` exist as Phase 01 skeletons: package metadata,
-explicit `exports`, ESM and declaration output through tsdown, Tiptap/React peer
-contracts, and a placeholder stylesheet. They contain **no editor API or features
-yet**. `apps/playground`, `.changeset/`, and any ADR do **not** exist yet.
+`editor-react` exists as a Phase 01 skeleton: package metadata, explicit
+`exports`, ESM and declaration output through tsdown, React/Tiptap peer
+contracts, and a placeholder stylesheet. It contains **no editor API or features
+yet**. `editor-core` now implements the framework-independent core API
+(Phase 03): editor creation, the default extension preset, the RumahKodingku
+image-upload extension, content utilities, JSON/HTML serialization, persistence
+schema versioning, the upload contract, toolbar definitions, and editor labels
+(see ADR 0002–0004). `apps/playground` and `.changeset/` do **not** exist yet.
 `bunfig.toml` and the scaffold Varlock workflow were removed in Phase 00.
 
 ### 3.2 Target structure (Proposed)
@@ -796,6 +800,13 @@ Deferred to the phase roadmap (explicitly **not** Phase 01):
 8. Vitest is wired so `pnpm run test` exists and CI runs it. — **done (Phase 02)**
 9. Changesets is configured (`.changeset/`, independent versions). — **Phase 09**
 
+Phase 03 (editor core) ownership:
+
+10. `editor-core` exposes editor creation, the default extension preset, the RK image-upload extension, content utilities, JSON/HTML serialization, persistence schema versioning, the upload contract, toolbar definitions, and editor labels. — **done (Phase 03)**
+11. `editor-core` stays framework-independent and import-safe in SSR; the full public API is typed, tested, documented, and validated with `publint`/`attw`. — **done (Phase 03)**
+12. Server-safe HTML output (`jsonToHTML`) is provided; `@tiptap/html` requires the optional `happy-dom` peer at runtime. — **done (Phase 03)**
+13. ADRs `0002`, `0003`, `0004` record the Tiptap public API, framework-agnostic core, and JSON-canonical decisions. — **done (Phase 03)**
+
 ### 26.4 Pre-publish gates
 
 Completed before the first public release.
@@ -855,3 +866,4 @@ pnpm run build
 | 1.0     | 2026-09-30 | Approved | Removed leaked citation artifacts, fixed §26 table, aligned stale references, separated approval from implementation and pre-publish gates, set Node `>=22` |
 | 1.1     | 2026-09-30 | Approved | Phase 01: realigned §26.3 gates (Vitest → Phase 02, Changesets → Phase 09), refreshed §3.1/§3.2 current state, documented build/package infrastructure (tsdown, exports, peer contracts, CSS artifact, `LICENSE`) |
 | 1.2     | 2026-09-30 | Approved | Phase 02: documented the testing architecture as implemented (§16 tooling, coverage, type tests), added the test scripts to §19.1/§19.3, and marked the Vitest/CI gate (§26.3 #8) done |
+| 1.3     | 2026-10-01 | Approved | Phase 03: `editor-core` implements the framework-independent core API (§6.1); refreshed §3.1 current state; added the Phase 03 implementation gates to §26.3; recorded ADRs 0002–0004 |
