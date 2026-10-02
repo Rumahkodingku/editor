@@ -1,0 +1,37 @@
+{
+	"name": "playground",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "Internal validation environment for RumahKodingku Editor.",
+	"scripts": {
+		"dev": "vite --port 4100 --strictPort",
+		"build": "vite build",
+		"preview": "vite preview --port 4100 --strictPort",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@rumahkodingku/editor-core": "workspace:*",
+		"@rumahkodingku/editor-react": "workspace:*",
+		"@tiptap/core": "^3.31.4",
+		"@tiptap/extension-image": "^3.31.4",
+		"@tiptap/extensions": "^3.31.4",
+		"@tiptap/html": "^3.31.4",
+		"@tiptap/pm": "^3.31.4",
+		"@tiptap/react": "^3.31.4",
+		"@tiptap/starter-kit": "^3.31.4",
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0"
+	},
+	"devDependencies": {
+		"@editor/config": "workspace:*",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/node": "^26.4.1",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"@vitejs/plugin-react": "^6.1.1",
+		"tailwindcss": "^4.3.3",
+		"typescript": "^6.0.3",
+		"vite": "^8.3.2"
+	}
+}

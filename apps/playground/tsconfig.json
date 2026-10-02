@@ -1,0 +1,10 @@
+{
+	"extends": "@editor/config/tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"jsx": "react-jsx",
+		"noEmit": true,
+		"types": ["node", "vite/client"]
+	},
+	"include": ["src", "vite.config.ts"]
+}

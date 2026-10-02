@@ -17,7 +17,8 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 
 - `apps/fumadocs` (Next.js 16 + Fumadocs docs site) and `packages/config` (`@editor/config`, shared tsconfig only).
 - `packages/editor-core` (`@rumahkodingku/editor-core`) now implements the **Phase 03 core API**: editor creation, the default extension preset (`StarterKit` + `Placeholder` + the RK `ImageUpload` extension), extension composition, content utilities, JSON/HTML serialization (including server-safe `jsonToHTML`), persistence schema versioning, the image-upload contract, toolbar definitions, and editor labels. `packages/editor-react` (`@rumahkodingku/editor-react`) now implements the **Phase 04 React adapter**: the `Editor` component (`@tiptap/react`'s `useEditor` + `EditorContent`), controlled/uncontrolled content with `value`/`defaultValue`, `onChange`/`onReady`, editable/disabled state, placeholder, custom extension composition through core `composeExtensions`, labels, a minimal toolbar adapter (`EditorToolbar`, `ToolbarButton`, inline-SVG `ToolbarIcon`), SSR support (`immediatelyRender` + `"use client"`), and the published `styles.css`. It consumes `editor-core` and declares `@tiptap/core`, `@tiptap/react`, `react`, and `react-dom` as peer dependencies. Full toolbar composition/UX and link/image dialogs remain Phase 06.
-- `apps/playground` and `.changeset/` **do not exist yet** — `ARCHITECTURE.md` §3.2 is a target, not reality. Don't import from or assume them. `docs/adr/` now contains ADRs `0002`–`0004` (Tiptap public API, framework-agnostic core, JSON-canonical content).
+- `apps/playground` (`playground`, Vite + React + TypeScript + Tailwind) now exists as the **internal validation environment** (Phase 05). It is a real consumer of `@rumahkodingku/editor-core` and `@rumahkodingku/editor-react` **through their public package exports only** — never `packages/*/src` — and it is never a dependency of a published package. Scenario surfaces, inspectors, fixtures, and the mock upload handler stay inside the app. It runs on port 4100 (`pnpm --filter playground run dev`). Fumadocs remains the canonical public documentation/example home; the playground is internal only. `.changeset/` still **does not exist yet** (Phase 09) — don't assume it.
+- `docs/adr/` contains ADRs `0002`–`0004` (Tiptap public API, framework-agnostic core, JSON-canonical content).
 - `LICENSE` (MIT) and root `README.md` (RumahKodingku Editor, pnpm, Node >=22, docs on port 4000) exist. The scaffold Varlock workflow and `bunfig.toml` were removed in Phase 00. `packages/config` (`@editor/config`) still provides the shared tsconfig only.
 - Testing infrastructure exists (Phase 02): Vitest (+ jsdom, React Testing Library) per package, Playwright browser tests in `tests/browser/`, and GitHub Actions CI in `.github/workflows/ci.yml`. See the Testing section below.
 
@@ -27,9 +28,9 @@ pnpm only (`packageManager: pnpm@10.34.5`), Node >= 22.
 
 | Command                                  | Notes                                                                 |
 | ---------------------------------------- | --------------------------------------------------------------------- |
-| `pnpm run dev`                           | turbo dev; fumadocs on `http://localhost:4000`                        |
+| `pnpm run dev`                           | turbo dev; fumadocs on `http://localhost:4000`, playground on `http://localhost:4100`                        |
 | `pnpm run check`                         | `biome check --write .` — **mutates files**, run it before committing |
-| `pnpm run check-types`                   | turbo `check-types`; covers `editor-core`/`editor-react`, not fumadocs |
+| `pnpm run check-types`                   | turbo `check-types`; covers `editor-core`/`editor-react`/`playground`, not fumadocs |
 | `pnpm run check-types:fumadocs`          | wrapper for `pnpm --filter fumadocs run types:check`                  |
 | `pnpm --filter fumadocs run types:check` | the real app typecheck (`next typegen && tsc --noEmit`); use this     |
 | `pnpm run build`                         | turbo build, `dependsOn: ["^build"]`                                  |
@@ -58,7 +59,8 @@ Tooling and responsibilities:
 
 Rules:
 
-- Unit tests are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`); type tests are `src/**/*.test-d.ts`; browser tests live in `tests/browser/`.
+- Unit tests are co-located with source (`src/**/*.test.ts`, `src/**/*.test.tsx`); type tests are `src/**/*.test-d.ts`; browser tests live in `tests/browser/` (`fumadocs/` and `playground/` subdirectories). `playwright.config.ts` defines one project per app: `fumadocs` on `:4000` and `playground` on `:4100`.
+- The playground has no Vitest suite in Phase 05 — it is validated by `check-types`, `vite build`, and the Playwright `playground` project. Do not add Vitest to it without a stated reason.
 - `editor-core` tests default to a **node** environment and must not touch React or browser globals. Tests that actually create an editor (editor creation, toolbar commands, image upload) opt in per file with `// @vitest-environment jsdom`; keep that annotation limited to those files. `editor-react` tests run in **jsdom**.
 - `editor-core` declares its Tiptap packages (`@tiptap/core`, `@tiptap/pm`, `@tiptap/starter-kit`, `@tiptap/extension-image`, `@tiptap/extensions`, `@tiptap/html`) as `peerDependencies`; `happy-dom` is an **optional** peer required only for server-side `jsonToHTML`. Keep them on one Tiptap version line.
 - `pnpm run test` must never launch a browser; browser behavior uses `pnpm run test:browser`.

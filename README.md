@@ -7,9 +7,10 @@ The project is a TypeScript monorepo. `editor-core` is designed to stay
 framework-independent so adapters (React first, Vue later) remain thin. React
 is the first supported UI framework.
 
-> This repository is in **Phase 03 — Editor Core**. `editor-core` now exposes the
-> framework-independent editor API; the React adapter (Phase 04) and the
-> playground are not implemented yet. See the roadmap below.
+> This repository is in **Phase 05 — Playground**. `editor-core` (Phase 03) and
+> the React adapter (Phase 04) are implemented, and `apps/playground` is the
+> internal validation environment that consumes both through their public API.
+> See the roadmap below.
 
 ## Repository Structure
 
@@ -21,14 +22,15 @@ editor/
 ├── .github/workflows/       # CI (check, types, tests, build, packages, browser)
 ├── .husky/                  # git hooks (pre-commit, commit-msg)
 ├── apps/
-│   └── fumadocs/            # documentation app (Next.js + Fumadocs)
+│   ├── fumadocs/            # documentation app (Next.js + Fumadocs)
+│   └── playground/          # internal validation environment (Vite + React + Tailwind)
 ├── docs/
 │   ├── adr/                 # architecture decision records (ADRs 0002–0004)
 │   └── roadmap/             # implementation roadmap
 ├── packages/
 │   ├── config/              # @editor/config — shared tsconfig (internal, not published)
 │   ├── editor-core/         # @rumahkodingku/editor-core — core API implemented (Phase 03)
-│   └── editor-react/        # @rumahkodingku/editor-react — tsdown build, no features yet
+│   └── editor-react/        # @rumahkodingku/editor-react — React adapter (Phase 04)
 ├── tests/
 │   └── browser/             # Playwright browser + accessibility tests
 ├── AGENTS.md                # operational rules for AI agents and contributors
@@ -52,12 +54,16 @@ editor/
 `editor-core` implements the framework-independent core API (Phase 03): editor
 creation, the default extension preset, the RumahKodingku image-upload
 extension, content utilities, JSON/HTML serialization, persistence schema
-versioning, the upload contract, toolbar definitions, and editor labels. It
-builds to ESM with type declarations and declares its Tiptap peer contracts.
-`editor-react` is still a Phase 01 skeleton. Phase 02 added the test foundation
-(Vitest, React Testing Library, Playwright, axe-core). `apps/playground` and
-`.changeset/` are defined in `ARCHITECTURE.md` §3.2 and are created in later
-phases.
+versioning, the upload contract, toolbar definitions, and editor labels.
+`editor-react` implements the React adapter (Phase 04): the `Editor` component,
+controlled/uncontrolled content, editable/read-only/disabled states, custom
+extension composition, labels, SSR support, a minimal toolbar, and the published
+stylesheet. Both build to ESM with type declarations and declare their Tiptap
+peer contracts. Phase 02 added the test foundation (Vitest, React Testing
+Library, Playwright, axe-core). `apps/playground` (Phase 05) is the internal
+validation environment and consumes the packages through their public exports
+only. `.changeset/` is defined in `ARCHITECTURE.md` §3.2 and is created in a
+later phase.
 
 ## Development
 
@@ -77,7 +83,8 @@ Start all applications in development mode:
 pnpm run dev
 ```
 
-The documentation app (Fumadocs) is served on http://localhost:4000.
+The documentation app (Fumadocs) is served on http://localhost:4000 and the
+playground on http://localhost:4100.
 
 ## Verification
 
@@ -112,9 +119,11 @@ Notes:
   `editor-core` tests run in a **node** environment; `editor-react` tests run in
   **jsdom** with React Testing Library.
 - **Playwright** runs real-browser tests from `tests/browser/` against the
-  production build of the Fumadocs app on http://localhost:4000. It builds and
-  starts the app automatically; the dev server is not used (it compiles on
-  demand and is not deterministic).
+  production builds of the apps. `tests/browser/fumadocs/` targets the Fumadocs
+  app on http://localhost:4000 and `tests/browser/playground/` targets the
+  playground on http://localhost:4100; each is a Playwright project and both
+  servers are built and started automatically. The dev server is not used (it
+  compiles on demand and is not deterministic).
 - **axe-core** (`@axe-core/playwright`) provides accessibility checks and runs as
   part of `pnpm run test:browser`.
 - Install the browser before the first browser run: `pnpm exec playwright install chromium`.

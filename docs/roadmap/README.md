@@ -12,8 +12,8 @@ Details for each phase will be saved in separate files in this folder.
 | 01    | Build & Package Infrastructure          | Done        |
 | 02    | Test Infrastructure                     | Done        |
 | 03    | Editor Core                             | Done        |
-| 04    | React Adapter                           | ⬜          |
-| 05    | Playground                              | ⬜          |
+| 04    | React Adapter                           | Done        |
+| 05    | Playground                              | Done        |
 | 06    | Editor MVP                              | ⬜          |
 | 07    | Browser & Accessibility                 | ⬜          |
 | 08    | Documentation                           | ⬜          |
@@ -21,14 +21,17 @@ Details for each phase will be saved in separate files in this folder.
 
 ## Current Phase
 
-**Phase 03 — Editor Core**
+**Phase 05 — Playground (complete) — next: Phase 06**
 
-Phases 00–03 are complete. `editor-core` now provides the framework-independent
-core API (editor creation, default extensions, the RK image-upload extension,
-content utilities, JSON/HTML serialization, persistence schema versioning, the
-upload contract, toolbar definitions, and editor labels), verified by unit,
-integration, and type tests plus package validation. ADRs 0002–0004 are recorded.
-Work proceeds to Phase 04 (React adapter).
+Phases 00–05 are complete. `editor-core` provides the framework-independent core
+API (Phase 03) and `editor-react` provides the React adapter (Phase 04), both
+verified by unit, integration, and type tests plus package validation.
+`apps/playground` (Phase 05) is the internal validation environment: a Vite +
+React app that consumes the packages through their public exports only, with
+scenario-based surfaces, JSON/HTML inspectors, mock image upload, and basic
+browser smoke/interaction tests. ADRs 0002–0004 are recorded. Work proceeds to
+Phase 06 (Editor UX / toolbar / dialogs); release engineering and Changesets
+remain deferred to Phase 09.
 
 ## Phase Documents
 

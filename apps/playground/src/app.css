@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/*
+ * Playground shell styling only.
+ *
+ * Editor styling lives in `@rumahkodingku/editor-react/styles.css` and is
+ * imported in `main.tsx`. Nothing here may reach into the published package;
+ * the playground only themes through the public `--rk-editor-*` variables.
+ */
+
+:root {
+	color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+.playground-scenarios {
+	--playground-panel: #ffffff;
+	--playground-panel-border: #e4e4e7;
+}
