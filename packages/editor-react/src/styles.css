@@ -1,8 +1,9 @@
 /*
- * Style foundation for RumahKodingku Editor.
+ * RumahKodingku Editor — framework-agnostic stylesheet.
  *
- * Framework-agnostic CSS variables only, no Tailwind. The full default
- * stylesheet and theming are implemented in Phase 04.
+ * No Tailwind, no UI framework. All selectors are namespaced with `rk-editor`
+ * and every color/size is a `--rk-editor-*` custom property so applications can
+ * theme the editor without touching this file.
  */
 
 :root {
@@ -11,4 +12,202 @@
 	--rk-editor-border: #e4e4e7;
 	--rk-editor-muted: #71717a;
 	--rk-editor-radius: 0.375rem;
+	--rk-editor-accent: #2563eb;
+	--rk-editor-accent-contrast: #ffffff;
+	--rk-editor-surface: #ffffff;
+	--rk-editor-toolbar-background: #fafafa;
+	--rk-editor-hover: #f4f4f5;
+	--rk-editor-focus-ring: color-mix(
+		in srgb,
+		var(--rk-editor-accent) 45%,
+		transparent
+	);
+	--rk-editor-spacing: 0.75rem;
+	--rk-editor-font-family: inherit;
+	--rk-editor-font-size: 1rem;
+	--rk-editor-line-height: 1.6;
+}
+
+[data-theme="dark"] {
+	--rk-editor-background: #18181b;
+	--rk-editor-foreground: #fafafa;
+	--rk-editor-border: #3f3f46;
+	--rk-editor-muted: #a1a1aa;
+	--rk-editor-surface: #18181b;
+	--rk-editor-toolbar-background: #27272a;
+	--rk-editor-hover: #3f3f46;
+	--rk-editor-accent: #60a5fa;
+	--rk-editor-accent-contrast: #18181b;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--rk-editor-background: #18181b;
+		--rk-editor-foreground: #fafafa;
+		--rk-editor-border: #3f3f46;
+		--rk-editor-muted: #a1a1aa;
+		--rk-editor-surface: #18181b;
+		--rk-editor-toolbar-background: #27272a;
+		--rk-editor-hover: #3f3f46;
+		--rk-editor-accent: #60a5fa;
+		--rk-editor-accent-contrast: #18181b;
+	}
+}
+
+.rk-editor {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	color: var(--rk-editor-foreground);
+	background: var(--rk-editor-background);
+	border: 1px solid var(--rk-editor-border);
+	border-radius: var(--rk-editor-radius);
+	overflow: hidden;
+}
+
+.rk-editor *,
+.rk-editor *::before,
+.rk-editor *::after {
+	box-sizing: border-box;
+}
+
+.rk-editor__toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.125rem;
+	padding: 0.375rem;
+	background: var(--rk-editor-toolbar-background);
+	border-bottom: 1px solid var(--rk-editor-border);
+}
+
+.rk-editor__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+	color: var(--rk-editor-foreground);
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: calc(var(--rk-editor-radius) - 0.125rem);
+	cursor: pointer;
+}
+
+.rk-editor__button:hover:not(:disabled) {
+	background: var(--rk-editor-hover);
+}
+
+.rk-editor__button:focus-visible {
+	outline: 2px solid var(--rk-editor-focus-ring);
+	outline-offset: 1px;
+}
+
+.rk-editor__button--active {
+	color: var(--rk-editor-accent-contrast);
+	background: var(--rk-editor-accent);
+}
+
+.rk-editor__button--active:hover:not(:disabled) {
+	background: var(--rk-editor-accent);
+}
+
+.rk-editor__button--disabled,
+.rk-editor__button:disabled {
+	color: var(--rk-editor-muted);
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.rk-editor__content {
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.rk-editor__surface {
+	min-height: 8rem;
+	padding: var(--rk-editor-spacing);
+	font-family: var(--rk-editor-font-family);
+	font-size: var(--rk-editor-font-size);
+	line-height: var(--rk-editor-line-height);
+	outline: none;
+}
+
+.rk-editor__surface:focus-visible {
+	outline: 2px solid var(--rk-editor-focus-ring);
+	outline-offset: -2px;
+}
+
+.rk-editor[data-readonly="true"] .rk-editor__surface {
+	cursor: default;
+}
+
+.rk-editor[data-disabled="true"] {
+	opacity: 0.6;
+}
+
+.rk-editor[data-disabled="true"] .rk-editor__surface {
+	cursor: not-allowed;
+}
+
+.rk-editor__surface p {
+	margin: 0 0 0.75em;
+}
+
+.rk-editor__surface h1,
+.rk-editor__surface h2,
+.rk-editor__surface h3 {
+	margin: 1em 0 0.5em;
+	line-height: 1.25;
+}
+
+.rk-editor__surface blockquote {
+	margin: 0.75em 0;
+	padding-left: 0.875rem;
+	border-left: 3px solid var(--rk-editor-border);
+	color: var(--rk-editor-muted);
+}
+
+.rk-editor__surface pre {
+	margin: 0.75em 0;
+	padding: 0.75rem 0.875rem;
+	overflow-x: auto;
+	background: var(--rk-editor-toolbar-background);
+	border-radius: var(--rk-editor-radius);
+}
+
+.rk-editor__surface code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.9em;
+}
+
+.rk-editor__surface hr {
+	margin: 1em 0;
+	border: none;
+	border-top: 1px solid var(--rk-editor-border);
+}
+
+.rk-editor__surface img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--rk-editor-radius);
+}
+
+.rk-editor__surface img[data-rk-upload-id] {
+	min-width: 4rem;
+	min-height: 4rem;
+	background: var(--rk-editor-toolbar-background);
+	border: 1px dashed var(--rk-editor-border);
+}
+
+.rk-editor__surface .is-editor-empty:first-child::before {
+	float: left;
+	height: 0;
+	color: var(--rk-editor-muted);
+	content: attr(data-placeholder);
+	pointer-events: none;
+}
+
+.rk-editor__surface ::selection {
+	background: var(--rk-editor-focus-ring);
 }

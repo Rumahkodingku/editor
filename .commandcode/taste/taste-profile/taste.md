@@ -11,6 +11,7 @@
 - Prefers all responses and deliverables written in Bahasa Indonesia. Confidence: 0.9
 - When multiple options exist, wants each option explained plus a recommended best choice with reasoning. Confidence: 0.85
 - Expects each proposed change to be justified: why the file is created/changed/removed and what dependency, config, or risk it affects — not just a list of steps. Confidence: 0.75
+- Wants potential risks or conflicts against the governing docs (e.g. AGENTS.md, ARCHITECTURE.md, PRD.md) explicitly identified in the plan rather than silently resolved. Confidence: 0.7
 - Prefers plans delivered in a fixed, numbered section outline (current state, task, plan, files affected, dependency/config impact, risks, verification, acceptance criteria, open questions). Confidence: 0.8
 - Once a plan is approved and execution begins, expects the agent to drive the full todo list through to completion rather than stopping midway and asking to continue. Confidence: 0.75
 - Approves plans with a short, direct instruction (e.g. "Eksekusi plan nya sekarang") and expects the agent to start immediately without re-confirming or restating the plan. Confidence: 0.75
