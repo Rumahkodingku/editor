@@ -39,10 +39,27 @@ export type {
 } from "@tiptap/core";
 // Components
 export { Editor } from "./components/Editor";
+export type { EditorContentProps } from "./components/EditorContent";
+export { EditorContent } from "./components/EditorContent";
+export type { EditorProviderProps } from "./components/EditorProvider";
+export { EditorProvider } from "./components/EditorProvider";
 export type { EditorToolbarProps } from "./components/EditorToolbar";
 export { EditorToolbar } from "./components/EditorToolbar";
+export type { ImageAltPopoverProps } from "./components/ImageAltPopover";
+export { ImageAltPopover } from "./components/ImageAltPopover";
+export type { ImageControlProps } from "./components/ImageControl";
+export { ImageControl } from "./components/ImageControl";
+export type { LinkControlProps } from "./components/LinkControl";
+export { LinkControl } from "./components/LinkControl";
 export type { ToolbarButtonProps } from "./components/ToolbarButton";
 export { ToolbarButton } from "./components/ToolbarButton";
+export type { ToolbarGroupProps } from "./components/ToolbarGroup";
+export { ToolbarGroup } from "./components/ToolbarGroup";
+// Context
+export {
+	type EditorContextValue,
+	useEditorContext,
+} from "./context/editor-context";
 export type { ToolbarIconProps } from "./icons/icons";
 // Icons
 export { ToolbarIcon } from "./icons/icons";

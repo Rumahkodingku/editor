@@ -43,7 +43,7 @@ function createMarkItem(
 }
 
 function createHeadingItem(
-	level: 1 | 2 | 3,
+	level: 1 | 2 | 3 | 4 | 5 | 6,
 	labelKey: keyof EditorLabels,
 	shortcut?: string,
 ): ToolbarItemDefinition {
@@ -78,6 +78,9 @@ export function createDefaultToolbar(): ToolbarItemDefinition[] {
 		createHeadingItem(1, "heading1", "Mod-Alt-1"),
 		createHeadingItem(2, "heading2", "Mod-Alt-2"),
 		createHeadingItem(3, "heading3", "Mod-Alt-3"),
+		createHeadingItem(4, "heading4", "Mod-Alt-4"),
+		createHeadingItem(5, "heading5", "Mod-Alt-5"),
+		createHeadingItem(6, "heading6", "Mod-Alt-6"),
 		{
 			id: "bulletList",
 			labelKey: "bulletList",

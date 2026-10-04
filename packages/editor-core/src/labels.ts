@@ -18,12 +18,26 @@ export type EditorLabels = {
 	heading1: string;
 	heading2: string;
 	heading3: string;
+	heading4: string;
+	heading5: string;
+	heading6: string;
 	horizontalRule: string;
 	link: string;
 	unlink: string;
 	image: string;
 	undo: string;
 	redo: string;
+	toolbarFormatting: string;
+	toolbarHeadings: string;
+	toolbarLists: string;
+	toolbarBlocks: string;
+	toolbarInsert: string;
+	toolbarHistory: string;
+	toolbarOther: string;
+	apply: string;
+	cancel: string;
+	url: string;
+	altText: string;
 };
 
 /** Default (English) labels. */
@@ -41,12 +55,26 @@ export const defaultLabels: EditorLabels = {
 	heading1: "Heading 1",
 	heading2: "Heading 2",
 	heading3: "Heading 3",
+	heading4: "Heading 4",
+	heading5: "Heading 5",
+	heading6: "Heading 6",
 	horizontalRule: "Horizontal rule",
 	link: "Link",
 	unlink: "Remove link",
 	image: "Image",
 	undo: "Undo",
 	redo: "Redo",
+	toolbarFormatting: "Text formatting",
+	toolbarHeadings: "Headings",
+	toolbarLists: "Lists",
+	toolbarBlocks: "Blocks",
+	toolbarInsert: "Insert",
+	toolbarHistory: "History",
+	toolbarOther: "More",
+	apply: "Apply",
+	cancel: "Cancel",
+	url: "URL",
+	altText: "Alt text",
 };
 
 /**

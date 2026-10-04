@@ -62,6 +62,33 @@ const ICONS: Record<string, ReactNode> = {
 			<path d="M16 9h5l-2.5 3.5a2.5 2.5 0 1 1-2 4" />
 		</>
 	),
+	"heading-4": (
+		<>
+			<path d="M4 6v12" />
+			<path d="M12 6v12" />
+			<path d="M4 12h8" />
+			<path d="M17 9v4h4" />
+			<path d="M21 13v6" />
+		</>
+	),
+	"heading-5": (
+		<>
+			<path d="M4 6v12" />
+			<path d="M12 6v12" />
+			<path d="M4 12h8" />
+			<path d="M17 9h4l-1 3.5" />
+			<path d="M20 12.5a2.5 2.5 0 1 1-1.5 4.5" />
+		</>
+	),
+	"heading-6": (
+		<>
+			<path d="M4 6v12" />
+			<path d="M12 6v12" />
+			<path d="M4 12h8" />
+			<path d="M21 10a2.5 2.5 0 1 0-4 2" />
+			<path d="M21 10a2.5 2.5 0 1 1-3 4" />
+		</>
+	),
 	list: (
 		<>
 			<line x1="9" y1="6" x2="20" y2="6" />
@@ -106,6 +133,26 @@ const ICONS: Record<string, ReactNode> = {
 		<>
 			<polyline points="15 14 20 9 15 4" />
 			<path d="M4 20v-7a4 4 0 0 1 4-4h12" />
+		</>
+	),
+	link: (
+		<>
+			<path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.4" />
+			<path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.6" />
+		</>
+	),
+	unlink: (
+		<>
+			<path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.4" />
+			<path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.6" />
+			<line x1="3" y1="3" x2="21" y2="21" />
+		</>
+	),
+	image: (
+		<>
+			<rect x="3" y="4" width="18" height="16" rx="2" />
+			<circle cx="8.5" cy="9" r="1.5" />
+			<path d="M21 16l-5-5L6 20" />
 		</>
 	),
 };

@@ -5,87 +5,100 @@ import {
 	type ToolbarItemDefinition,
 } from "@rumahkodingku/editor-core";
 import type { Editor } from "@tiptap/core";
-import { type KeyboardEvent, useCallback, useMemo, useState } from "react";
+import { type ReactNode, useContext, useMemo } from "react";
 
-import { useToolbarState } from "../hooks/useToolbarState";
+import { EditorContext } from "../context/editor-context";
+import { useRovingTabIndex } from "../hooks/useRovingTabIndex";
+import {
+	type ToolbarItemState,
+	useToolbarState,
+} from "../hooks/useToolbarState";
 import { cx } from "../lib/cx";
+import { groupToolbarItems } from "./defaultToolbarGroups";
 import { ToolbarButton } from "./ToolbarButton";
+import { ToolbarGroup } from "./ToolbarGroup";
 
 export type EditorToolbarProps = {
-	/** Editor the toolbar controls. */
-	editor: Editor | null;
-	/** Partial label overrides applied on top of the core defaults. */
+	/** Editor the toolbar controls. Falls back to the surrounding context. */
+	editor?: Editor | null;
+	/** Partial label overrides applied on top of the resolved/core defaults. */
 	labels?: Partial<EditorLabels>;
 	/** Items to render. Defaults to the core default toolbar. */
 	items?: ToolbarItemDefinition[];
+	/** Extra controls (link/image/custom) rendered after the grouped items. */
+	children?: ReactNode;
 	/** Class name applied to the toolbar root element. */
 	className?: string;
 };
 
+const EMPTY_STATE: ToolbarItemState = { active: false, disabled: true };
+
 /**
  * Render core toolbar definitions as React controls.
  *
- * The default toolbar is the core default; consumers can pass their own `items`
- * (composed from core definitions) without mutating global state.
+ * Core formatting commands come from `createDefaultToolbar`; adapter-composed
+ * controls (link, image) are passed as `children`, so a single toolbar can mix
+ * both while the command logic stays in `editor-core`. The toolbar exposes a
+ * single tab stop and arrow-key navigation (WAI-ARIA toolbar pattern).
  */
 export function EditorToolbar({
 	editor,
 	labels,
 	items,
+	children,
 	className,
 }: EditorToolbarProps) {
-	const resolvedLabels = useMemo(() => resolveLabels(labels), [labels]);
+	const context = useContext(EditorContext);
+	const resolvedEditor = editor ?? context?.editor ?? null;
+	const resolvedLabels = useMemo(
+		() => resolveLabels(labels ?? context?.labels),
+		[labels, context?.labels],
+	);
+
 	const toolbarItems = useMemo(() => items ?? createDefaultToolbar(), [items]);
-	const states = useToolbarState(editor, toolbarItems);
-	const [focusIndex, setFocusIndex] = useState(0);
+	const groups = useMemo(() => groupToolbarItems(toolbarItems), [toolbarItems]);
+	const states = useToolbarState(resolvedEditor, toolbarItems);
 
-	const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-		if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
-			return;
-		}
+	const stateById = useMemo(() => {
+		const map = new Map<string, ToolbarItemState>();
+		toolbarItems.forEach((item, index) => {
+			map.set(item.id, states[index] ?? EMPTY_STATE);
+		});
+		return map;
+	}, [toolbarItems, states]);
 
-		const buttons = Array.from(
-			event.currentTarget.querySelectorAll<HTMLButtonElement>(
-				"button:not([disabled])",
-			),
-		);
-		if (buttons.length === 0) {
-			return;
-		}
-
-		const currentIndex = buttons.indexOf(
-			document.activeElement as HTMLButtonElement,
-		);
-		if (currentIndex === -1) {
-			return;
-		}
-
-		event.preventDefault();
-		const delta = event.key === "ArrowRight" ? 1 : -1;
-		const nextIndex = (currentIndex + delta + buttons.length) % buttons.length;
-		buttons[nextIndex]?.focus();
-	}, []);
+	const dependency = useMemo(
+		() =>
+			`${toolbarItems
+				.map((item) => (stateById.get(item.id)?.disabled ? "1" : "0"))
+				.join("")}|${children ? "1" : "0"}`,
+		[toolbarItems, stateById, children],
+	);
+	const containerRef = useRovingTabIndex<HTMLDivElement>(dependency);
 
 	return (
 		<div
+			ref={containerRef}
 			role="toolbar"
 			aria-label={resolvedLabels.editor}
 			aria-orientation="horizontal"
 			className={cx("rk-editor__toolbar", className)}
-			onKeyDown={handleKeyDown}
 		>
-			{toolbarItems.map((item, index) => (
-				<ToolbarButton
-					key={item.id}
-					editor={editor}
-					item={item}
-					label={resolvedLabels[item.labelKey]}
-					active={states[index]?.active ?? false}
-					disabled={states[index]?.disabled ?? true}
-					tabIndex={focusIndex === index ? 0 : -1}
-					onFocus={() => setFocusIndex(index)}
-				/>
+			{groups.map((group) => (
+				<ToolbarGroup key={group.id} label={resolvedLabels[group.labelKey]}>
+					{group.items.map((item) => (
+						<ToolbarButton
+							key={item.id}
+							editor={resolvedEditor}
+							item={item}
+							label={resolvedLabels[item.labelKey]}
+							active={stateById.get(item.id)?.active ?? false}
+							disabled={stateById.get(item.id)?.disabled ?? true}
+						/>
+					))}
+				</ToolbarGroup>
 			))}
+			{children}
 		</div>
 	);
 }

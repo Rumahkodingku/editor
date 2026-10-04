@@ -31,8 +31,11 @@ export type ToolbarButtonProps = {
 	active: boolean;
 	/** Whether the item is currently unavailable. */
 	disabled: boolean;
-	/** Roving tabindex value. */
-	tabIndex: number;
+	/**
+	 * Explicit tabindex. Omit to let the toolbar's roving-tabindex hook manage
+	 * the single tab stop.
+	 */
+	tabIndex?: number;
 	/** Called when the button receives focus. */
 	onFocus?: () => void;
 };

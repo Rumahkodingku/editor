@@ -179,7 +179,7 @@ function resolveUploadOptions(editor: Editor): ImageUploadExtensionOptions {
 export async function insertImageFromFile(
 	editor: Editor,
 	file: File,
-	options: InsertImageOptions = resolveUploadOptions(editor),
+	options?: InsertImageOptions,
 ): Promise<ImageUploadResult | null> {
 	const {
 		upload,
@@ -189,7 +189,7 @@ export async function insertImageFromFile(
 		allowedProtocols,
 		signal,
 		onProgress,
-	} = options;
+	} = { ...resolveUploadOptions(editor), ...options };
 
 	try {
 		validateImageFile(file, { accept, maxSize });

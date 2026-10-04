@@ -1,12 +1,26 @@
 import { expectTypeOf, test } from "vitest";
 import type {
 	AnyExtension,
+	EditorContentProps,
 	EditorLabels,
 	EditorProps,
+	EditorProviderProps,
+	ImageAltPopoverProps,
+	ImageControlProps,
 	JSONContent,
+	LinkControlProps,
 	TiptapEditor,
+	ToolbarGroupProps,
 } from "./index";
-import { Editor, EditorToolbar, ToolbarButton, ToolbarIcon } from "./index";
+import {
+	Editor,
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+	ToolbarButton,
+	ToolbarGroup,
+	ToolbarIcon,
+} from "./index";
 
 test("EditorProps matches the approved contract", () => {
 	expectTypeOf<EditorProps>().toHaveProperty("value");
@@ -24,10 +38,26 @@ test("EditorProps matches the approved contract", () => {
 	>();
 });
 
+test("EditorProviderProps extends EditorProps with children", () => {
+	expectTypeOf<EditorProviderProps>().toMatchTypeOf<EditorProps>();
+	expectTypeOf<EditorProviderProps>().toHaveProperty("children");
+});
+
+test("composable surfaces expose the expected props", () => {
+	expectTypeOf<EditorContentProps>().toHaveProperty("editor");
+	expectTypeOf<ToolbarGroupProps["label"]>().toEqualTypeOf<string>();
+	expectTypeOf<LinkControlProps>().toHaveProperty("labels");
+	expectTypeOf<ImageControlProps>().toHaveProperty("onProgress");
+	expectTypeOf<ImageAltPopoverProps>().toHaveProperty("editor");
+});
+
 test("public components are usable values", () => {
 	expectTypeOf(Editor).toBeFunction();
+	expectTypeOf(EditorProvider).toBeFunction();
+	expectTypeOf(EditorContent).toBeFunction();
 	expectTypeOf(EditorToolbar).toBeFunction();
 	expectTypeOf(ToolbarButton).toBeFunction();
+	expectTypeOf(ToolbarGroup).toBeFunction();
 	expectTypeOf(ToolbarIcon).toBeFunction();
 });
 

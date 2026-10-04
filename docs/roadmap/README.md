@@ -14,24 +14,24 @@ Details for each phase will be saved in separate files in this folder.
 | 03    | Editor Core                             | Done        |
 | 04    | React Adapter                           | Done        |
 | 05    | Playground                              | Done        |
-| 06    | Editor MVP                              | ⬜          |
+| 06    | Editor MVP                              | 🚧 In progress |
 | 07    | Browser & Accessibility                 | ⬜          |
 | 08    | Documentation                           | ⬜          |
 | 09    | Release Engineering                     | ⬜          |
 
 ## Current Phase
 
-**Phase 05 — Playground (complete) — next: Phase 06**
+**Phase 06 — Editor MVP (in progress) — Sections A–G implemented**
 
-Phases 00–05 are complete. `editor-core` provides the framework-independent core
-API (Phase 03) and `editor-react` provides the React adapter (Phase 04), both
-verified by unit, integration, and type tests plus package validation.
-`apps/playground` (Phase 05) is the internal validation environment: a Vite +
-React app that consumes the packages through their public exports only, with
-scenario-based surfaces, JSON/HTML inspectors, mock image upload, and basic
-browser smoke/interaction tests. ADRs 0002–0004 are recorded. Work proceeds to
-Phase 06 (Editor UX / toolbar / dialogs); release engineering and Changesets
-remain deferred to Phase 09.
+Phases 00–05 are complete. Phase 06 implements the React-facing Editor MVP:
+composable surfaces (`EditorProvider`, `EditorContent`, `EditorToolbar`,
+`ToolbarGroup`), a complete default toolbar (bold/italic/underline, headings
+H1–H6, lists, blockquote, inline code + code block, horizontal rule, link,
+image, undo/redo), link and image popovers, image upload progress/error/alt UI,
+styling, and React/type tests. Adapter-composed link/image controls keep the
+core `ToolbarItemDefinition` model unchanged. Sections H–N (accessibility audit,
+formal tests, playground, browser validation, docs, phase gate) remain. Release
+engineering and Changesets remain deferred to Phase 09.
 
 ## Phase Documents
 

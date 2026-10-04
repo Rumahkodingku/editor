@@ -64,3 +64,31 @@ test("does not expose aria-pressed for undo/redo", () => {
 		screen.getByRole("button", { name: "Redo" }).getAttribute("aria-pressed"),
 	).toBeNull();
 });
+
+test("exposes named toolbar groups", () => {
+	renderEditor();
+
+	const groups = screen.getAllByRole("group");
+	expect(groups.length).toBeGreaterThan(0);
+	for (const group of groups) {
+		expect(group.getAttribute("aria-label")).toBeTruthy();
+	}
+});
+
+test("exposes accessible names for the link and image controls", () => {
+	renderEditor();
+
+	expect(screen.getByRole("button", { name: "Link" })).toBeDefined();
+	expect(screen.getByRole("button", { name: "Image" })).toBeDefined();
+	expect(screen.getByRole("button", { name: "Alt text" })).toBeDefined();
+});
+
+test("exposes heading controls up to level six", () => {
+	renderEditor();
+
+	for (let level = 1; level <= 6; level += 1) {
+		expect(
+			screen.getByRole("button", { name: `Heading ${level}` }),
+		).toBeDefined();
+	}
+});

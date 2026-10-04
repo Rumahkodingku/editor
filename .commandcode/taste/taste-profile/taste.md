@@ -4,7 +4,7 @@
 - Wants the agent to STOP after delivering the plan and wait for explicit approval before implementing. Confidence: 0.9
 - Wants the current codebase state verified against real files/config rather than assuming something exists or doesn't. Confidence: 0.9
 - Expects key project docs to be read before planning (e.g. AGENTS.md, ARCHITECTURE.md, PRD.md, roadmap docs). Confidence: 0.85
-- Wants ambiguity, requirement conflicts, or undecided points surfaced as explicit questions instead of being assumed away. Confidence: 0.9
+- Wants ambiguity, requirement conflicts, or undecided points surfaced as explicit questions instead of being assumed away — and expects the agent to halt and ask before proceeding rather than picking an assumption. Confidence: 0.9
 - Enforces strict scope discipline within the current phase; do not drift into the next phase or unrelated scope. Confidence: 0.8
 - Expects a verification plan (commands/checks) to be specified for after implementation. Confidence: 0.8
 - Respects document authority/change-control: treats approved docs (e.g. ARCHITECTURE.md, PRD.md) as immutable unless a change is justified and explicit. Confidence: 0.75

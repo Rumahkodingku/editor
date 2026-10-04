@@ -126,20 +126,70 @@ hydration mismatches:
 
 ## Toolbar
 
-`<Editor>` renders the core default toolbar. For custom composition, render
-`EditorToolbar` with your own list of core `ToolbarItemDefinition`s:
+`<Editor>` renders the default toolbar: core formatting definitions (bold,
+italic, underline, strike, inline code, headings H1–H6, lists, blockquote, code
+block, horizontal rule, undo/redo) plus adapter-composed link and image controls.
+Core formatting commands come from `@rumahkodingku/editor-core`; link and image
+need extra input, so the adapter owns their popovers/pickers and reuses core
+security (`isSafeUrl`) and the core upload pipeline (`insertImageFromFile`).
+
+The toolbar exposes a single tab stop with arrow-key, Home and End navigation,
+and groups its controls with `role="group"`.
+
+For custom composition, render `EditorToolbar` with your own list of core
+`ToolbarItemDefinition`s. Extra controls (including a `ToolbarGroup`) can be
+passed as children, so link/image or consumer controls join the same toolbar and
+tab sequence:
 
 ```tsx
-import { EditorToolbar, createDefaultToolbar } from "@rumahkodingku/editor-react";
+import {
+	EditorToolbar,
+	LinkControl,
+	ImageControl,
+	ToolbarGroup,
+	createDefaultToolbar,
+} from "@rumahkodingku/editor-react";
 
-<EditorToolbar editor={editor} items={createDefaultToolbar().slice(0, 5)} />;
+<EditorToolbar items={createDefaultToolbar().slice(0, 5)}>
+	<ToolbarGroup label="Insert">
+		<LinkControl />
+		<ImageControl />
+	</ToolbarGroup>
+</EditorToolbar>;
 ```
+
+## Composition
+
+`<Editor>` is the all-in-one default layout. For a custom layout, use
+`EditorProvider` with the composable surfaces — they share one editor instance
+through context (no global store; Tiptap still owns the document):
+
+```tsx
+import {
+	EditorProvider,
+	EditorToolbar,
+	EditorContent,
+} from "@rumahkodingku/editor-react";
+
+<EditorProvider value={content} onChange={setContent}>
+	<EditorToolbar />
+	<EditorContent />
+</EditorProvider>;
+```
+
+`EditorContent` also accepts an explicit `editor` prop. `useEditorContext()`
+exposes `{ editor, labels, editable, disabled }` to custom controls.
 
 ## Public API
 
-Components: `Editor`, `EditorToolbar`, `ToolbarButton`, `ToolbarIcon`.
-Types: `EditorProps`, `EditorToolbarProps`, `ToolbarButtonProps`,
-`ToolbarIconProps`, plus re-exported core types (`EditorLabels`,
-`ToolbarItemDefinition`, `ImageUploadHandler`, `ImageUploadResult`,
-`ImageUploadOptions`, `PersistenceEnvelope`) and Tiptap types (`JSONContent`,
-`AnyExtension`, `TiptapEditor`).
+Components: `Editor`, `EditorProvider`, `EditorContent`, `EditorToolbar`,
+`ToolbarGroup`, `ToolbarButton`, `ToolbarIcon`, `LinkControl`, `ImageControl`,
+`ImageAltPopover`.
+Hooks: `useEditorContext`.
+Types: `EditorProps`, `EditorProviderProps`, `EditorContentProps`,
+`EditorToolbarProps`, `ToolbarGroupProps`, `ToolbarButtonProps`,
+`ToolbarIconProps`, `LinkControlProps`, `ImageControlProps`,
+`ImageAltPopoverProps`, `EditorContextValue`, plus re-exported core types
+(`EditorLabels`, `ToolbarItemDefinition`, `ImageUploadHandler`,
+`ImageUploadResult`, `ImageUploadOptions`, `PersistenceEnvelope`) and Tiptap
+types (`JSONContent`, `AnyExtension`, `TiptapEditor`).

@@ -135,3 +135,18 @@ test("reports a missing upload handler", async () => {
 
 	expect(onError.mock.calls[0]?.[0].code).toBe("upload-failed");
 });
+
+test("merges caller options over the configured extension options", async () => {
+	const upload = vi.fn(async () => ({
+		src: "https://cdn.example.com/merged.png",
+	}));
+	const editor = makeEditor(upload);
+	const onProgress = vi.fn();
+
+	// Only `onProgress` is supplied: the configured `upload` must still be used.
+	const result = await insertImageFromFile(editor, makeFile(), { onProgress });
+
+	expect(upload).toHaveBeenCalledOnce();
+	expect(result?.src).toBe("https://cdn.example.com/merged.png");
+	expect(imageNodes(editor)).toHaveLength(1);
+});

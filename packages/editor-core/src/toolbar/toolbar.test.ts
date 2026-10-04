@@ -38,6 +38,9 @@ test("exposes definitions for the MVP formatting commands", () => {
 		"heading-1",
 		"heading-2",
 		"heading-3",
+		"heading-4",
+		"heading-5",
+		"heading-6",
 		"bulletList",
 		"orderedList",
 		"blockquote",
@@ -92,4 +95,23 @@ test("undo and redo are never reported as active and are disabled read-only", ()
 	const readOnly = makeEditor(false);
 	expect(undo.isDisabled(readOnly)).toBe(true);
 	expect(redo.isDisabled(readOnly)).toBe(true);
+});
+
+test("exposes heading levels 1 through 6 and toggles them", () => {
+	const editor = makeEditor();
+	const toolbar = createDefaultToolbar();
+
+	for (const item of toolbar.filter((entry) =>
+		entry.id.startsWith("heading-"),
+	)) {
+		expect(item.isActive(editor)).toBe(false);
+		item.run(editor);
+		expect(item.isActive(editor)).toBe(true);
+		item.run(editor);
+		expect(item.isActive(editor)).toBe(false);
+	}
+
+	expect(toolbar.filter((item) => item.id.startsWith("heading-"))).toHaveLength(
+		6,
+	);
 });

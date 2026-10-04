@@ -112,3 +112,46 @@ test("uses a roving tabindex across controls", () => {
 	expect(italic.getAttribute("tabindex")).toBe("0");
 	expect(bold.getAttribute("tabindex")).toBe("-1");
 });
+
+test("exposes a single tab stop across grouped and adapter controls", () => {
+	render(<Editor />);
+
+	const buttons = screen.getAllByRole("button");
+	const tabStops = buttons.filter(
+		(button) => button.getAttribute("tabindex") === "0",
+	);
+	expect(tabStops).toHaveLength(1);
+});
+
+test("moves the tab stop with arrow keys, Home and End", () => {
+	render(<Editor />);
+
+	const toolbar = screen.getByRole("toolbar");
+	const bold = screen.getByRole("button", { name: "Bold" });
+	const italic = screen.getByRole("button", { name: "Italic" });
+	const enabled = screen
+		.getAllByRole("button")
+		.filter((button) => !(button as HTMLButtonElement).disabled);
+	const lastEnabled = enabled[enabled.length - 1];
+	const activeStop = () =>
+		screen
+			.getAllByRole("button")
+			.find((button) => button.getAttribute("tabindex") === "0");
+
+	act(() => {
+		bold.focus();
+	});
+	expect(activeStop()).toBe(bold);
+
+	fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+	expect(activeStop()).toBe(italic);
+
+	fireEvent.keyDown(toolbar, { key: "ArrowLeft" });
+	expect(activeStop()).toBe(bold);
+
+	fireEvent.keyDown(toolbar, { key: "End" });
+	expect(activeStop()).toBe(lastEnabled);
+
+	fireEvent.keyDown(toolbar, { key: "Home" });
+	expect(activeStop()).toBe(bold);
+});
