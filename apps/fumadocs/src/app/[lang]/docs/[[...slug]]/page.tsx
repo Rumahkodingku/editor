@@ -29,7 +29,7 @@ export default async function Page(
 
 	return (
 		<DocsPage toc={page.data.toc} full={page.data.full}>
-			<DocsTitle>{page.data.title}</DocsTitle>
+			<DocsTitle className="rk-docs-title">{page.data.title}</DocsTitle>
 			<DocsDescription className="mb-0">
 				{page.data.description}
 			</DocsDescription>
@@ -40,7 +40,7 @@ export default async function Page(
 					githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/fumadocs/content/docs/${page.path}`}
 				/>
 			</div>
-			<DocsBody>
+			<DocsBody className="rk-docs">
 				<MDX
 					components={getMDXComponents({
 						// Internal documentation links keep the active locale.

@@ -18,3 +18,10 @@
 - Will supply elevated credentials (e.g. a sudo password) on request so the agent can install missing host/system dependencies, rather than letting the agent skip or leave verification partially done. Confidence: 0.6
 - Prefers unblocking environment/tooling setup end-to-end (install deps, run the full test matrix on every target engine) so verification is complete, not scoped down to what happens to work locally. Confidence: 0.55
 - Expects the agent to leave changes uncommitted unless a commit is explicitly requested. Confidence: 0.6
+- Treats the actual repository as the source of truth and forbids inventing APIs, packages, features, or content that do not truly exist there; copy/examples must be taken from the real code. Confidence: 0.85
+- Insists existing architecture and functionality be preserved: no broken routing, navigation, search, TOC, rendering, dark/light mode, or accessibility semantics as a side effect of a change. Confidence: 0.85
+- Prefers reusing components already available, avoiding unnecessary new dependencies, and avoiding duplicated design tokens; changes should be systemic rather than superficial re-skinning. Confidence: 0.8
+- Requires browser-level verification, not just automated unit/build checks: run the repo's real lint/typecheck/build/test commands, then Playwright regression tests, then exploratory visual/interactive validation (e.g. agent-browser) for hierarchy, spacing, typography, color, responsiveness, and visual regressions. Confidence: 0.85
+- Does not accept "it builds" as done: issues found during testing must be diagnosed, fixed, and the affected tests re-run before the task is declared complete. Confidence: 0.8
+- Wants explanations and questions written in clear, easily understood Bahasa Indonesia, without overusing unexplained technical jargon. Confidence: 0.8
+- Wants a structured final report in Bahasa Indonesia with fixed sections: summary, main changes, files changed, testing results, findings and fixes, and remaining notes. Confidence: 0.7

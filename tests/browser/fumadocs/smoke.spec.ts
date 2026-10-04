@@ -4,7 +4,21 @@ test("home page loads @cross-browser", async ({ page }) => {
 	await page.goto("/");
 
 	await expect(
-		page.getByRole("heading", { level: 1, name: "RumahKodingku Editor" }),
+		page.getByRole("heading", {
+			level: 1,
+			name: "A modern rich-text editor for the web.",
+		}),
+	).toBeVisible();
+});
+
+test("Indonesian home page loads", async ({ page }) => {
+	await page.goto("/id");
+
+	await expect(
+		page.getByRole("heading", {
+			level: 1,
+			name: "Editor rich-text modern untuk web.",
+		}),
 	).toBeVisible();
 });
 

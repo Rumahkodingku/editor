@@ -1,14 +1,20 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
 import "@rumahkodingku/editor-react/styles.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
 import { i18nUI } from "@/lib/layout.shared";
 import { appName } from "@/lib/shared";
 import "../global.css";
 
-const inter = Inter({
+const geist = Geist({
 	subsets: ["latin"],
+	variable: "--font-geist-sans",
+});
+
+const geistMono = Geist_Mono({
+	subsets: ["latin"],
+	variable: "--font-geist-mono",
 });
 
 const description =
@@ -46,8 +52,12 @@ export default async function Layout({
 	const { lang } = await params;
 
 	return (
-		<html lang={lang} className={inter.className} suppressHydrationWarning>
-			<body className="flex min-h-screen flex-col">
+		<html
+			lang={lang}
+			className={`${geist.variable} ${geistMono.variable} ${geist.className}`}
+			suppressHydrationWarning
+		>
+			<body className="flex min-h-screen flex-col font-sans">
 				<RootProvider i18n={i18nUI.provider(lang)}>{children}</RootProvider>
 			</body>
 		</html>

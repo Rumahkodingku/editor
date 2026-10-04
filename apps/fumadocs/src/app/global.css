@@ -2,21 +2,399 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
+/*
+ * RumahKodingku Editor — single source of truth for design tokens.
+ *
+ * Everything visual is centralized here:
+ *   1. `@theme` brand tokens (expose Tailwind utilities like `bg-rk-primary`).
+ *   2. Fumadocs `--color-fd-*` overrides so `/docs` adopts the brand without
+ *      forking internal components.
+ *   3. An editor token bridge so live examples follow the brand and the
+ *      Fumadocs dark mode.
+ */
+
+@theme {
+	--font-sans:
+		var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+		sans-serif;
+	--font-mono:
+		var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas,
+		monospace;
+
+	/* Brand — indigo is the single CTA/link accent. */
+	--color-rk-primary: #533afd;
+	--color-rk-primary-deep: #4434d4;
+	--color-rk-primary-press: #2e2b8c;
+	--color-rk-primary-soft: #665efd;
+	--color-rk-primary-subdued: #f0efff;
+	--color-rk-brand-dark: #1c1e54;
+
+	/* Ink — deep navy, never pure black. */
+	--color-rk-ink: #0d253d;
+	--color-rk-ink-secondary: #273951;
+	--color-rk-ink-muted: #5b6a7f;
+
+	/* Surface */
+	--color-rk-canvas: #ffffff;
+	--color-rk-canvas-soft: #f6f9fc;
+	--color-rk-canvas-cream: #f5e9d4;
+	--color-rk-hairline: #e3e8ee;
+
+	/* Atmospheric gradient stops */
+	--color-rk-ruby: #ea2261;
+	--color-rk-magenta: #f96bee;
+	--color-rk-lemon: #9b6829;
+}
+
+:root {
+	--rk-shadow-1: 0 1px 3px rgba(0, 55, 112, 0.08);
+	--rk-shadow-2:
+		0 8px 24px rgba(0, 55, 112, 0.08), 0 2px 6px rgba(0, 55, 112, 0.04);
+
+	--rk-header-height: 3.5rem;
+
+	/*
+	 * Fumadocs tokens. Overriding the HSL defaults gives the documentation a
+	 * light, branded surface while keeping every Fumadocs component intact.
+	 * `--color-fd-muted-foreground` is set to a value that meets WCAG AA
+	 * (4.5:1) against the canvas.
+	 */
+	--color-fd-background: #ffffff;
+	--color-fd-foreground: var(--color-rk-ink);
+	--color-fd-muted: var(--color-rk-canvas-soft);
+	--color-fd-muted-foreground: var(--color-rk-ink-muted);
+	--color-fd-popover: #ffffff;
+	--color-fd-popover-foreground: var(--color-rk-ink);
+	--color-fd-card: var(--color-rk-canvas-soft);
+	--color-fd-card-foreground: var(--color-rk-ink);
+	--color-fd-border: var(--color-rk-hairline);
+	--color-fd-primary: var(--color-rk-primary);
+	--color-fd-primary-foreground: #ffffff;
+	--color-fd-secondary: var(--color-rk-canvas-soft);
+	--color-fd-secondary-foreground: var(--color-rk-ink-secondary);
+	--color-fd-accent: rgba(83, 58, 253, 0.08);
+	--color-fd-accent-foreground: var(--color-rk-primary-deep);
+	--color-fd-ring: var(--color-rk-primary);
+	--color-fd-overlay: rgba(13, 37, 61, 0.2);
+}
+
+.dark {
+	--rk-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.4);
+	--rk-shadow-2: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+
+	/* Landing surfaces flip to the deep-navy palette. */
+	--color-rk-canvas: #0d1028;
+	--color-rk-canvas-soft: #14173a;
+	--color-rk-ink: #ffffff;
+	--color-rk-ink-secondary: #cbd2e0;
+	--color-rk-ink-muted: #a8b2c2;
+	--color-rk-hairline: rgba(255, 255, 255, 0.1);
+	--color-rk-primary-subdued: rgba(102, 94, 253, 0.16);
+
+	/* Fumadocs dark surfaces. */
+	--color-fd-background: #0d1028;
+	--color-fd-foreground: #ffffff;
+	--color-fd-muted: var(--color-rk-brand-dark);
+	--color-fd-muted-foreground: #a8b2c2;
+	--color-fd-popover: var(--color-rk-brand-dark);
+	--color-fd-popover-foreground: #ffffff;
+	--color-fd-card: var(--color-rk-brand-dark);
+	--color-fd-card-foreground: #ffffff;
+	--color-fd-border: rgba(255, 255, 255, 0.1);
+	--color-fd-primary: var(--color-rk-primary-soft);
+	--color-fd-primary-foreground: #ffffff;
+	--color-fd-secondary: var(--color-rk-brand-dark);
+	--color-fd-secondary-foreground: #ffffff;
+	--color-fd-accent: rgba(102, 94, 253, 0.16);
+	--color-fd-accent-foreground: #c7c3ff;
+	--color-fd-ring: var(--color-rk-primary-soft);
+	--color-fd-overlay: rgba(0, 0, 0, 0.5);
+
+	/* neutral.css scopes muted/secondary tokens to the sidebar; align them. */
+	--rk-editor-background: #0d1028;
+}
+
+/* Keep the Fumadocs sidebar on the brand palette (neutral.css sets its own). */
+.dark #nd-sidebar {
+	--color-fd-muted: var(--color-rk-brand-dark);
+	--color-fd-secondary: var(--color-rk-brand-dark);
+	--color-fd-muted-foreground: #a8b2c2;
+}
+
+/*
+ * Editor token bridge.
+ *
+ * The editor stylesheet keys dark mode off `[data-theme="dark"]` and
+ * `prefers-color-scheme`, while Fumadocs toggles the `.dark` class. The
+ * selectors below have enough specificity to win in every combination and keep
+ * both systems in sync.
+ */
+:root:not(.dark):not([data-theme="dark"]) {
+	--rk-editor-background: #ffffff;
+	--rk-editor-foreground: var(--color-rk-ink);
+	--rk-editor-border: var(--color-rk-hairline);
+	--rk-editor-muted: var(--color-rk-ink-muted);
+	--rk-editor-surface: #ffffff;
+	--rk-editor-toolbar-background: var(--color-rk-canvas-soft);
+	--rk-editor-hover: #eef2f7;
+	--rk-editor-popover-background: #ffffff;
+	--rk-editor-accent: var(--color-rk-primary);
+	--rk-editor-accent-contrast: #ffffff;
+	--rk-editor-link: var(--color-rk-primary);
+	--rk-editor-danger: #dc2626;
+	--rk-editor-shadow: 0 8px 24px rgba(13, 37, 61, 0.14);
+}
+
+:root.dark,
+:root[data-theme="dark"] {
+	--rk-editor-background: #0d1028;
+	--rk-editor-foreground: #ffffff;
+	--rk-editor-border: rgba(255, 255, 255, 0.14);
+	--rk-editor-muted: #a8b2c2;
+	--rk-editor-surface: #0d1028;
+	--rk-editor-toolbar-background: var(--color-rk-brand-dark);
+	--rk-editor-hover: #23265f;
+	--rk-editor-popover-background: var(--color-rk-brand-dark);
+	--rk-editor-accent: var(--color-rk-primary-soft);
+	--rk-editor-accent-contrast: #ffffff;
+	--rk-editor-link: #9c96ff;
+	--rk-editor-danger: #f87171;
+	--rk-editor-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
 html {
 	scrollbar-gutter: stable;
 }
 
-/*
- * Documentation contrast: raise the muted foreground used by page descriptions
- * and link cards so it meets WCAG AA (4.5:1) against the default background. The
- * Fumadocs default (#737373 on #f5f5f5) measures 4.34:1.
- */
-:root {
-	--color-fd-muted-foreground: hsl(0, 0%, 40%);
+/* ------------------------------------------------------------------ */
+/* Landing primitives                                                  */
+/* ------------------------------------------------------------------ */
+
+.rk-container {
+	width: 100%;
+	max-width: 1200px;
+	margin-inline: auto;
+	padding-inline: 24px;
 }
 
-.dark {
-	--color-fd-muted-foreground: hsl(0, 0%, 78%);
+.rk-shadow-1 {
+	box-shadow: var(--rk-shadow-1);
+}
+
+.rk-shadow-2 {
+	box-shadow: var(--rk-shadow-2);
+}
+
+.rk-btn-primary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1;
+	color: #ffffff;
+	background: var(--color-rk-primary);
+	border: 1px solid transparent;
+	border-radius: 9999px;
+	white-space: nowrap;
+	transition:
+		background-color 180ms ease,
+		transform 150ms ease;
+}
+
+.rk-btn-primary:hover {
+	background: var(--color-rk-primary-deep);
+}
+
+.rk-btn-primary:active {
+	background: var(--color-rk-primary-press);
+	transform: translateY(1px);
+}
+
+.rk-btn-secondary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1;
+	color: var(--color-rk-ink);
+	background: var(--color-rk-canvas);
+	border: 1px solid var(--color-rk-hairline);
+	border-radius: 9999px;
+	white-space: nowrap;
+	transition:
+		background-color 180ms ease,
+		border-color 180ms ease,
+		transform 150ms ease;
+}
+
+.rk-btn-secondary:hover {
+	border-color: var(--color-rk-ink-muted);
+}
+
+.rk-btn-secondary:active {
+	transform: translateY(1px);
+}
+
+/* Inverted variant for deep-navy bands. */
+.rk-btn-on-dark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1;
+	color: #ffffff;
+	background: var(--color-rk-primary);
+	border: 1px solid transparent;
+	border-radius: 9999px;
+	white-space: nowrap;
+	transition:
+		background-color 180ms ease,
+		transform 150ms ease;
+}
+
+.rk-btn-on-dark:hover {
+	background: var(--color-rk-primary-soft);
+}
+
+.rk-btn-on-dark:active {
+	transform: translateY(1px);
+}
+
+.rk-btn-primary:focus-visible,
+.rk-btn-secondary:focus-visible,
+.rk-btn-on-dark:focus-visible {
+	outline: 2px solid var(--color-rk-primary);
+	outline-offset: 3px;
+}
+
+.rk-btn-on-dark:focus-visible {
+	outline-color: #ffffff;
+}
+
+.rk-card {
+	background: var(--color-rk-canvas);
+	border: 1px solid var(--color-rk-hairline);
+	border-radius: 12px;
+}
+
+/* Hero subheadline accent: deep indigo on light, light indigo on dark. */
+.rk-hero-accent {
+	color: var(--color-rk-primary-deep);
+}
+
+.dark .rk-hero-accent {
+	color: #c3bfff;
+}
+
+/* Hero editor preview frame. */
+.rk-hero-editor {
+	border-radius: 12px;
+}
+
+.rk-hero-editor .rk-editor {
+	border-radius: 12px;
+	min-height: 0;
+}
+
+.rk-hero-editor .rk-editor__surface {
+	min-height: 11rem;
+	font-size: 0.9375rem;
+}
+
+/*
+ * Documentation prose must not restyle editor content. The typography plugin
+ * sets explicit colors on headings and text; inside a live example the editor's
+ * own `--rk-editor-foreground` should win instead. Blockquotes and links keep
+ * the editor stylesheet's own colors.
+ */
+.rk-editor :is(h1, h2, h3, h4, h5, h6, p, li, strong, em, code) {
+	color: inherit;
+}
+
+/* ------------------------------------------------------------------ */
+/* Documentation polish                                               */
+/* ------------------------------------------------------------------ */
+
+/* Active sidebar item: soft indigo instead of a filled block (§22). */
+#nd-sidebar [data-active="true"] {
+	background: var(--color-rk-primary-subdued);
+	color: var(--color-rk-primary-deep);
+	border-radius: 8px;
+}
+
+#nd-sidebar [data-active="true"]:hover {
+	background: var(--color-rk-primary-subdued);
+	color: var(--color-rk-primary-deep);
+}
+
+.dark #nd-sidebar [data-active="true"] {
+	background: rgba(102, 94, 253, 0.18);
+	color: #c7c3ff;
+}
+
+/* Editorial page title (DocsTitle ships `font-semibold text-[1.75em]`). */
+.rk-docs-title {
+	font-size: clamp(2rem, 1.5rem + 1.9vw, 3rem);
+	font-weight: 300;
+	line-height: 1.15;
+	letter-spacing: -0.96px;
+	color: var(--color-fd-foreground);
+}
+
+/* Deep-navy code blocks, on brand for both themes (§24). */
+figure.shiki {
+	--color-fd-muted-foreground: rgba(226, 232, 240, 0.74);
+	background: var(--color-rk-brand-dark);
+	border-color: rgba(255, 255, 255, 0.12);
+}
+
+figure.shiki figcaption {
+	color: rgba(226, 232, 240, 0.74);
+}
+
+/* Light tables with a soft header (§25). */
+.rk-docs table {
+	width: 100%;
+	border: 1px solid var(--color-fd-border);
+	border-radius: 12px;
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow: hidden;
+	font-size: 0.9375rem;
+}
+
+.rk-docs thead {
+	background: var(--color-rk-canvas-soft);
+}
+
+.rk-docs :is(th, td) {
+	padding: 12px 16px;
+	border: 0;
+	border-bottom: 1px solid var(--color-fd-border);
+	vertical-align: top;
+}
+
+.rk-docs th {
+	color: var(--color-fd-foreground);
+	font-weight: 500;
+	text-align: start;
+}
+
+.rk-docs td {
+	color: var(--color-fd-foreground);
+}
+
+.rk-docs tbody tr:last-child :is(th, td) {
+	border-bottom: 0;
 }
 
 html > body[data-scroll-locked] {

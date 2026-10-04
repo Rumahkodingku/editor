@@ -62,3 +62,27 @@ export const demoDocument: JSONContent = {
 
 /** Empty document fixture. */
 export const emptyDocument: JSONContent = createEmptyDocument();
+
+/** Short document used by the landing-page hero preview. */
+export const heroDocument: JSONContent = {
+	type: "doc",
+	content: [
+		{
+			type: "paragraph",
+			content: [
+				{ type: "text", text: "Build rich content with a modern " },
+				{ type: "text", marks: [{ type: "bold" }], text: "editing experience" },
+				{ type: "text", text: "." },
+			],
+		},
+		{
+			type: "paragraph",
+			content: [
+				{
+					type: "text",
+					text: "This editor is reusable, typed, composable, and framework-ready.",
+				},
+			],
+		},
+	],
+};
