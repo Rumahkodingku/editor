@@ -13,5 +13,8 @@
 - Expects each proposed change to be justified: why the file is created/changed/removed and what dependency, config, or risk it affects — not just a list of steps. Confidence: 0.75
 - Wants potential risks or conflicts against the governing docs (e.g. AGENTS.md, ARCHITECTURE.md, PRD.md) explicitly identified in the plan rather than silently resolved. Confidence: 0.7
 - Prefers plans delivered in a fixed, numbered section outline (current state, task, plan, files affected, dependency/config impact, risks, verification, acceptance criteria, open questions). Confidence: 0.8
-- Once a plan is approved and execution begins, expects the agent to drive the full todo list through to completion rather than stopping midway and asking to continue. Confidence: 0.75
+- Once a plan is approved and execution begins, expects the agent to drive the full todo list through to completion rather than stopping midway and asking to continue; insists that every task be finished and none be left undone, and reinforces this with terse follow-ups like "continue until done" rather than re-approving each step. Confidence: 0.85
 - Approves plans with a short, direct instruction (e.g. "Eksekusi plan nya sekarang") and expects the agent to start immediately without re-confirming or restating the plan. Confidence: 0.75
+- Will supply elevated credentials (e.g. a sudo password) on request so the agent can install missing host/system dependencies, rather than letting the agent skip or leave verification partially done. Confidence: 0.6
+- Prefers unblocking environment/tooling setup end-to-end (install deps, run the full test matrix on every target engine) so verification is complete, not scoped down to what happens to work locally. Confidence: 0.55
+- Expects the agent to leave changes uncommitted unless a commit is explicitly requested. Confidence: 0.6

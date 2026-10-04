@@ -88,6 +88,36 @@ test("does not expose aria-pressed for non-toggle actions", () => {
 	expect(button.getAttribute("aria-pressed")).toBeNull();
 });
 
+test("exposes aria-pressed for every heading level", () => {
+	const editor = createEditor({});
+	editors.push(editor);
+
+	for (let level = 1; level <= 6; level += 1) {
+		render(
+			<ToolbarButton
+				editor={editor}
+				item={makeItem({
+					id: `heading-${level}`,
+					labelKey: `heading${level}` as ToolbarItemDefinition["labelKey"],
+					icon: `heading-${level}`,
+				})}
+				label={`Heading ${level}`}
+				active={true}
+				disabled={false}
+				tabIndex={-1}
+			/>,
+		);
+	}
+
+	for (let level = 1; level <= 6; level += 1) {
+		expect(
+			screen
+				.getByRole("button", { name: `Heading ${level}` })
+				.getAttribute("aria-pressed"),
+		).toBe("true");
+	}
+});
+
 test("is disabled and exposes aria-disabled when unavailable", () => {
 	const editor = createEditor({});
 	editors.push(editor);

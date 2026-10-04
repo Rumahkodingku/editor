@@ -1,13 +1,13 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
-test("playground loads and renders the editor", async ({ page }) => {
+test("playground loads and renders the editor", async ({ page, editor }) => {
 	await page.goto("/");
 
 	await expect(
 		page.getByRole("heading", { level: 1, name: /Playground/i }),
 	).toBeVisible();
 	await expect(page.getByTestId("scenario-basic")).toBeVisible();
-	await expect(page.locator(".rk-editor__surface")).toBeVisible();
+	await expect(editor.surface("basic")).toBeVisible();
 });
 
 test("scenario navigation switches scenarios", async ({ page }) => {
@@ -21,11 +21,12 @@ test("scenario navigation switches scenarios", async ({ page }) => {
 
 test("deep link selects a scenario without a fatal runtime error", async ({
 	page,
+	editor,
 }) => {
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
 
-	await page.goto("/#/controlled");
+	await editor.goto("controlled");
 
 	await expect(page.getByTestId("scenario-controlled")).toBeVisible();
 	expect(errors).toEqual([]);

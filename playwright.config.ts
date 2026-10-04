@@ -3,6 +3,15 @@ import { defineConfig, devices } from "@playwright/test";
 const FUMADOCS_URL = "http://localhost:4000";
 const PLAYGROUND_URL = "http://localhost:4100";
 
+/**
+ * Browser matrix.
+ *
+ * Chromium runs the full suite. Firefox and WebKit run only the critical editor
+ * flows tagged `@cross-browser`, which keeps cross-browser validation
+ * meaningful without duplicating the entire (paste/drag-drop/IME) suite.
+ */
+const CROSS_BROWSER = /@cross-browser/;
+
 export default defineConfig({
 	testDir: "tests/browser",
 	fullyParallel: true,
@@ -12,17 +21,31 @@ export default defineConfig({
 	outputDir: "test-results",
 	use: {
 		trace: "on-first-retry",
+		// Failure-only artifacts: successful runs stay light (Phase 07 §07.67).
+		screenshot: "only-on-failure",
 	},
 	projects: [
 		{
-			name: "fumadocs",
+			name: "fumadocs-chromium",
 			testMatch: "fumadocs/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"], baseURL: FUMADOCS_URL },
 		},
 		{
-			name: "playground",
+			name: "playground-chromium",
 			testMatch: "playground/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"], baseURL: PLAYGROUND_URL },
+		},
+		{
+			name: "playground-firefox",
+			testMatch: "playground/**/*.spec.ts",
+			grep: CROSS_BROWSER,
+			use: { ...devices["Desktop Firefox"], baseURL: PLAYGROUND_URL },
+		},
+		{
+			name: "playground-webkit",
+			testMatch: "playground/**/*.spec.ts",
+			grep: CROSS_BROWSER,
+			use: { ...devices["Desktop Safari"], baseURL: PLAYGROUND_URL },
 		},
 	],
 	webServer: [

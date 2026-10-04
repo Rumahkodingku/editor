@@ -27,5 +27,5 @@ jobs:
       - run: pnpm run build
       - run: pnpm run check:packages
 
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: pnpm run test:browser
