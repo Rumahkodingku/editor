@@ -1,0 +1,34 @@
+---
+title: Links
+description: Create, edit, and remove links, with safe URL handling.
+---
+
+Links are provided through the adapter's `LinkControl`. It is composed by the
+default toolbar because inserting a link needs a URL input; the core toolbar
+model stays free of input-dependent commands.
+
+## Behavior
+
+- Create a link on the current selection.
+- Edit or remove an existing link.
+- URLs are validated before insertion.
+
+## Safe URLs
+
+The core exposes framework-independent URL safety helpers:
+
+```ts
+import {
+	isSafeUrl,
+	DEFAULT_LINK_PROTOCOLS,
+	DEFAULT_IMAGE_PROTOCOLS,
+} from "@rumahkodingku/editor-core";
+```
+
+`isSafeUrl` rejects dangerous schemes such as `javascript:`. Allowed protocols
+are configurable with a safe default. The same validation applies to image
+sources.
+
+
+> URL validation reduces risk but does not make rendered application HTML safe.
+> Sanitize untrusted HTML before injecting it. See [HTML](/docs/fundamentals/html).

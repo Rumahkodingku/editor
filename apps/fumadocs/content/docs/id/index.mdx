@@ -1,0 +1,45 @@
+---
+title: Pengantar
+description: RumahKodingku Editor adalah editor teks kaya (WYSIWYG) yang dapat digunakan ulang, bertipe, dan composable, dibangun di atas Tiptap dan ProseMirror.
+---
+
+RumahKodingku Editor adalah ekosistem **editor teks kaya (WYSIWYG)** yang dapat
+digunakan ulang, bertipe, dan composable untuk aplikasi web modern. Proyek ini
+adalah monorepo TypeScript yang dibangun di atas **Tiptap + ProseMirror**,
+dengan **React** sebagai framework UI pertama dan **core yang independen dari
+framework** sehingga adapter tambahan dapat ditambahkan nanti tanpa menduplikasi
+logika editor.
+
+## Paket
+
+- `@rumahkodingku/editor-core` — logika editor yang independen dari framework:
+  pembuatan editor, preset extension default, utilitas konten, serialisasi
+  JSON/HTML, versioning skema, definisi toolbar, kontrak upload, dan label.
+- `@rumahkodingku/editor-react` — adapter React: komponen `Editor`, surface yang
+  composable, perilaku controlled/uncontrolled, toolbar default, dan stylesheet
+  yang dipublikasikan.
+- `@rumahkodingku/editor-vue` — direncanakan, belum diimplementasikan.
+
+## Fakta penting
+
+| Area | Kontrak |
+| --- | --- |
+| Engine editor | Tiptap 3.x di atas ProseMirror |
+| Konten kanonik | **JSON** Tiptap/ProseMirror |
+| HTML | Serialisasi keluaran saja |
+| Persistensi | Envelope `{ schemaVersion, content }` |
+| Framework | React 19 (peer dependency) |
+| Runtime | Node `>=22` untuk tooling build |
+| Styling | CSS independen framework dengan variabel `--rk-editor-*` |
+| Penyimpanan | Disediakan konsumen melalui `ImageUploadHandler` |
+
+## Langkah berikutnya
+
+- **Instalasi** — pasang paket, peer dependency, dan stylesheet.
+- **Mulai Cepat** — render editor yang berfungsi dan baca konten JSON-nya.
+- **Panduan** — controlled mode, read-only, extension, upload, theming, SSR.
+- **Referensi API** — daftar export publik `editor-core` dan `editor-react`.
+- **Contoh** — contoh yang dapat dijalankan dan hanya memakai API publik paket.
+
+> Dokumentasi mendeskripsikan API yang benar-benar diimplementasikan. Paket belum
+> dipublikasikan ke npm; status implementasi terkini ada di roadmap repositori.

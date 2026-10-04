@@ -1,0 +1,65 @@
+---
+title: API Ekstensi
+description: Komposisi ekstensi dan ekstensi ImageUpload RumahKodingku.
+---
+
+## `createDefaultExtensions(options?)`
+
+Menyusun preset default: StarterKit (paragraf, heading, mark, list, blockquote,
+code, horizontal rule, link, history) ditambah `Placeholder` (saat `placeholder`
+diatur) dan ekstensi `ImageUpload`.
+
+```ts
+type DefaultExtensionsOptions = {
+	placeholder?: string;
+	upload?: ImageUploadExtensionOptions;
+};
+```
+
+## `composeExtensions(base, custom, options?)`
+
+Menggabungkan preset default dengan ekstensi konsumen tanpa mengubah input.
+
+```ts
+type ExtensionCompositionMode = "append" | "strict";
+
+composeExtensions(defaults, custom, { mode: "append" });
+```
+
+- `"append"` (default): base lebih dulu, lalu custom; ekstensi custom dengan nama
+  yang sama menggantikan instance base di tempatnya.
+- `"strict"`: nama yang duplikat memunculkan `EditorConfigError` alih-alih
+  diselesaikan secara diam-diam.
+
+Adapter React menggunakan ini untuk menggabungkan prop `extensions` dengan preset
+default.
+
+## `ImageUpload`
+
+Ekstensi bernama. Konfigurasikan pipeline upload pada ekstensi itu sendiri:
+
+```ts
+ImageUpload.configure({
+	upload,
+	accept: ["image/png", "image/jpeg"],
+	maxSize: 5_000_000,
+	allowedProtocols: ["https:"],
+});
+```
+
+`IMAGE_UPLOAD_EXTENSION_NAME` bernilai `"imageUpload"`.
+
+## `insertImageFromFile(editor, file, options?)`
+
+Menjalankan pipeline upload secara imperatif (digunakan oleh kontrol gambar pada
+adapter):
+
+```ts
+import { insertImageFromFile } from "@rumahkodingku/editor-core";
+
+await insertImageFromFile(editor, file, { onProgress: setProgress });
+```
+
+`InsertImageOptions` memperluas opsi ekstensi dengan `signal` dan `onProgress`.
+
+<CustomExtensionDemo />

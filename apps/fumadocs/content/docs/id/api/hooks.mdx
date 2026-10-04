@@ -1,0 +1,22 @@
+---
+title: Hooks
+description: Hooks publik yang diekspor oleh @rumahkodingku/editor-react.
+---
+
+| Hook | Tujuan |
+| --- | --- |
+| `useEditorContext()` | Membaca instance editor yang dibagikan, label yang telah diresolusi, serta status editable/disabled dari `EditorProvider` |
+
+```ts
+import { useEditorContext } from "@rumahkodingku/editor-react";
+
+function CustomControl() {
+	const { editor, labels, editable, disabled } = useEditorContext();
+	// ...
+}
+```
+
+`EditorContextValue` adalah tipe context yang diekspor. Hooks internal yang digunakan
+oleh adapter (kontrol, status toolbar, status upload, roving tabindex) **tidak**
+diekspor dan bukan bagian dari API publik. Gunakan instance Tiptap dari `onReady` atau
+`useEditorContext` sebagai gantinya.

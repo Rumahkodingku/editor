@@ -1,0 +1,24 @@
+---
+title: Disabled Mode
+description: Remove focus and interaction entirely, with disabled controls.
+---
+
+Set `disabled` to disable the editor completely.
+
+```tsx
+<Editor defaultValue={content} disabled />;
+```
+
+| Aspect | Behavior |
+| --- | --- |
+| Focus | Not focusable |
+| Selection | Not available |
+| Editing | Blocked |
+| Toolbar | All controls disabled |
+| ARIA | Exposes `aria-disabled` semantics |
+
+<DisabledEditorDemo />
+
+Use disabled for content that is temporarily unavailable (for example while a
+form is submitting). Use [read-only mode](/docs/guides/read-only) when the content
+should remain selectable and copyable.

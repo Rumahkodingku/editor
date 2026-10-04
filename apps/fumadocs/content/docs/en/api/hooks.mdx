@@ -1,0 +1,22 @@
+---
+title: Hooks
+description: Public hooks exported by @rumahkodingku/editor-react.
+---
+
+| Hook | Purpose |
+| --- | --- |
+| `useEditorContext()` | Reads the shared editor instance, resolved labels, and editable/disabled state from `EditorProvider` |
+
+```ts
+import { useEditorContext } from "@rumahkodingku/editor-react";
+
+function CustomControl() {
+	const { editor, labels, editable, disabled } = useEditorContext();
+	// ...
+}
+```
+
+`EditorContextValue` is the exported context type. Internal hooks used by the
+adapter (controls, toolbar state, upload state, roving tabindex) are **not**
+exported and are not part of the public API. Use the Tiptap instance from
+`onReady` or `useEditorContext` instead.

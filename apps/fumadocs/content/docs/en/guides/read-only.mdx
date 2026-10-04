@@ -1,0 +1,26 @@
+---
+title: Read-only Mode
+description: Show content that can be selected and copied but not edited.
+---
+
+Set `editable={false}` to make the content read-only.
+
+```tsx
+<Editor defaultValue={content} editable={false} />;
+```
+
+| Aspect | Behavior |
+| --- | --- |
+| Editing | Blocked |
+| Focus | Allowed |
+| Selection / copy | Allowed |
+| Toolbar | Editing controls disabled |
+| ARIA | Exposes `aria-readonly` semantics |
+
+<ReadOnlyEditorDemo />
+
+## Read-only vs disabled
+
+Read-only keeps focus and selection so users can copy content; disabled removes
+interaction entirely. See [Disabled mode](/docs/guides/disabled) and
+[Editable state](/docs/api/react).

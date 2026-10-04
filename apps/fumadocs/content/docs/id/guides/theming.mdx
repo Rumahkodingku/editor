@@ -1,0 +1,46 @@
+---
+title: Theming
+description: Sesuaikan editor dengan variabel CSS yang independen dari framework.
+---
+
+Editor menyertakan CSS yang independen dari framework. Semua warna dan ukuran
+adalah properti kustom `--rk-editor-*`; nama kelas diawali dengan `rk-`.
+
+## Variabel
+
+| Variabel | Kegunaan |
+| --- | --- |
+| `--rk-editor-background` | Latar belakang editor |
+| `--rk-editor-foreground` | Warna teks |
+| `--rk-editor-border` | Batas |
+| `--rk-editor-muted` | Teks redup |
+| `--rk-editor-toolbar-background` | Latar belakang toolbar |
+| `--rk-editor-hover` | Latar belakang hover |
+| `--rk-editor-accent` / `--rk-editor-accent-contrast` | Warna kontrol aktif |
+| `--rk-editor-radius` | Radius sudut |
+| `--rk-editor-link` | Warna tautan |
+| `--rk-editor-danger` | Warna error |
+
+Timpa di mana saja dalam cascade:
+
+```css
+.my-theme {
+	--rk-editor-background: #0b1220;
+	--rk-editor-foreground: #e2e8f0;
+	--rk-editor-radius: 0.75rem;
+}
+```
+
+<ThemingDemo />
+
+## Tema terang dan gelap
+
+Stylesheet menyediakan default terang, blok `[data-theme="dark"]`, dan fallback
+`prefers-color-scheme: dark`. Setel `data-theme="light"` pada root untuk
+menyimpang dari preferensi sistem.
+
+## Tidak mewajibkan Tailwind
+
+Konsumen tidak pernah diwajibkan memasang Tailwind atau pustaka ikon/UI. Tailwind
+hanya digunakan di dalam aplikasi dokumentasi ini, tidak pernah di paket yang
+dipublikasikan.

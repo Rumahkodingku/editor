@@ -1,0 +1,29 @@
+---
+title: Custom Toolbar
+description: Compose a toolbar with the public surfaces.
+---
+
+```tsx
+import {
+	createDefaultToolbar,
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+} from "@rumahkodingku/editor-react";
+
+const keep = new Set(["bold", "italic", "bulletList", "orderedList"]);
+const items = createDefaultToolbar().filter((item) => keep.has(item.id));
+
+export function App() {
+	return (
+		<EditorProvider defaultValue={content}>
+			<div className="rk-editor">
+				<EditorToolbar items={items} />
+				<EditorContent />
+			</div>
+		</EditorProvider>
+	);
+}
+```
+
+<CustomToolbarDemo />

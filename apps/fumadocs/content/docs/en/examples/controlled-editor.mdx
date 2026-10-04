@@ -1,0 +1,17 @@
+---
+title: Controlled Editor
+description: Parent-owned JSON with onChange.
+---
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { useState } from "react";
+
+export function App() {
+	const [value, setValue] = useState(initialContent);
+
+	return <Editor value={value} onChange={setValue} />;
+}
+```
+
+<ControlledEditorDemo />

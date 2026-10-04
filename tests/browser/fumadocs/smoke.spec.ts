@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("home page loads", async ({ page }) => {
+test("home page loads @cross-browser", async ({ page }) => {
 	await page.goto("/");
 
 	await expect(
@@ -8,10 +8,18 @@ test("home page loads", async ({ page }) => {
 	).toBeVisible();
 });
 
-test("documentation page loads", async ({ page }) => {
+test("docs landing page loads @cross-browser", async ({ page }) => {
 	await page.goto("/docs");
 
 	await expect(
-		page.getByRole("heading", { level: 1, name: "RumahKodingku Editor" }),
+		page.getByRole("heading", { level: 1, name: "Introduction" }),
+	).toBeVisible();
+});
+
+test("Indonesian docs landing page loads", async ({ page }) => {
+	await page.goto("/id/docs");
+
+	await expect(
+		page.getByRole("heading", { level: 1, name: "Pengantar" }),
 	).toBeVisible();
 });

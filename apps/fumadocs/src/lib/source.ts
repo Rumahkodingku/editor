@@ -3,7 +3,8 @@ import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
 import { defineDocs } from "fumadocs-mdx/macro";
 
-import { docsContentRoute, docsImageRoute, docsRoute } from "./shared";
+import { i18n } from "./i18n";
+import { docsRoute } from "./shared";
 
 const docs = defineDocs({
 	dir: "content/docs",
@@ -22,6 +23,7 @@ const docs = defineDocs({
 export const source = loader({
 	baseUrl: docsRoute,
 	source: docs.toFumadocsSource(),
+	i18n,
 	plugins: [lucideIconsPlugin()],
 });
 

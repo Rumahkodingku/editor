@@ -1,0 +1,79 @@
+---
+title: API Inti
+description: Ekspor publik dari @rumahkodingku/editor-core.
+---
+
+`@rumahkodingku/editor-core` tidak bergantung pada framework dan aman untuk diimpor
+pada SSR. Hanya ekspor di bawah ini yang bersifat publik.
+
+## Editor
+
+| Ekspor | Jenis | Catatan |
+| --- | --- | --- |
+| `createEditor(options)` | fungsi | Membuat editor Tiptap dengan preset inti |
+| `CreateEditorOptions` | tipe | Opsi untuk `createEditor` |
+| `EDITOR_CORE_PACKAGE_NAME` | konstanta | Pengenal paket |
+
+## Utilitas konten
+
+| Ekspor | Jenis |
+| --- | --- |
+| `createEmptyDocument()` | fungsi |
+| `isValidJSONContent(value)` | fungsi |
+| `isEmptyContent(content)` | fungsi |
+| `normalizeContent(content)` | fungsi |
+| `toJSON(editor)` | fungsi |
+| `toHTML(editor)` | fungsi |
+| `jsonToHTML(content)` | fungsi async (aman untuk server) |
+
+## Ekstensi
+
+| Ekspor | Jenis |
+| --- | --- |
+| `createDefaultExtensions(options?)` | fungsi |
+| `composeExtensions(options)` | fungsi |
+| `ImageUpload` | ekstensi |
+| `insertImageFromFile(editor, file, options?)` | fungsi async |
+| `IMAGE_UPLOAD_EXTENSION_NAME` | konstanta |
+
+## Toolbar dan label
+
+| Ekspor | Jenis |
+| --- | --- |
+| `createDefaultToolbar()` | fungsi |
+| `ToolbarItemDefinition` | tipe |
+| `defaultLabels` | konstanta |
+| `resolveLabels(overrides?)` | fungsi |
+| `EditorLabels` | tipe |
+
+## Persistensi
+
+| Ekspor | Jenis |
+| --- | --- |
+| `PersistenceEnvelope` | tipe |
+| `EditorSchemaVersion` | tipe |
+| `EDITOR_SCHEMA_VERSION` | konstanta |
+| `createPersistenceEnvelope(content)` | fungsi |
+| `parsePersistenceEnvelope(value)` | fungsi |
+| `isPersistenceEnvelope(value)` | fungsi |
+| `isSupportedSchemaVersion(version)` | fungsi |
+
+## Keamanan
+
+| Ekspor | Jenis |
+| --- | --- |
+| `isSafeUrl(url, options?)` | fungsi |
+| `UrlValidationOptions` | tipe |
+| `DEFAULT_LINK_PROTOCOLS` | konstanta |
+| `DEFAULT_IMAGE_PROTOCOLS` | konstanta |
+
+## Kesalahan
+
+`EditorError`, `EditorConfigError`, `EditorContentError`,
+`EditorSchemaVersionError`, dan `EditorUploadError` diekspor agar kegagalan dapat
+dibedakan. Kesalahan mempertahankan `cause`-nya.
+
+## Tipe Tiptap
+
+Tiptap adalah bagian dari kontrak publik: `AnyExtension`, `Editor`, dan `JSONContent`
+di-ekspor ulang dari `@tiptap/core`.

@@ -1,0 +1,65 @@
+---
+title: Instalasi
+description: Pasang @rumahkodingku/editor-react beserta peer dependencies-nya, lalu impor stylesheet yang telah dipublikasikan.
+---
+
+## Pasang paketnya
+
+`@rumahkodingku/editor-react` bergantung pada `@rumahkodingku/editor-core`, jadi
+kasus umumnya adalah memasang adapter tersebut beserta core-nya. Tiptap, React, dan React DOM
+merupakan **peer dependencies**: pasang semuanya bersama adapter agar graf dependensi
+terurai menjadi satu instance Tiptap/ProseMirror saja.
+
+```bash
+pnpm add @rumahkodingku/editor-react @rumahkodingku/editor-core \
+  @tiptap/core @tiptap/react @tiptap/pm @tiptap/starter-kit \
+  @tiptap/extension-image @tiptap/extensions @tiptap/html \
+  react react-dom
+```
+
+pnpm adalah package manager yang didukung secara resmi. Paket-paket yang dipublikasikan dapat
+digunakan dengan npm, pnpm, dan Bun; jaga agar setiap paket Tiptap berada pada lini 3.x yang sama.
+
+## Peer dependencies
+
+| Paket | Rentang | Alasan menjadi peer |
+| --- | --- | --- |
+| `react`, `react-dom` | `^19` | Disediakan oleh aplikasi |
+| `@tiptap/core` | `^3.31.4` | Tipe seperti `JSONContent`, `Editor`, `AnyExtension` adalah bagian dari API publik |
+| `@tiptap/react` | `^3.31.4` | Binding React yang digunakan oleh adapter |
+| `@tiptap/pm` | `^3.31.4` | Paket ProseMirror yang digunakan oleh engine |
+| `@tiptap/starter-kit` | `^3.31.4` | Preset ekstensi bawaan |
+| `@tiptap/extension-image` | `^3.31.4` | Node gambar yang digunakan oleh ekstensi unggah gambar |
+| `@tiptap/extensions` | `^3.31.4` | Placeholder dan helper |
+| `@tiptap/html` | `^3.31.4` | `jsonToHTML` yang aman untuk server |
+| `happy-dom` | `^20` (opsional) | Hanya dibutuhkan untuk `jsonToHTML` di sisi server tanpa DOM browser |
+
+## Impor stylesheet-nya
+
+Paket React ini menyertakan stylesheet editor; impor sekali di
+titik masuk aplikasi Anda:
+
+```ts
+import "@rumahkodingku/editor-react/styles.css";
+```
+
+Stylesheet ini adalah CSS yang agnostik terhadap framework dan dikendalikan oleh variabel `--rk-editor-*`. Lihat
+[Theming](/docs/guides/theming) untuk menyesuaikannya.
+
+## Verifikasi instalasi
+
+Aplikasi minimal akan merender editor yang berfungsi tanpa konfigurasi apa pun:
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import "@rumahkodingku/editor-react/styles.css";
+
+export function App() {
+	return <Editor />;
+}
+```
+
+<BasicEditorDemo />
+
+> Paket-paketnya sudah diimplementasikan tetapi belum dipublikasikan ke npm (versinya
+> `0.0.0`). Perintah di atas menggambarkan kontrak instalasi yang dimaksudkan.

@@ -1,0 +1,38 @@
+---
+title: Images
+description: Insert images, set alt text, and route uploads through a consumer-provided handler.
+---
+
+Images are provided by the RumahKodingku `ImageUpload` extension and the
+adapter's `ImageControl`. Insertion, paste, and drag/drop all use the **same**
+upload handler.
+
+## Capabilities
+
+- Toolbar insertion through a file picker.
+- Paste and drag/drop of image files.
+- Alt text editing (`ImageAltPopover`).
+- Upload progress and failure feedback, with placeholder cleanup on failure.
+- File type and size validation for user feedback.
+- Safe source URL validation before insertion.
+
+## Configuration
+
+The upload is configured on the extension, not as a top-level editor option:
+
+```ts
+import { ImageUpload } from "@rumahkodingku/editor-core";
+
+const extensions = [
+	ImageUpload.configure({
+		upload,
+		accept: ["image/png", "image/jpeg"],
+		maxSize: 5 * 1024 * 1024,
+	}),
+];
+
+<Editor extensions={extensions} />;
+```
+
+See [Image upload](/docs/guides/image-upload) for the full handler contract and a
+runnable example.

@@ -6,6 +6,19 @@ html {
 	scrollbar-gutter: stable;
 }
 
+/*
+ * Documentation contrast: raise the muted foreground used by page descriptions
+ * and link cards so it meets WCAG AA (4.5:1) against the default background. The
+ * Fumadocs default (#737373 on #f5f5f5) measures 4.34:1.
+ */
+:root {
+	--color-fd-muted-foreground: hsl(0, 0%, 40%);
+}
+
+.dark {
+	--color-fd-muted-foreground: hsl(0, 0%, 78%);
+}
+
 html > body[data-scroll-locked] {
 	margin-right: 0px !important;
 	--removed-body-scroll-bar-size: 0px !important;

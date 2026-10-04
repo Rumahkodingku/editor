@@ -1,0 +1,54 @@
+---
+title: API React
+description: Ekspor publik dari @rumahkodingku/editor-react dan props Editor.
+---
+
+`@rumahkodingku/editor-react` adalah adapter React. Paket ini mengekspor ulang nilai
+dan tipe inti yang dibutuhkan konsumen, sehingga satu kali instalasi sering kali sudah
+cukup.
+
+## Props Editor
+
+```ts
+type EditorProps = {
+	value?: JSONContent;
+	defaultValue?: JSONContent;
+	onChange?: (content: JSONContent) => void;
+	onReady?: (editor: Editor) => void;
+	placeholder?: string;
+	editable?: boolean;
+	disabled?: boolean;
+	extensions?: AnyExtension[];
+	labels?: Partial<EditorLabels>;
+	immediatelyRender?: boolean;
+	className?: string;
+};
+```
+
+| Prop | Tipe | Default | Perilaku |
+| --- | --- | --- | --- |
+| `value` | `JSONContent` | — | Konten terkontrol (lebih diutamakan daripada `defaultValue`) |
+| `defaultValue` | `JSONContent` | — | Konten awal untuk mode uncontrolled |
+| `onChange` | `(content) => void` | — | Dipanggil dengan JSON kanonik pada setiap transaksi yang mengubah dokumen |
+| `onReady` | `(editor) => void` | — | Dipanggil sekali per instance editor |
+| `placeholder` | `string` | — | Ditampilkan selama kosong; tidak pernah menjadi bagian dari konten |
+| `editable` | `boolean` | `true` | Pengeditan diaktifkan |
+| `disabled` | `boolean` | `false` | Tanpa fokus atau interaksi |
+| `extensions` | `AnyExtension[]` | — | Digabungkan dengan preset default; jaga agar tetap stabil antar render |
+| `labels` | `Partial<EditorLabels>` | — | Override label yang digabungkan di atas nilai default |
+| `immediatelyRender` | `boolean` | — | Berikan `false` untuk SSR |
+| `className` | `string` | — | Class yang diterapkan ke root editor |
+
+## Nilai inti yang di-ekspor ulang
+
+`composeExtensions`, `createDefaultExtensions`, `createDefaultToolbar`,
+`defaultLabels`, `ImageUpload`, `resolveLabels`.
+
+## Tipe yang di-ekspor ulang
+
+`AnyExtension`, `TiptapEditor` (dialias dari `Editor` milik Tiptap), `JSONContent`,
+`EditorLabels`, `ImageUploadHandler`, `ImageUploadOptions`, `ImageUploadResult`,
+`PersistenceEnvelope`, `ToolbarItemDefinition`.
+
+`EDITOR_REACT_PACKAGE_NAME` diekspor sebagai pengenal paket. Entri stylesheet-nya
+adalah `@rumahkodingku/editor-react/styles.css`.

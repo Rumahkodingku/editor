@@ -1,0 +1,32 @@
+---
+title: Components
+description: Public components exported by @rumahkodingku/editor-react.
+---
+
+| Component | Props type | Purpose |
+| --- | --- | --- |
+| `Editor` | `EditorProps` | All-in-one editor with the default toolbar |
+| `EditorProvider` | `EditorProviderProps` | Owns the lifecycle and shares the instance through context |
+| `EditorContent` | `EditorContentProps` | The editing surface |
+| `EditorToolbar` | `EditorToolbarProps` | Renders toolbar items |
+| `ToolbarGroup` | `ToolbarGroupProps` | A semantic `role="group"` of controls |
+| `ToolbarButton` | `ToolbarButtonProps` | A single semantic toolbar button |
+| `LinkControl` | `LinkControlProps` | Link create/edit/remove control |
+| `ImageControl` | `ImageControlProps` | Image insertion control |
+| `ImageAltPopover` | `ImageAltPopoverProps` | Alt-text editing popover |
+| `ToolbarIcon` | `ToolbarIconProps` | Inline-SVG icon (no icon library) |
+
+Components are headless-first: behavior comes from `editor-core`, and styling is
+provided through CSS variables. `EditorContent` falls back to the surrounding
+`EditorProvider` context when no `editor` prop is passed, so the surfaces compose:
+
+```tsx
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar />
+		<EditorContent />
+	</div>
+</EditorProvider>
+```
+
+Internal components are not part of the public API.

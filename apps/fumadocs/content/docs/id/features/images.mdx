@@ -1,0 +1,39 @@
+---
+title: Gambar
+description: Sisipkan gambar, atur teks alt, dan arahkan upload melalui handler yang disediakan konsumen.
+---
+
+Gambar disediakan oleh extension `ImageUpload` RumahKodingku dan `ImageControl`
+milik adapter. Penyisipan, paste, dan drag/drop semuanya memakai handler upload
+yang **sama**.
+
+## Kemampuan
+
+- Penyisipan lewat toolbar melalui pemilih berkas.
+- Paste dan drag/drop berkas gambar.
+- Pengeditan teks alt (`ImageAltPopover`).
+- Umpan balik progres dan kegagalan upload, dengan pembersihan placeholder saat
+  gagal.
+- Validasi tipe dan ukuran berkas untuk umpan balik pengguna.
+- Validasi URL sumber yang aman sebelum penyisipan.
+
+## Konfigurasi
+
+Upload dikonfigurasi pada extension, bukan sebagai opsi editor tingkat atas:
+
+```ts
+import { ImageUpload } from "@rumahkodingku/editor-core";
+
+const extensions = [
+	ImageUpload.configure({
+		upload,
+		accept: ["image/png", "image/jpeg"],
+		maxSize: 5 * 1024 * 1024,
+	}),
+];
+
+<Editor extensions={extensions} />;
+```
+
+Lihat [Upload gambar](/docs/guides/image-upload) untuk kontrak handler lengkap
+dan contoh yang dapat dijalankan.

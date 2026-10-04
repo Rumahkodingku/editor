@@ -1,0 +1,30 @@
+---
+title: Mode Controlled
+description: Biarkan induk memiliki nilai JSON dan menerima perubahan melalui onChange.
+---
+
+Dalam mode controlled, prop `value` adalah sumber kebenaran. Berikan `onChange`
+untuk menerima JSON baru dan memperbarui state Anda.
+
+```tsx
+const [value, setValue] = useState(initialContent);
+
+<Editor value={value} onChange={setValue} />;
+```
+
+## Jaminan perilaku
+
+- `onChange` dipanggil paling banyak sekali per transaksi yang mengubah dokumen.
+- Perubahan yang disebabkan oleh prop `value` tidak memicu `onChange`.
+- `value` yang masuk dibandingkan dengan dokumen saat ini sebelum
+  `setContent(..., { emitUpdate: false })`, yang mencegah loop pembaruan dan
+  lompatan kursor.
+- Seleksi dipertahankan saat nilai yang masuk ekuivalen.
+- Dokumen diserialisasi secara lazy; render yang tidak terkait tidak memanggil
+  `getJSON()`.
+
+<ControlledEditorDemo />
+
+`value` lebih diprioritaskan daripada `defaultValue`; memberikan keduanya akan
+mencatat peringatan pengembangan. Lihat
+[Mode Uncontrolled](/docs/guides/uncontrolled) untuk alternatifnya.

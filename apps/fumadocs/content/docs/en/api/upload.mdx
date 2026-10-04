@@ -1,0 +1,54 @@
+---
+title: Upload API
+description: The provider-independent image upload contract.
+---
+
+```ts
+type ImageUploadResult = {
+	src: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+};
+
+type ImageUploadContext = {
+	file: File;
+	signal: AbortSignal;
+	onProgress?: (percent: number) => void;
+};
+
+type ImageUploadHandler = (
+	ctx: ImageUploadContext,
+) => Promise<ImageUploadResult>;
+```
+
+## Options
+
+```ts
+type ImageUploadOptions = {
+	upload: ImageUploadHandler;
+	accept?: readonly string[];
+	maxSize?: number;
+	onError?: (error: EditorUploadError) => void;
+};
+```
+
+`ImageUploadExtensionOptions = Partial<ImageUploadOptions> & { allowedProtocols?: readonly string[] }`.
+
+## Validation and defaults
+
+| Export | Value |
+| --- | --- |
+| `DEFAULT_IMAGE_ACCEPT` | `["image/png", "image/jpeg", "image/gif", "image/webp"]` |
+| `DEFAULT_IMAGE_MAX_SIZE` | `5 * 1024 * 1024` (5 MiB) |
+| `validateImageFile(file, options)` | Throws `EditorUploadError` with a specific code |
+| `toUploadError(error)` | Normalizes any thrown value to `EditorUploadError` |
+
+## Errors
+
+`EditorUploadError` carries a machine-readable `code`:
+`"unsupported-type"`, `"file-too-large"`, `"upload-failed"`, `"aborted"`,
+`"unsafe-source"`. Abort errors become `"aborted"` so intentional cancellations
+can be ignored.
+
+<ImageUploadDemo />

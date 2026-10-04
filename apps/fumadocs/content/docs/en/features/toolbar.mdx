@@ -1,0 +1,40 @@
+---
+title: Toolbar
+description: The default toolbar, its groups, item state, and keyboard navigation.
+---
+
+The default toolbar renders core `ToolbarItemDefinition`s and is grouped
+semantically.
+
+## Groups
+
+| Group | Items |
+| --- | --- |
+| Text formatting | `bold`, `italic`, `underline`, `strike`, `code` |
+| Headings | `heading-1` … `heading-6` |
+| Lists | `bulletList`, `orderedList` |
+| Blocks | `blockquote`, `codeBlock`, `horizontalRule` |
+| History | `undo`, `redo` |
+| More | any item not listed above (including consumer items) |
+
+Link and image controls are adapter-composed and rendered after the grouped
+items because their commands need extra input.
+
+## State
+
+Each item reports `isActive` and `isDisabled` from the current editor state.
+Buttons expose `aria-pressed` and `aria-disabled`; disabled items are not
+focusable.
+
+## Keyboard navigation
+
+The toolbar follows the WAI-ARIA toolbar pattern: a single tab stop with roving
+`tabindex`, and `ArrowLeft` / `ArrowRight` / `Home` / `End` to move between
+enabled controls.
+
+## Custom toolbars
+
+Compose your own toolbar with `EditorProvider`, `EditorToolbar` (passing your own
+`ToolbarItemDefinition[]`), and `EditorContent`. See
+[Custom toolbar](/docs/guides/custom-toolbar) and the
+[Toolbar API](/docs/api/toolbar).

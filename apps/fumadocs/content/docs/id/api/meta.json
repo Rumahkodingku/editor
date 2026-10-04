@@ -1,0 +1,13 @@
+{
+	"title": "Referensi API",
+	"pages": [
+		"core",
+		"react",
+		"components",
+		"hooks",
+		"types",
+		"extensions",
+		"toolbar",
+		"upload"
+	]
+}

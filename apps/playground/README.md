@@ -81,17 +81,17 @@ Playwright tests live in `tests/browser/playground/` and run as part of
 `pnpm run test:browser` (the `playground` project). The configuration builds the
 workspace packages and serves the production build on port 4100.
 
-Coverage is intentionally basic (smoke + representative interactions); the full
-browser and accessibility audit is a later phase.
+Phase 07 completed the full browser and accessibility audit here: Chromium runs
+the entire suite, and Firefox/WebKit run the flows tagged `@cross-browser`.
 
 ## Notes and known gaps
 
-- **Custom toolbar composition.** The `Editor` component always renders its
-  default toolbar and has no prop to replace it, and there is no headless
-  `EditorContent` export yet. The Toolbar scenario therefore renders an
-  additional `EditorToolbar` (with caller-provided `ToolbarItemDefinition`s)
-  beside the `Editor`. A headless surface that replaces the built-in toolbar is
-  a future editor-UX concern, not part of this Phase.
+- **Custom toolbar composition.** The all-in-one `Editor` always renders its
+  default toolbar and has no prop to replace it. The composable surfaces
+  (`EditorProvider`, `EditorToolbar` with caller-provided
+  `ToolbarItemDefinition`s, and `EditorContent`) are exported and can replace it;
+  the Toolbar scenario renders its own `EditorToolbar` beside the `Editor` to
+  validate the toolbar contract against a live editor instance.
 - **Mock upload source.** The mock handler returns a local `data:` SVG URL and
   configures the image extension with `allowedProtocols: ["data:"]`. This keeps
   the Playground offline and deterministic while exercising the public URL

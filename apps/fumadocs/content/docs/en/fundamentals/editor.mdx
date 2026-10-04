@@ -1,0 +1,56 @@
+---
+title: Editor
+description: The React Editor component, its default behavior, and how to compose its surfaces.
+---
+
+`Editor` is the all-in-one React component. It creates the Tiptap/ProseMirror
+editor, renders the default toolbar, and renders the editing surface.
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+
+<Editor placeholder="Write something…" />;
+```
+
+## Defaults
+
+| Prop | Default | Effect |
+| --- | --- | --- |
+| `editable` | `true` | The document accepts input |
+| `disabled` | `false` | The editor cannot be focused or interacted with |
+| `placeholder` | — | Shown while the document is empty; never part of the content |
+| `immediatelyRender` | — | Pass `false` for SSR (see [SSR](/docs/guides/ssr)) |
+
+## Composable surfaces
+
+`Editor` is a convenience wrapper. For a custom layout, compose the exported
+surfaces directly: `EditorProvider` owns the lifecycle and shares the instance
+through context; `EditorToolbar` renders toolbar items; `EditorContent` renders
+the surface. See [Custom toolbar](/docs/guides/custom-toolbar).
+
+```tsx
+import {
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+} from "@rumahkodingku/editor-react";
+
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar />
+		<EditorContent />
+	</div>
+</EditorProvider>;
+```
+
+## The editor instance
+
+Use `onReady` to receive the Tiptap `Editor` instance. It is the supported way to
+run commands or read output:
+
+```tsx
+<Editor onReady={(editor) => console.log(editor.getJSON())} />
+```
+
+Tiptap remains the source of truth for the document; the adapter never keeps a
+second copy of it. The full prop list is in the [React API reference](/docs/api/react).

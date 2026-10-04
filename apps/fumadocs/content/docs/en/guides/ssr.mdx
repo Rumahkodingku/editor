@@ -1,0 +1,36 @@
+---
+title: SSR
+description: Integrate the editor with server-side rendering and avoid hydration mismatches.
+---
+
+Both packages are import-safe in a server environment: importing them does not
+touch `window` or `document`. The React adapter marks its entry as a client
+module, and the editing engine is created only in the browser.
+
+## Disable immediate rendering
+
+For SSR frameworks, pass `immediatelyRender={false}` so the editor mounts on the
+client after hydration:
+
+```tsx
+"use client";
+
+import { Editor } from "@rumahkodingku/editor-react";
+
+export function ClientEditor() {
+	return <Editor defaultValue={content} immediatelyRender={false} />;
+}
+```
+
+Wrap the editor in a client component boundary (for example a `"use client"`
+module in the Next.js App Router). Do not render the editor during server
+rendering.
+
+## Rendering stored content on the server
+
+To display stored content without the editor, use the server-safe `jsonToHTML`
+helper from `@rumahkodingku/editor-core` instead of creating an editor. See
+[HTML](/docs/fundamentals/html).
+
+> The core is UI-framework-agnostic but not DOM-free; creating an editor requires
+> a browser-capable runtime.

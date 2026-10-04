@@ -16,22 +16,25 @@ Details for each phase will be saved in separate files in this folder.
 | 05    | Playground                              | Done        |
 | 06    | Editor MVP                              | Done        |
 | 07    | Browser & Accessibility                 | Done        |
-| 08    | Documentation                           | ⬜          |
+| 08    | Documentation                           | Done        |
 | 09    | Release Engineering                     | ⬜          |
 
 ## Current Phase
 
-**Phase 08 — Documentation (next)**
+**Phase 09 — Release Engineering (next)**
 
-Phases 00–07 are complete. Phase 06 delivered the React-facing Editor MVP
+Phases 00–08 are complete. Phase 06 delivered the React-facing Editor MVP
 (composable surfaces, the default toolbar, link/image popovers, image upload
 progress/error/alt UI, styling, and React/type tests). Phase 07 added browser and
 accessibility validation in `tests/browser/`: a Chromium/Firefox/WebKit Playwright
 matrix, `@axe-core/playwright` audits of the editor, and specs for rendering,
 typing, formatting, toolbar keyboard navigation, link/image flows, read-only and
 disabled states, controlled mode, selection/focus, paste, drag/drop, IME/Unicode,
-and responsive viewports. The full matrix passes (144 tests). Release engineering
-and Changesets remain deferred to Phase 09.
+and responsive viewports. Phase 08 published the public documentation in
+`apps/fumadocs` in English and Indonesian: installation, quick start, fundamentals,
+features, guides, accessibility, API reference, live examples, SEO metadata, and
+LLM endpoints (`/llms.txt`, `/llms-full.txt`, per-page Markdown). Release
+engineering and Changesets remain deferred to Phase 09.
 
 ## Phase Documents
 
@@ -44,7 +47,9 @@ and Changesets remain deferred to Phase 09.
 - `phase-06-editor-mvp.md`
 - `phase-07-browser-accessibility.md`
 - `phase-08-documentation.md`
-- `phase-09-release-engineering.md`
+
+Phase 09 (Release Engineering) does not have a phase document yet; it is planned
+and approved separately.
 
 ## Rules
 

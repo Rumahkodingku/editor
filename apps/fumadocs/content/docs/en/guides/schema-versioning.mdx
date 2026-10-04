@@ -1,0 +1,33 @@
+---
+title: Schema Versioning
+description: Understand schema ownership, compatibility, and migration.
+---
+
+The document schema is owned by Tiptap/ProseMirror and the extensions in use. The
+`schemaVersion` field belongs to the **persistence boundary**, not the editor
+component.
+
+## Compatibility rules
+
+- Node and mark types may be **added**.
+- Types must not be renamed or removed, and attributes must not change
+  incompatibly, without a migration.
+- Removing an extension is a breaking change and is called out in release notes.
+
+## Migration
+
+When a change requires it, migrate stored content before loading it into the
+editor. Migrations are introduced only when the first incompatible change
+requires one; until then the envelope and version check are enough.
+
+```ts
+import { isSupportedSchemaVersion } from "@rumahkodingku/editor-core";
+
+if (!isSupportedSchemaVersion(envelope.schemaVersion)) {
+	// run migrations or reject the document
+}
+```
+
+The core throws `EditorSchemaVersionError` for unsupported versions and
+`EditorContentError` for invalid content, so failures are distinguishable. See
+[Persistence](/docs/guides/persistence).

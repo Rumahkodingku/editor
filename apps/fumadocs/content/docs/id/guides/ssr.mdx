@@ -1,0 +1,35 @@
+---
+title: SSR
+description: Integrasikan editor dengan server-side rendering dan hindari ketidakcocokan hidrasi.
+---
+
+Kedua paket aman untuk diimpor di lingkungan server: mengimpornya tidak
+menyentuh `window` atau `document`. Adapter React menandai entry-nya sebagai
+modul klien, dan engine pengeditan hanya dibuat di browser.
+
+## Nonaktifkan render langsung
+
+Untuk framework SSR, berikan `immediatelyRender={false}` agar editor di-mount di
+klien setelah hidrasi:
+
+```tsx
+"use client";
+
+import { Editor } from "@rumahkodingku/editor-react";
+
+export function ClientEditor() {
+	return <Editor defaultValue={content} immediatelyRender={false} />;
+}
+```
+
+Bungkus editor dalam batas komponen klien (misalnya modul `"use client"` di
+Next.js App Router). Jangan merender editor selama server rendering.
+
+## Merender konten tersimpan di server
+
+Untuk menampilkan konten tersimpan tanpa editor, gunakan helper `jsonToHTML`
+yang aman untuk server dari `@rumahkodingku/editor-core` daripada membuat
+editor. Lihat [HTML](/docs/fundamentals/html).
+
+> Core tidak bergantung pada framework UI tetapi tidak bebas DOM; membuat editor
+> memerlukan runtime yang mampu menjalankan browser.

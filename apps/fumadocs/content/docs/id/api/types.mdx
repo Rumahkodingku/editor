@@ -1,0 +1,45 @@
+---
+title: Tipe
+description: Tipe publik yang diekspor oleh paket-paket.
+---
+
+Semua tipe publik diekspor dari entry point paket.
+
+## Konten
+
+| Tipe | Sumber | Catatan |
+| --- | --- | --- |
+| `JSONContent` | `@tiptap/core` (di-ekspor ulang) | Konten kanonik |
+| `AnyExtension` | `@tiptap/core` (di-ekspor ulang) | Komposisi ekstensi |
+| `TiptapEditor` | `@tiptap/core` `Editor` (dialias, di-ekspor ulang) | Instance editor |
+
+## React
+
+`EditorProps`, `EditorProviderProps`, `EditorContentProps`, `EditorToolbarProps`,
+`ToolbarGroupProps`, `ToolbarButtonProps`, `LinkControlProps`, `ImageControlProps`,
+`ImageAltPopoverProps`, `ToolbarIconProps`, `EditorContextValue`.
+
+## Upload
+
+`ImageUploadHandler`, `ImageUploadResult`, `ImageUploadOptions`,
+`ImageUploadContext`, `ImageUploadProgressHandler`, `ImageUploadErrorCode`,
+`ImageFileValidationOptions`, `ImageUploadExtensionOptions`, `InsertImageOptions`.
+
+## Toolbar
+
+`ToolbarItemDefinition` — `{ id, labelKey, icon, shortcut?, isActive, isDisabled, run }`.
+
+## Label
+
+`EditorLabels` — setiap string yang berhadapan dengan pengguna. Kunci: `editor`,
+`bold`, `italic`, `underline`, `strike`, `code`, `codeBlock`, `blockquote`,
+`bulletList`, `orderedList`, `heading1` … `heading6`, `horizontalRule`, `link`,
+`unlink`, `image`, `undo`, `redo`, `toolbarFormatting`, `toolbarHeadings`,
+`toolbarLists`, `toolbarBlocks`, `toolbarInsert`, `toolbarHistory`, `toolbarOther`,
+`apply`, `cancel`, `url`, `altText`.
+
+## Persistensi dan konfigurasi
+
+`PersistenceEnvelope`, `EditorSchemaVersion`, `CreateEditorOptions`,
+`DefaultExtensionsOptions`, `ComposeExtensionsOptions`,
+`ExtensionCompositionMode`, `UrlValidationOptions`.

@@ -1,0 +1,65 @@
+---
+title: Installation
+description: Install @rumahkodingku/editor-react and its peer dependencies, then import the published stylesheet.
+---
+
+## Install the packages
+
+`@rumahkodingku/editor-react` depends on `@rumahkodingku/editor-core`, so the
+common case installs the adapter plus the core. Tiptap, React, and React DOM are
+**peer dependencies**: install them alongside the adapter so the dependency graph
+resolves to a single Tiptap/ProseMirror instance.
+
+```bash
+pnpm add @rumahkodingku/editor-react @rumahkodingku/editor-core \
+  @tiptap/core @tiptap/react @tiptap/pm @tiptap/starter-kit \
+  @tiptap/extension-image @tiptap/extensions @tiptap/html \
+  react react-dom
+```
+
+pnpm is the officially supported package manager. The published packages work
+with npm, pnpm, and Bun; keep every Tiptap package on the same 3.x line.
+
+## Peer dependencies
+
+| Package | Range | Why it is a peer |
+| --- | --- | --- |
+| `react`, `react-dom` | `^19` | Supplied by the application |
+| `@tiptap/core` | `^3.31.4` | Types such as `JSONContent`, `Editor`, `AnyExtension` are part of the public API |
+| `@tiptap/react` | `^3.31.4` | React binding used by the adapter |
+| `@tiptap/pm` | `^3.31.4` | ProseMirror packages used by the engine |
+| `@tiptap/starter-kit` | `^3.31.4` | Default extension preset |
+| `@tiptap/extension-image` | `^3.31.4` | Image node used by the image-upload extension |
+| `@tiptap/extensions` | `^3.31.4` | Placeholder and helpers |
+| `@tiptap/html` | `^3.31.4` | Server-safe `jsonToHTML` |
+| `happy-dom` | `^20` (optional) | Needed only for server-side `jsonToHTML` without a browser DOM |
+
+## Import the stylesheet
+
+The React package ships the editor stylesheet; import it once in your
+application entry point:
+
+```ts
+import "@rumahkodingku/editor-react/styles.css";
+```
+
+The stylesheet is framework-agnostic CSS driven by `--rk-editor-*` variables. See
+[Theming](/docs/guides/theming) to customize it.
+
+## Verify the installation
+
+A minimal application renders a working editor with no configuration:
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import "@rumahkodingku/editor-react/styles.css";
+
+export function App() {
+	return <Editor />;
+}
+```
+
+<BasicEditorDemo />
+
+> The packages are implemented but not published to npm yet (their version is
+> `0.0.0`). The commands above describe the intended install contract.

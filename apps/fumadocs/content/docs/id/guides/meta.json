@@ -1,0 +1,16 @@
+{
+	"title": "Panduan",
+	"pages": [
+		"controlled",
+		"uncontrolled",
+		"read-only",
+		"disabled",
+		"custom-extensions",
+		"custom-toolbar",
+		"image-upload",
+		"theming",
+		"ssr",
+		"persistence",
+		"schema-versioning"
+	]
+}

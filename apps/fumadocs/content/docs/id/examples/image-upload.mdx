@@ -1,0 +1,26 @@
+---
+title: Unggah Gambar
+description: Handler unggah yang disediakan konsumen dan dikonfigurasi pada ekstensi gambar.
+---
+
+```tsx
+import { ImageUpload, type ImageUploadHandler } from "@rumahkodingku/editor-core";
+import { Editor } from "@rumahkodingku/editor-react";
+
+const upload: ImageUploadHandler = async ({ file, signal, onProgress }) => {
+	const body = new FormData();
+	body.append("file", file);
+	const response = await fetch("/api/uploads", { method: "POST", body, signal });
+	const { url } = await response.json();
+	onProgress?.(100);
+	return { src: url, alt: file.name };
+};
+
+const extensions = [ImageUpload.configure({ upload })];
+
+export function App() {
+	return <Editor extensions={extensions} />;
+}
+```
+
+<ImageUploadDemo />

@@ -1,0 +1,54 @@
+---
+title: API Upload
+description: Kontrak unggah gambar yang independen dari provider.
+---
+
+```ts
+type ImageUploadResult = {
+	src: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+};
+
+type ImageUploadContext = {
+	file: File;
+	signal: AbortSignal;
+	onProgress?: (percent: number) => void;
+};
+
+type ImageUploadHandler = (
+	ctx: ImageUploadContext,
+) => Promise<ImageUploadResult>;
+```
+
+## Opsi
+
+```ts
+type ImageUploadOptions = {
+	upload: ImageUploadHandler;
+	accept?: readonly string[];
+	maxSize?: number;
+	onError?: (error: EditorUploadError) => void;
+};
+```
+
+`ImageUploadExtensionOptions = Partial<ImageUploadOptions> & { allowedProtocols?: readonly string[] }`.
+
+## Validasi dan default
+
+| Ekspor | Nilai |
+| --- | --- |
+| `DEFAULT_IMAGE_ACCEPT` | `["image/png", "image/jpeg", "image/gif", "image/webp"]` |
+| `DEFAULT_IMAGE_MAX_SIZE` | `5 * 1024 * 1024` (5 MiB) |
+| `validateImageFile(file, options)` | Memunculkan `EditorUploadError` dengan kode tertentu |
+| `toUploadError(error)` | Menormalkan nilai apa pun yang dilempar menjadi `EditorUploadError` |
+
+## Kesalahan
+
+`EditorUploadError` membawa `code` yang dapat dibaca mesin:
+`"unsupported-type"`, `"file-too-large"`, `"upload-failed"`, `"aborted"`,
+`"unsafe-source"`. Kesalahan pembatalan menjadi `"aborted"` sehingga pembatalan yang
+disengaja dapat diabaikan.
+
+<ImageUploadDemo />

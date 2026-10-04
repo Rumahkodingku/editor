@@ -1,0 +1,44 @@
+---
+title: API Toolbar
+description: Definisi toolbar, pengelompokan, dan perenderan.
+---
+
+## `ToolbarItemDefinition`
+
+```ts
+type ToolbarItemDefinition = {
+	id: string;
+	labelKey: keyof EditorLabels;
+	icon: string;
+	shortcut?: string;
+	isActive: (editor: Editor) => boolean;
+	isDisabled: (editor: Editor) => boolean;
+	run: (editor: Editor) => void;
+};
+```
+
+Definisi ini hanya membawa perilaku; adapter yang merendernya. `icon` adalah pengenal
+yang diresolusi menjadi SVG inline, sehingga tidak diperlukan pustaka ikon.
+
+## `createDefaultToolbar()`
+
+Mengembalikan daftar item default. Id item: `bold`, `italic`, `underline`, `strike`,
+`code`, `heading-1` … `heading-6`, `bulletList`, `orderedList`, `blockquote`,
+`codeBlock`, `horizontalRule`, `undo`, `redo`.
+
+## Perenderan dan pengelompokan
+
+`EditorToolbar` merender item (defaultnya `createDefaultToolbar()`) dan
+mengelompokkannya secara semantik. Item yang tidak tercakup oleh grup default
+(termasuk item custom) masuk ke grup "More" di bagian akhir, sehingga setiap item yang
+Anda berikan tetap dirender.
+
+```tsx
+<EditorToolbar items={items} labels={{ editor: "My toolbar" }} />
+```
+
+Props `EditorToolbar`: `editor?`, `labels?`, `items?`, `children?`, `className?`.
+`children` dirender setelah item yang dikelompokkan (digunakan untuk kontrol
+link/image).
+
+<CustomToolbarDemo />

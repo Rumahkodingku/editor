@@ -1,0 +1,42 @@
+---
+title: Persistensi
+description: Persistensikan JSON kanonik yang dibungkus dalam envelope berversi.
+---
+
+Konten yang dipersistensikan sebaiknya memakai envelope berversi agar dokumen
+tersimpan tetap hidup melampaui versi paket individual:
+
+```json
+{
+	"schemaVersion": 1,
+	"content": {
+		"type": "doc",
+		"content": []
+	}
+}
+```
+
+Komponen itu sendiri bekerja dengan `JSONContent` biasa; bungkus pada batas
+penyimpanan. `@rumahkodingku/editor-core` menyediakan tipe envelope dan helper:
+
+| Helper | Tujuan |
+| --- | --- |
+| `PersistenceEnvelope` | Tipe `{ schemaVersion, content }` |
+| `EDITOR_SCHEMA_VERSION` | Versi skema saat ini |
+| `createPersistenceEnvelope(content)` | Membungkus konten |
+| `parsePersistenceEnvelope(value)` | Memvalidasi dan membuka bungkusan |
+| `isPersistenceEnvelope(value)` | Type guard |
+| `isSupportedSchemaVersion(version)` | Pemeriksaan versi |
+
+```ts
+import {
+	createPersistenceEnvelope,
+	parsePersistenceEnvelope,
+} from "@rumahkodingku/editor-core";
+
+const stored = JSON.stringify(createPersistenceEnvelope(editor.getJSON()));
+// later
+const { content } = parsePersistenceEnvelope(JSON.parse(stored));
+```
+
+Lihat [Versioning skema](/docs/guides/schema-versioning) untuk aturan evolusi.

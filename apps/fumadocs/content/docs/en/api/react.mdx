@@ -1,0 +1,53 @@
+---
+title: React API
+description: Public exports of @rumahkodingku/editor-react and the Editor props.
+---
+
+`@rumahkodingku/editor-react` is the React adapter. It re-exports the core values
+and types a consumer needs, so one install is often enough.
+
+## Editor props
+
+```ts
+type EditorProps = {
+	value?: JSONContent;
+	defaultValue?: JSONContent;
+	onChange?: (content: JSONContent) => void;
+	onReady?: (editor: Editor) => void;
+	placeholder?: string;
+	editable?: boolean;
+	disabled?: boolean;
+	extensions?: AnyExtension[];
+	labels?: Partial<EditorLabels>;
+	immediatelyRender?: boolean;
+	className?: string;
+};
+```
+
+| Prop | Type | Default | Behavior |
+| --- | --- | --- | --- |
+| `value` | `JSONContent` | — | Controlled content (takes precedence over `defaultValue`) |
+| `defaultValue` | `JSONContent` | — | Initial content for uncontrolled mode |
+| `onChange` | `(content) => void` | — | Fired with canonical JSON per document-changing transaction |
+| `onReady` | `(editor) => void` | — | Called once per editor instance |
+| `placeholder` | `string` | — | Shown while empty; never part of the content |
+| `editable` | `boolean` | `true` | Editing enabled |
+| `disabled` | `boolean` | `false` | No focus or interaction |
+| `extensions` | `AnyExtension[]` | — | Composed with the default preset; keep stable between renders |
+| `labels` | `Partial<EditorLabels>` | — | Label overrides merged over the defaults |
+| `immediatelyRender` | `boolean` | — | Pass `false` for SSR |
+| `className` | `string` | — | Class applied to the editor root |
+
+## Re-exported core values
+
+`composeExtensions`, `createDefaultExtensions`, `createDefaultToolbar`,
+`defaultLabels`, `ImageUpload`, `resolveLabels`.
+
+## Re-exported types
+
+`AnyExtension`, `TiptapEditor` (aliased from Tiptap's `Editor`), `JSONContent`,
+`EditorLabels`, `ImageUploadHandler`, `ImageUploadOptions`, `ImageUploadResult`,
+`PersistenceEnvelope`, `ToolbarItemDefinition`.
+
+`EDITOR_REACT_PACKAGE_NAME` is exported as the package identifier. The stylesheet
+entry is `@rumahkodingku/editor-react/styles.css`.

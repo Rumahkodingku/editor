@@ -1,0 +1,45 @@
+---
+title: Types
+description: Public types exported by the packages.
+---
+
+All public types are exported from the package entry points.
+
+## Content
+
+| Type | Source | Notes |
+| --- | --- | --- |
+| `JSONContent` | `@tiptap/core` (re-exported) | Canonical content |
+| `AnyExtension` | `@tiptap/core` (re-exported) | Extension composition |
+| `TiptapEditor` | `@tiptap/core` `Editor` (aliased, re-exported) | Editor instance |
+
+## React
+
+`EditorProps`, `EditorProviderProps`, `EditorContentProps`, `EditorToolbarProps`,
+`ToolbarGroupProps`, `ToolbarButtonProps`, `LinkControlProps`, `ImageControlProps`,
+`ImageAltPopoverProps`, `ToolbarIconProps`, `EditorContextValue`.
+
+## Upload
+
+`ImageUploadHandler`, `ImageUploadResult`, `ImageUploadOptions`,
+`ImageUploadContext`, `ImageUploadProgressHandler`, `ImageUploadErrorCode`,
+`ImageFileValidationOptions`, `ImageUploadExtensionOptions`, `InsertImageOptions`.
+
+## Toolbar
+
+`ToolbarItemDefinition` — `{ id, labelKey, icon, shortcut?, isActive, isDisabled, run }`.
+
+## Labels
+
+`EditorLabels` — every user-facing string key. Keys: `editor`, `bold`, `italic`,
+`underline`, `strike`, `code`, `codeBlock`, `blockquote`, `bulletList`,
+`orderedList`, `heading1` … `heading6`, `horizontalRule`, `link`, `unlink`,
+`image`, `undo`, `redo`, `toolbarFormatting`, `toolbarHeadings`, `toolbarLists`,
+`toolbarBlocks`, `toolbarInsert`, `toolbarHistory`, `toolbarOther`, `apply`,
+`cancel`, `url`, `altText`.
+
+## Persistence and config
+
+`PersistenceEnvelope`, `EditorSchemaVersion`, `CreateEditorOptions`,
+`DefaultExtensionsOptions`, `ComposeExtensionsOptions`,
+`ExtensionCompositionMode`, `UrlValidationOptions`.

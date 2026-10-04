@@ -1,0 +1,52 @@
+---
+title: JSON
+description: Tiptap/ProseMirror JSON is the canonical document representation.
+---
+
+JSON is the canonical value type of the API. A document is a single root node of
+type `doc`:
+
+```json
+{
+	"type": "doc",
+	"content": []
+}
+```
+
+A paragraph with formatted text:
+
+```json
+{
+	"type": "doc",
+	"content": [
+		{
+			"type": "paragraph",
+			"content": [
+				{ "type": "text", "text": "Hello " },
+				{ "type": "text", "marks": [{ "type": "bold" }], "text": "world" }
+			]
+		}
+	]
+}
+```
+
+## Types
+
+The public API uses Tiptap's `JSONContent` directly; it is re-exported from both
+packages:
+
+```ts
+import type { JSONContent } from "@rumahkodingku/editor-react";
+```
+
+## Helpers
+
+`@rumahkodingku/editor-core` provides content utilities:
+
+| Helper | Purpose |
+| --- | --- |
+| `createEmptyDocument()` | An empty `doc` node |
+| `isValidJSONContent(value)` | Validates an unknown value |
+| `isEmptyContent(content)` | Detects an empty document |
+| `normalizeContent(content)` | Normalizes content for the editor |
+| `toJSON(editor)` | Reads the canonical JSON from an editor |

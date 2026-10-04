@@ -1,0 +1,61 @@
+---
+title: Image Upload
+description: Route toolbar, paste, and drag/drop uploads through a consumer-provided handler.
+---
+
+Uploading is dependency-inverted. The editor calls a handler you provide; it does
+not depend on any storage provider.
+
+```text
+Editor → ImageUpload → ImageUploadHandler → consumer storage/backend
+```
+
+## Handler contract
+
+```ts
+type ImageUploadHandler = (ctx: {
+	file: File;
+	signal: AbortSignal;
+	onProgress?: (percent: number) => void;
+}) => Promise<{
+	src: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+}>;
+```
+
+Implement it against your own backend:
+
+```ts
+const upload: ImageUploadHandler = async ({ file, signal, onProgress }) => {
+	const body = new FormData();
+	body.append("file", file);
+	const response = await fetch("/api/uploads", { method: "POST", body, signal });
+	const { url, alt } = await response.json();
+	onProgress?.(100);
+	return { src: url, alt };
+};
+```
+
+Then configure the extension:
+
+```ts
+ImageUpload.configure({ upload, accept: ["image/png"], maxSize: 5_000_000 });
+```
+
+## Progress, cancellation, and errors
+
+- `onProgress(percent)` reports progress; the toolbar shows an upload state.
+- The `signal` aborts a cancelled upload; abort is reported as an error.
+- Failures remove the placeholder and are reported through `onError` /
+  `EditorUploadError`.
+- File type and size are validated for user feedback; validate again in your
+  storage layer.
+
+## Provider agnosticism
+
+The packages do not depend on S3, Cloudinary, Supabase, Firebase, or any specific
+backend or HTTP client. Storage is entirely the consumer's responsibility.
+
+<ImageUploadDemo />

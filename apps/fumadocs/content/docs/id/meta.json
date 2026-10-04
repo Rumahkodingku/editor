@@ -1,0 +1,13 @@
+{
+	"title": "Dokumentasi",
+	"pages": [
+		"index",
+		"introduction",
+		"fundamentals",
+		"features",
+		"guides",
+		"accessibility",
+		"api",
+		"examples"
+	]
+}

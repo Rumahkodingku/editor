@@ -1,0 +1,42 @@
+---
+title: Toolbar API
+description: Toolbar definitions, grouping, and rendering.
+---
+
+## `ToolbarItemDefinition`
+
+```ts
+type ToolbarItemDefinition = {
+	id: string;
+	labelKey: keyof EditorLabels;
+	icon: string;
+	shortcut?: string;
+	isActive: (editor: Editor) => boolean;
+	isDisabled: (editor: Editor) => boolean;
+	run: (editor: Editor) => void;
+};
+```
+
+The definition carries behavior only; adapters render it. `icon` is an identifier
+resolved to an inline SVG, so no icon library is required.
+
+## `createDefaultToolbar()`
+
+Returns the default item list. Item ids: `bold`, `italic`, `underline`, `strike`,
+`code`, `heading-1` … `heading-6`, `bulletList`, `orderedList`, `blockquote`,
+`codeBlock`, `horizontalRule`, `undo`, `redo`.
+
+## Rendering and grouping
+
+`EditorToolbar` renders items (defaulting to `createDefaultToolbar()`) and groups
+them semantically. Items not covered by the default groups (including custom
+items) fall into a trailing "More" group, so every item you pass is rendered.
+
+```tsx
+<EditorToolbar items={items} labels={{ editor: "My toolbar" }} />
+```
+
+`EditorToolbar` props: `editor?`, `labels?`, `items?`, `children?`, `className?`.
+`children` are rendered after the grouped items (used for link/image controls).
+
+<CustomToolbarDemo />

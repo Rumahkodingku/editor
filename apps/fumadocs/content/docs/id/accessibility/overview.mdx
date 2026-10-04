@@ -1,0 +1,41 @@
+---
+title: Ringkasan Aksesibilitas
+description: Aksesibilitas adalah persyaratan utama untuk UI editor default.
+---
+
+Aksesibilitas adalah persyaratan produk, dengan target **WCAG 2.2 AA** untuk UI
+default. Editor divalidasi dengan pemeriksaan axe-core otomatis dan uji browser
+nyata; editor ini tidak mengklaim sertifikasi formal.
+
+## Apa yang disediakan editor
+
+- Toolbar yang mengikuti pola toolbar WAI-ARIA: `role="toolbar"`, satu titik
+  perhentian Tab dengan `tabindex` bergulir, dan navigasi dengan tombol panah.
+- Permukaan pengeditan dengan nama yang aksesibel dan semantik teks multibaris.
+- Tombol semantik dengan status fokus yang terlihat dan status pressed/disabled
+  yang terekspos (`aria-pressed`, `aria-disabled`).
+- Grup semantik (`role="group"` dengan nama yang aksesibel).
+- Semantik tersendiri untuk status [read-only](/docs/guides/read-only)
+  (`aria-readonly`) dan [disabled](/docs/guides/disabled) (`aria-disabled`).
+- Kontras warna yang memenuhi AA pada tema terang dan gelap.
+
+## Navigasi keyboard
+
+| Tombol | Aksi |
+| --- | --- |
+| `Tab` | Masuk / keluar dari toolbar dan permukaan pengeditan |
+| `ArrowLeft` / `ArrowRight` | Berpindah antar kontrol toolbar |
+| `Home` / `End` | Lompat ke kontrol toolbar pertama / terakhir |
+| `Escape` | Tutup popover yang terbuka (misalnya dialog tautan) |
+
+## Label
+
+Semua string yang dilihat pengguna berasal dari objek `EditorLabels` dan dapat
+ditimpa melalui prop `labels`. Lokal default adalah bahasa Inggris; label bahasa
+Indonesia sedang direncanakan. Lihat [label di referensi API](/docs/api/types).
+
+## Strategi pengujian
+
+- **axe-core** mengaudit editor di browser nyata.
+- **Playwright** memverifikasi interaksi keyboard, fokus, dan perilaku non-jsdom.
+- Pemeriksaan otomatis melengkapi, bukan menggantikan, tinjauan manual.

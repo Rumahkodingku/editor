@@ -646,6 +646,13 @@ Advanced Usage · API Reference · React · Vue (future) · Migration / Changelo
 
 Examples use the public API only. Documentation MAY depend on the packages; packages MUST NOT depend on documentation.
 
+The documentation is **bilingual**: English is the default locale (URL prefix
+hidden) and Indonesian is served under `/id`, using Fumadocs' `parser: "dir"`
+i18n mode with content under `content/docs/<lang>/`. Examples are **live,
+runnable components** that consume the published packages through their public
+exports. `apps/fumadocs` therefore depends on `editor-react` (and its Tiptap
+peers) as an application, never the reverse. See ADR 0006.
+
 ### 20.2 Playground
 
 The playground is a Vite + React + TypeScript app used for development, manual testing, and visual validation. It is not a package dependency and MAY use Tailwind. It demonstrates: basic usage, toolbar, formatting, JSON/HTML output, read-only and disabled states, placeholder, image upload integration, and custom extensions.
@@ -867,3 +874,4 @@ pnpm run build
 | 1.1     | 2026-09-30 | Approved | Phase 01: realigned §26.3 gates (Vitest → Phase 02, Changesets → Phase 09), refreshed §3.1/§3.2 current state, documented build/package infrastructure (tsdown, exports, peer contracts, CSS artifact, `LICENSE`) |
 | 1.2     | 2026-09-30 | Approved | Phase 02: documented the testing architecture as implemented (§16 tooling, coverage, type tests), added the test scripts to §19.1/§19.3, and marked the Vitest/CI gate (§26.3 #8) done |
 | 1.3     | 2026-10-01 | Approved | Phase 03: `editor-core` implements the framework-independent core API (§6.1); refreshed §3.1 current state; added the Phase 03 implementation gates to §26.3; recorded ADRs 0002–0004 |
+| 1.4     | 2026-10-04 | Approved | Phase 08: documented the bilingual (English/Indonesian) Fumadocs site and live examples (§20.1); recorded ADR 0006 |

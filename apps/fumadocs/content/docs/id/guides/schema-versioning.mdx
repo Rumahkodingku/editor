@@ -1,0 +1,33 @@
+---
+title: Versioning Skema
+description: Pahami kepemilikan skema, kompatibilitas, dan migrasi.
+---
+
+Skema dokumen dimiliki oleh Tiptap/ProseMirror dan extension yang digunakan.
+Field `schemaVersion` adalah milik **batas persistensi**, bukan komponen editor.
+
+## Aturan kompatibilitas
+
+- Tipe node dan mark boleh **ditambahkan**.
+- Tipe tidak boleh diganti nama atau dihapus, dan atribut tidak boleh berubah
+  secara tidak kompatibel, tanpa migrasi.
+- Menghapus extension adalah breaking change dan dicantumkan di catatan rilis.
+
+## Migrasi
+
+Ketika suatu perubahan memerlukannya, migrasikan konten tersimpan sebelum
+memuatnya ke editor. Migrasi diperkenalkan hanya ketika perubahan tidak
+kompatibel yang pertama memerlukannya; sampai saat itu envelope dan pemeriksaan
+versi sudah cukup.
+
+```ts
+import { isSupportedSchemaVersion } from "@rumahkodingku/editor-core";
+
+if (!isSupportedSchemaVersion(envelope.schemaVersion)) {
+	// run migrations or reject the document
+}
+```
+
+Core melempar `EditorSchemaVersionError` untuk versi yang tidak didukung dan
+`EditorContentError` untuk konten yang tidak valid, sehingga kegagalan dapat
+dibedakan. Lihat [Persistensi](/docs/guides/persistence).

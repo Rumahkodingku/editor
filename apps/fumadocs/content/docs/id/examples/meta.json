@@ -1,0 +1,14 @@
+{
+	"title": "Contoh",
+	"pages": [
+		"basic-editor",
+		"controlled-editor",
+		"uncontrolled-editor",
+		"read-only-editor",
+		"disabled-editor",
+		"custom-toolbar",
+		"custom-extension",
+		"image-upload",
+		"theming"
+	]
+}

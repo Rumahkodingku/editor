@@ -1,0 +1,33 @@
+---
+title: Komponen
+description: Komponen publik yang diekspor oleh @rumahkodingku/editor-react.
+---
+
+| Komponen | Tipe props | Tujuan |
+| --- | --- | --- |
+| `Editor` | `EditorProps` | Editor all-in-one dengan toolbar default |
+| `EditorProvider` | `EditorProviderProps` | Memiliki lifecycle dan membagikan instance melalui context |
+| `EditorContent` | `EditorContentProps` | Surface tempat pengeditan |
+| `EditorToolbar` | `EditorToolbarProps` | Merender item toolbar |
+| `ToolbarGroup` | `ToolbarGroupProps` | Kontrol dengan `role="group"` yang semantik |
+| `ToolbarButton` | `ToolbarButtonProps` | Satu tombol toolbar yang semantik |
+| `LinkControl` | `LinkControlProps` | Kontrol pembuatan/pengubahan/penghapusan link |
+| `ImageControl` | `ImageControlProps` | Kontrol penyisipan gambar |
+| `ImageAltPopover` | `ImageAltPopoverProps` | Popover pengeditan alt-text |
+| `ToolbarIcon` | `ToolbarIconProps` | Ikon SVG inline (tanpa pustaka ikon) |
+
+Komponen mengutamakan pendekatan headless: perilaku berasal dari `editor-core`, dan
+styling disediakan melalui CSS variable. `EditorContent` kembali ke konteks
+`EditorProvider` di sekitarnya ketika tidak ada prop `editor` yang diberikan, sehingga
+surface-nya dapat dikomposisi:
+
+```tsx
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar />
+		<EditorContent />
+	</div>
+</EditorProvider>
+```
+
+Komponen internal bukan bagian dari API publik.

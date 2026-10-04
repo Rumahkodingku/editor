@@ -1,0 +1,40 @@
+---
+title: Toolbar
+description: Toolbar default, grupnya, status item, dan navigasi keyboard.
+---
+
+Toolbar default merender `ToolbarItemDefinition` dari core dan dikelompokkan
+secara semantik.
+
+## Grup
+
+| Grup | Item |
+| --- | --- |
+| Pemformatan teks | `bold`, `italic`, `underline`, `strike`, `code` |
+| Judul | `heading-1` … `heading-6` |
+| Daftar | `bulletList`, `orderedList` |
+| Blok | `blockquote`, `codeBlock`, `horizontalRule` |
+| Riwayat | `undo`, `redo` |
+| Lainnya | item apa pun yang tidak tercantum di atas (termasuk item konsumen) |
+
+Kontrol tautan dan gambar dirakit oleh adapter dan dirender setelah item yang
+dikelompokkan karena perintahnya memerlukan input tambahan.
+
+## Status
+
+Setiap item melaporkan `isActive` dan `isDisabled` dari status editor saat ini.
+Tombol mengekspos `aria-pressed` dan `aria-disabled`; item yang dinonaktifkan
+tidak dapat difokuskan.
+
+## Navigasi keyboard
+
+Toolbar mengikuti pola toolbar WAI-ARIA: satu titik perhentian Tab dengan
+`tabindex` bergulir, serta `ArrowLeft` / `ArrowRight` / `Home` / `End` untuk
+berpindah antara kontrol yang aktif.
+
+## Toolbar kustom
+
+Rakit toolbar Anda sendiri dengan `EditorProvider`, `EditorToolbar` (dengan
+memberikan `ToolbarItemDefinition[]` milik Anda), dan `EditorContent`. Lihat
+[Toolbar kustom](/docs/guides/custom-toolbar) dan
+[Toolbar API](/docs/api/toolbar).

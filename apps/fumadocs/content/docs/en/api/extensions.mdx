@@ -1,0 +1,65 @@
+---
+title: Extensions API
+description: Extension composition and the RumahKodingku ImageUpload extension.
+---
+
+## `createDefaultExtensions(options?)`
+
+Assembles the default preset: StarterKit (paragraphs, headings, marks, lists,
+blockquote, code, horizontal rule, links, history) plus `Placeholder` (when
+`placeholder` is set) and the `ImageUpload` extension.
+
+```ts
+type DefaultExtensionsOptions = {
+	placeholder?: string;
+	upload?: ImageUploadExtensionOptions;
+};
+```
+
+## `composeExtensions(base, custom, options?)`
+
+Composes the default preset with consumer extensions without mutating inputs.
+
+```ts
+type ExtensionCompositionMode = "append" | "strict";
+
+composeExtensions(defaults, custom, { mode: "append" });
+```
+
+- `"append"` (default): base first, then custom; a custom extension with the same
+  name replaces the base instance in place.
+- `"strict"`: duplicate names throw `EditorConfigError` instead of resolving
+  silently.
+
+The React adapter uses this to merge the `extensions` prop with the default
+preset.
+
+## `ImageUpload`
+
+A named extension. Configure the upload pipeline on the extension itself:
+
+```ts
+ImageUpload.configure({
+	upload,
+	accept: ["image/png", "image/jpeg"],
+	maxSize: 5_000_000,
+	allowedProtocols: ["https:"],
+});
+```
+
+`IMAGE_UPLOAD_EXTENSION_NAME` is `"imageUpload"`.
+
+## `insertImageFromFile(editor, file, options?)`
+
+Runs the upload pipeline imperatively (used by the adapter's image control):
+
+```ts
+import { insertImageFromFile } from "@rumahkodingku/editor-core";
+
+await insertImageFromFile(editor, file, { onProgress: setProgress });
+```
+
+`InsertImageOptions` extends the extension options with `signal` and
+`onProgress`.
+
+<CustomExtensionDemo />

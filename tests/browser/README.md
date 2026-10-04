@@ -1,8 +1,8 @@
 # Browser tests
 
-Phase 07 browser and accessibility validation for the Editor MVP. This folder
-documents the conventions the Playwright suite follows and records the coverage
-baseline.
+Phase 07 browser and accessibility validation for the Editor MVP, extended in
+Phase 08 with documentation coverage. This folder documents the conventions the
+Playwright suite follows and records the coverage baseline.
 
 ## Projects
 
@@ -10,18 +10,24 @@ baseline.
 
 | Project               | App        | Browser        | Scope                               |
 | --------------------- | ---------- | -------------- | ----------------------------------- |
-| `fumadocs-chromium`   | fumadocs   | Chromium       | Docs scaffold smoke + axe           |
+| `fumadocs-chromium`   | fumadocs   | Chromium       | Documentation smoke, navigation, examples, axe |
+| `fumadocs-firefox`    | fumadocs   | Firefox        | Documentation flows (`@cross-browser`) |
+| `fumadocs-webkit`     | fumadocs   | WebKit         | Documentation flows (`@cross-browser`) |
 | `playground-chromium` | playground | Chromium       | All editor browser tests            |
 | `playground-firefox`  | playground | Firefox        | Critical editor flows (`@cross-browser`) |
 | `playground-webkit`   | playground | WebKit         | Critical editor flows (`@cross-browser`) |
 
-The editor only renders in `apps/playground`; the fumadocs project covers the
-documentation scaffold (`/` and `/docs`) and is not an editor target. Its known
-scaffold accessibility findings are tracked separately and belong to Phase 08.
+The editor only renders in `apps/playground` and in the live documentation
+examples in `apps/fumadocs`. The fumadocs project covers the documentation site
+(`/`, `/docs`, guides, API reference, examples, locale-aware links, and the
+search index) plus axe-core audits of the documentation pages.
 
 Run a subset:
 
 ```bash
+pnpm exec playwright test --project=fumadocs-chromium
+pnpm exec playwright test --project=fumadocs-firefox
+pnpm exec playwright test --project=fumadocs-webkit
 pnpm exec playwright test --project=playground-chromium
 pnpm exec playwright test --project=playground-firefox
 pnpm exec playwright test --project=playground-webkit
@@ -80,6 +86,19 @@ the suite must keep working through the public semantics above.
 | IME / Unicode                    | missing       | `editor/ime-unicode.spec.ts`               |
 | axe-core (editor)                | missing       | `editor/a11y.spec.ts`                      |
 | Responsive viewports             | missing       | `editor/responsive.spec.ts` (`@chromium-only`) |
+
+## Documentation coverage (Phase 08)
+
+| Area                              | Spec                                    |
+| --------------------------------- | --------------------------------------- |
+| Home and docs landing             | `fumadocs/smoke.spec.ts`                |
+| Quick Start, API reference, live examples, locale links, search index | `fumadocs/navigation.spec.ts` |
+| Documentation axe-core audit      | `fumadocs/a11y.spec.ts`                 |
+
+The a11y spec audits the documentation pages with the Fumadocs chrome regions
+(`#nd-sidebar`, `#nd-toc`, `header`, dialogs) excluded and gates critical/serious
+violations. No rules are disabled. The high-contrast Shiki theme
+(`apps/fumadocs/source.config.ts`) keeps code examples AA-compliant.
 
 ## Known limitations
 

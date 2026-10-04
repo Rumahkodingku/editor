@@ -1,0 +1,29 @@
+---
+title: Uncontrolled Mode
+description: Let the editor own the document and read it on demand.
+---
+
+Pass `defaultValue` and the editor owns the document after mount.
+
+```tsx
+<Editor defaultValue={initialContent} />;
+```
+
+Read the document on demand through the Tiptap instance obtained from `onReady`:
+
+```tsx
+<Editor
+	defaultValue={initialContent}
+	onReady={(editor) => {
+		console.log(editor.getJSON());
+	}}
+/>;
+```
+
+`onReady` is called once per editor instance. The instance is also the supported
+way to run commands; Tiptap/ProseMirror remains the source of truth.
+
+<UncontrolledEditorDemo />
+
+Do not pass both `value` and `defaultValue`; `value` wins and a development
+warning is emitted.

@@ -1,0 +1,41 @@
+---
+title: Accessibility Overview
+description: Accessibility is a first-class requirement for the default editor UI.
+---
+
+Accessibility is a product requirement, targeting **WCAG 2.2 AA** for the
+default UI. The editor is validated with automated axe-core checks and real
+browser tests; it does not claim formal certification.
+
+## What the editor provides
+
+- A toolbar that follows the WAI-ARIA toolbar pattern: `role="toolbar"`, a single
+  tab stop with roving `tabindex`, and arrow-key navigation.
+- An editing surface with an accessible name and multiline text semantics.
+- Semantic buttons with visible focus states and exposed pressed/disabled state
+  (`aria-pressed`, `aria-disabled`).
+- Semantic groups (`role="group"` with an accessible name).
+- Distinct semantics for [read-only](/docs/guides/read-only) (`aria-readonly`)
+  and [disabled](/docs/guides/disabled) (`aria-disabled`) states.
+- Color contrast that meets AA in light and dark themes.
+
+## Keyboard navigation
+
+| Key | Action |
+| --- | --- |
+| `Tab` | Enter / leave the toolbar and the editing surface |
+| `ArrowLeft` / `ArrowRight` | Move between toolbar controls |
+| `Home` / `End` | Jump to the first / last toolbar control |
+| `Escape` | Close an open popover (for example the link dialog) |
+
+## Labels
+
+All user-facing strings come from the `EditorLabels` object and can be overridden
+through the `labels` prop. The default locale is English; Indonesian labels are
+planned. See the [labels in the API reference](/docs/api/types).
+
+## Testing strategy
+
+- **axe-core** audits the editor in a real browser.
+- **Playwright** verifies keyboard interaction, focus, and non-jsdom behavior.
+- Automated checks complement, but do not replace, manual review.

@@ -1,0 +1,35 @@
+---
+title: Toolbar Kustom
+description: Rakit toolbar Anda sendiri dengan surface publik.
+---
+
+`Editor` yang serba bisa selalu merender toolbar default. Untuk membuat tata
+letak kustom, rakit `EditorProvider`, `EditorToolbar`, dan `EditorContent`.
+
+```tsx
+import {
+	createDefaultToolbar,
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+} from "@rumahkodingku/editor-react";
+
+const keep = new Set(["bold", "italic", "bulletList", "orderedList"]);
+const items = createDefaultToolbar().filter((item) => keep.has(item.id));
+
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar items={items} labels={{ editor: "Custom toolbar" }} />
+		<EditorContent />
+	</div>
+</EditorProvider>;
+```
+
+- `items` default-nya adalah toolbar default core.
+- Berikan `children` untuk menambahkan kontrol rakitan adapter (tautan/gambar)
+  atau kontrol Anda sendiri.
+- Berikan `ToolbarItemDefinition[]` dari core, atau definisi Anda sendiri.
+
+<CustomToolbarDemo />
+
+Lihat [Toolbar API](/docs/api/toolbar) untuk kontrak `ToolbarItemDefinition`.

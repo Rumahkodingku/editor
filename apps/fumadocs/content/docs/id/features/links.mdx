@@ -1,0 +1,35 @@
+---
+title: Tautan
+description: Buat, edit, dan hapus tautan, dengan penanganan URL yang aman.
+---
+
+Tautan disediakan melalui `LinkControl` milik adapter. Kontrol ini dirakit oleh
+toolbar default karena menyisipkan tautan memerlukan input URL; model toolbar
+inti tetap bebas dari perintah yang bergantung pada input.
+
+## Perilaku
+
+- Membuat tautan pada seleksi saat ini.
+- Mengedit atau menghapus tautan yang sudah ada.
+- URL divalidasi sebelum disisipkan.
+
+## URL yang aman
+
+Core mengekspos helper keamanan URL yang independen dari framework:
+
+```ts
+import {
+	isSafeUrl,
+	DEFAULT_LINK_PROTOCOLS,
+	DEFAULT_IMAGE_PROTOCOLS,
+} from "@rumahkodingku/editor-core";
+```
+
+`isSafeUrl` menolak skema berbahaya seperti `javascript:`. Protokol yang
+diizinkan dapat dikonfigurasi dengan default yang aman. Validasi yang sama juga
+berlaku untuk sumber gambar.
+
+
+> Validasi URL mengurangi risiko tetapi tidak membuat HTML aplikasi yang dirender
+> menjadi aman. Sanitasi HTML yang tidak tepercaya sebelum menyuntikkannya. Lihat
+> [HTML](/docs/fundamentals/html).

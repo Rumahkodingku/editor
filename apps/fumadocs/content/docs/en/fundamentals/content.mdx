@@ -1,0 +1,51 @@
+---
+title: Content
+description: "How content enters and leaves the editor: initial value, controlled value, and changes."
+---
+
+The editor works with **Tiptap/ProseMirror JSON** as its canonical content
+representation. HTML is available as an output format only.
+
+## Initial content (uncontrolled)
+
+```tsx
+<Editor defaultValue={content} />
+```
+
+The editor owns the document after mount. Read it on demand from the instance:
+`editor.getJSON()`.
+
+## Controlled content
+
+```tsx
+const [value, setValue] = useState(content);
+
+<Editor value={value} onChange={setValue} />;
+```
+
+Control rules (implemented and tested):
+
+- `onChange` fires at most once per transaction that changes the document.
+- Updates caused by the `value` prop do **not** fire `onChange`.
+- An incoming `value` is compared with the current document before
+  `setContent` and is applied with `emitUpdate: false`, preventing update loops
+  and cursor jumps.
+- The document is serialized lazily; unrelated renders do not call `getJSON()`.
+
+## Output
+
+- JSON: the canonical format — `editor.getJSON()` or the core `toJSON(editor)`.
+- HTML: an output format — `editor.getHTML()` or the core `toHTML(editor)`.
+
+See [JSON](/docs/fundamentals/json) and [HTML](/docs/fundamentals/html).
+
+## Persisting content
+
+Applications wrap the JSON in the persistence envelope at the storage boundary:
+
+```json
+{ "schemaVersion": 1, "content": { "type": "doc", "content": [] } }
+```
+
+See [Persistence](/docs/guides/persistence) and
+[Schema versioning](/docs/guides/schema-versioning).

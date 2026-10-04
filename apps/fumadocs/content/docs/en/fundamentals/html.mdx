@@ -1,0 +1,35 @@
+---
+title: HTML
+description: HTML is an output-only serialization of the canonical JSON document.
+---
+
+HTML is a serialization/output format. The MVP component does **not** accept HTML
+as `value`; JSON is canonical.
+
+## From an editor instance
+
+```tsx
+const html = editor.getHTML();
+```
+
+## Without an editor (server-safe)
+
+`jsonToHTML` renders stored JSON to HTML without an editor instance and without a
+browser DOM, so applications can display stored content on the server:
+
+```ts
+import { jsonToHTML } from "@rumahkodingku/editor-core";
+
+const html = await jsonToHTML(content);
+```
+
+Server-side rendering without a DOM requires the optional `happy-dom` peer.
+
+## Security
+
+Editor HTML is untrusted data once it crosses an application boundary. Do not
+assume it is safe to inject directly. Sanitize HTML before rendering it in
+contexts where markup is interpreted, and validate URL protocols for links and
+images. The library does not make arbitrary application HTML safe by serializing
+it. See the [security documentation section](/docs/api/core) and the safe-URL
+helpers `isSafeUrl`, `DEFAULT_LINK_PROTOCOLS`, and `DEFAULT_IMAGE_PROTOCOLS`.

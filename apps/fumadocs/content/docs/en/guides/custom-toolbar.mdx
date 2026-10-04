@@ -1,0 +1,34 @@
+---
+title: Custom Toolbar
+description: Compose your own toolbar with the public surfaces.
+---
+
+The all-in-one `Editor` always renders the default toolbar. To build a custom
+layout, compose `EditorProvider`, `EditorToolbar`, and `EditorContent`.
+
+```tsx
+import {
+	createDefaultToolbar,
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+} from "@rumahkodingku/editor-react";
+
+const keep = new Set(["bold", "italic", "bulletList", "orderedList"]);
+const items = createDefaultToolbar().filter((item) => keep.has(item.id));
+
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar items={items} labels={{ editor: "Custom toolbar" }} />
+		<EditorContent />
+	</div>
+</EditorProvider>;
+```
+
+- `items` defaults to the core default toolbar.
+- Pass `children` to append adapter-composed controls (link/image) or your own.
+- Provide `ToolbarItemDefinition[]` from core, or your own definitions.
+
+<CustomToolbarDemo />
+
+See the [Toolbar API](/docs/api/toolbar) for the `ToolbarItemDefinition` contract.

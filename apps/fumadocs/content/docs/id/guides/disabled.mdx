@@ -1,0 +1,24 @@
+---
+title: Mode Disabled
+description: Hilangkan fokus dan interaksi sepenuhnya, dengan kontrol yang dinonaktifkan.
+---
+
+Setel `disabled` untuk menonaktifkan editor sepenuhnya.
+
+```tsx
+<Editor defaultValue={content} disabled />;
+```
+
+| Aspek | Perilaku |
+| --- | --- |
+| Fokus | Tidak dapat difokuskan |
+| Seleksi | Tidak tersedia |
+| Pengeditan | Diblokir |
+| Toolbar | Semua kontrol dinonaktifkan |
+| ARIA | Mengekspos semantik `aria-disabled` |
+
+<DisabledEditorDemo />
+
+Gunakan disabled untuk konten yang sementara tidak tersedia (misalnya saat
+formulir sedang dikirim). Gunakan [mode read-only](/docs/guides/read-only) ketika
+konten harus tetap dapat dipilih dan disalin.

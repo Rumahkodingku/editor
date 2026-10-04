@@ -1,0 +1,17 @@
+---
+title: Editor Terkendali
+description: JSON milik parent dengan onChange.
+---
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { useState } from "react";
+
+export function App() {
+	const [value, setValue] = useState(initialContent);
+
+	return <Editor value={value} onChange={setValue} />;
+}
+```
+
+<ControlledEditorDemo />

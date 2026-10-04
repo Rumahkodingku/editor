@@ -1,0 +1,79 @@
+---
+title: Core API
+description: Public exports of @rumahkodingku/editor-core.
+---
+
+`@rumahkodingku/editor-core` is framework-independent and import-safe in SSR.
+Only the exports below are public.
+
+## Editor
+
+| Export | Kind | Notes |
+| --- | --- | --- |
+| `createEditor(options)` | function | Creates a Tiptap editor with the core preset |
+| `CreateEditorOptions` | type | Options for `createEditor` |
+| `EDITOR_CORE_PACKAGE_NAME` | const | Package identifier |
+
+## Content utilities
+
+| Export | Kind |
+| --- | --- |
+| `createEmptyDocument()` | function |
+| `isValidJSONContent(value)` | function |
+| `isEmptyContent(content)` | function |
+| `normalizeContent(content)` | function |
+| `toJSON(editor)` | function |
+| `toHTML(editor)` | function |
+| `jsonToHTML(content)` | async function (server-safe) |
+
+## Extensions
+
+| Export | Kind |
+| --- | --- |
+| `createDefaultExtensions(options?)` | function |
+| `composeExtensions(options)` | function |
+| `ImageUpload` | extension |
+| `insertImageFromFile(editor, file, options?)` | async function |
+| `IMAGE_UPLOAD_EXTENSION_NAME` | const |
+
+## Toolbar and labels
+
+| Export | Kind |
+| --- | --- |
+| `createDefaultToolbar()` | function |
+| `ToolbarItemDefinition` | type |
+| `defaultLabels` | const |
+| `resolveLabels(overrides?)` | function |
+| `EditorLabels` | type |
+
+## Persistence
+
+| Export | Kind |
+| --- | --- |
+| `PersistenceEnvelope` | type |
+| `EditorSchemaVersion` | type |
+| `EDITOR_SCHEMA_VERSION` | const |
+| `createPersistenceEnvelope(content)` | function |
+| `parsePersistenceEnvelope(value)` | function |
+| `isPersistenceEnvelope(value)` | function |
+| `isSupportedSchemaVersion(version)` | function |
+
+## Security
+
+| Export | Kind |
+| --- | --- |
+| `isSafeUrl(url, options?)` | function |
+| `UrlValidationOptions` | type |
+| `DEFAULT_LINK_PROTOCOLS` | const |
+| `DEFAULT_IMAGE_PROTOCOLS` | const |
+
+## Errors
+
+`EditorError`, `EditorConfigError`, `EditorContentError`,
+`EditorSchemaVersionError`, and `EditorUploadError` are exported so failures can
+be distinguished. Errors preserve their `cause`.
+
+## Tiptap types
+
+Tiptap is part of the public contract: `AnyExtension`, `Editor`, and `JSONContent`
+are re-exported from `@tiptap/core`.

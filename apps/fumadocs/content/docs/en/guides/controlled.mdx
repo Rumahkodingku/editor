@@ -1,0 +1,28 @@
+---
+title: Controlled Mode
+description: Let the parent own the JSON value and receive changes through onChange.
+---
+
+In controlled mode the `value` prop is the source of truth. Pass `onChange` to
+receive the new JSON and update your state.
+
+```tsx
+const [value, setValue] = useState(initialContent);
+
+<Editor value={value} onChange={setValue} />;
+```
+
+## Behavior guarantees
+
+- `onChange` fires at most once per transaction that changes the document.
+- Changes caused by the `value` prop do not fire `onChange`.
+- An incoming `value` is compared with the current document before
+  `setContent(..., { emitUpdate: false })`, which prevents update loops and
+  cursor jumps.
+- Selection is preserved when the incoming value is equivalent.
+- The document is serialized lazily; unrelated renders do not call `getJSON()`.
+
+<ControlledEditorDemo />
+
+`value` takes precedence over `defaultValue`; providing both logs a development
+warning. See [Uncontrolled mode](/docs/guides/uncontrolled) for the alternative.

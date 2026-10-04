@@ -1,0 +1,26 @@
+---
+title: Theming
+description: Override the editor's CSS variables.
+---
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import type { CSSProperties } from "react";
+
+const theme = {
+	"--rk-editor-background": "#0b1220",
+	"--rk-editor-foreground": "#e2e8f0",
+	"--rk-editor-accent": "#38bdf8",
+	"--rk-editor-radius": "0.75rem",
+} as CSSProperties;
+
+export function App() {
+	return (
+		<div style={theme}>
+			<Editor defaultValue={content} />
+		</div>
+	);
+}
+```
+
+<ThemingDemo />

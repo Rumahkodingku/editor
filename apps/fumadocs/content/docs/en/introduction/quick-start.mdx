@@ -1,0 +1,74 @@
+---
+title: Quick Start
+description: Render a working editor, provide initial JSON content, and receive changes through onChange.
+---
+
+This page takes you from install to a working editor that emits JSON.
+
+## 1. Render an editor
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import "@rumahkodingku/editor-react/styles.css";
+
+export function App() {
+	return <Editor />;
+}
+```
+
+`Editor` renders the default toolbar and the editing surface; the document is
+owned by Tiptap/ProseMirror. `editable` defaults to `true`, `disabled` to
+`false`.
+
+<BasicEditorDemo />
+
+## 2. Provide initial JSON content
+
+Pass `defaultValue` for **uncontrolled** content (the editor owns it after
+mount):
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+
+const content = {
+	type: "doc",
+	content: [
+		{
+			type: "paragraph",
+			content: [{ type: "text", text: "Hello world" }],
+		},
+	],
+};
+
+export function App() {
+	return <Editor defaultValue={content} />;
+}
+```
+
+## 3. Receive changes
+
+`onChange` fires with canonical **JSON** whenever a transaction changes the
+document:
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { useState } from "react";
+
+export function App() {
+	const [value, setValue] = useState(initialContent);
+
+	return <Editor value={value} onChange={setValue} />;
+}
+```
+
+JSON is the canonical content format. HTML is an **output** — obtain it from the
+editor instance with `editor.getHTML()`, or use the core `toHTML(editor)` helper.
+See [Content](/docs/fundamentals/content) and [JSON](/docs/fundamentals/json).
+
+<ControlledEditorDemo />
+
+## Next steps
+
+- [Editor props reference](/docs/api/react)
+- [Controlled mode](/docs/guides/controlled) and [uncontrolled mode](/docs/guides/uncontrolled)
+- [Images and uploads](/docs/guides/image-upload)

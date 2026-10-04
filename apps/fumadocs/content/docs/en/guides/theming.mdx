@@ -1,0 +1,45 @@
+---
+title: Theming
+description: Customize the editor with framework-agnostic CSS variables.
+---
+
+The editor ships framework-agnostic CSS. All colors and sizes are
+`--rk-editor-*` custom properties; class names are prefixed with `rk-`.
+
+## Variables
+
+| Variable | Purpose |
+| --- | --- |
+| `--rk-editor-background` | Editor background |
+| `--rk-editor-foreground` | Text color |
+| `--rk-editor-border` | Borders |
+| `--rk-editor-muted` | Muted text |
+| `--rk-editor-toolbar-background` | Toolbar background |
+| `--rk-editor-hover` | Hover background |
+| `--rk-editor-accent` / `--rk-editor-accent-contrast` | Active control colors |
+| `--rk-editor-radius` | Corner radius |
+| `--rk-editor-link` | Link color |
+| `--rk-editor-danger` | Error color |
+
+Override them anywhere in the cascade:
+
+```css
+.my-theme {
+	--rk-editor-background: #0b1220;
+	--rk-editor-foreground: #e2e8f0;
+	--rk-editor-radius: 0.75rem;
+}
+```
+
+<ThemingDemo />
+
+## Light and dark themes
+
+The stylesheet provides light defaults, a `[data-theme="dark"]` block, and a
+`prefers-color-scheme: dark` fallback. Set `data-theme="light"` on the root to
+opt out of the system preference.
+
+## No Tailwind requirement
+
+Consumers are never required to install Tailwind or an icon/UI library. Tailwind
+is used only inside this documentation application, never in a published package.

@@ -1,0 +1,52 @@
+---
+title: JSON
+description: JSON Tiptap/ProseMirror adalah representasi dokumen yang kanonik.
+---
+
+JSON adalah tipe nilai kanonik dari API. Sebuah dokumen adalah satu node root
+bertipe `doc`:
+
+```json
+{
+	"type": "doc",
+	"content": []
+}
+```
+
+Paragraf dengan teks berformat:
+
+```json
+{
+	"type": "doc",
+	"content": [
+		{
+			"type": "paragraph",
+			"content": [
+				{ "type": "text", "text": "Hello " },
+				{ "type": "text", "marks": [{ "type": "bold" }], "text": "world" }
+			]
+		}
+	]
+}
+```
+
+## Tipe
+
+API publik menggunakan `JSONContent` milik Tiptap secara langsung; ia diekspor
+ulang dari kedua paket:
+
+```ts
+import type { JSONContent } from "@rumahkodingku/editor-react";
+```
+
+## Helper
+
+`@rumahkodingku/editor-core` menyediakan utilitas konten:
+
+| Helper | Fungsi |
+| --- | --- |
+| `createEmptyDocument()` | Node `doc` yang kosong |
+| `isValidJSONContent(value)` | Memvalidasi nilai yang belum diketahui |
+| `isEmptyContent(content)` | Mendeteksi dokumen kosong |
+| `normalizeContent(content)` | Menormalisasi konten untuk editor |
+| `toJSON(editor)` | Membaca JSON kanonik dari sebuah editor |

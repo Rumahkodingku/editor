@@ -1,0 +1,38 @@
+---
+title: Formatting
+description: Formatting capabilities provided by the default extension preset and toolbar.
+---
+
+The default preset includes the common formatting marks and blocks. Only features
+that are actually exposed are listed here.
+
+| Feature | Toolbar item id | Shortcut |
+| --- | --- | --- |
+| Paragraph | — (default block) | — |
+| Heading 1–6 | `heading-1` … `heading-6` | `Mod-Alt-1` … `Mod-Alt-6` |
+| Bold | `bold` | `Mod-b` |
+| Italic | `italic` | `Mod-i` |
+| Underline | `underline` | `Mod-u` |
+| Strikethrough | `strike` | `Mod-Shift-x` |
+| Inline code | `code` | `Mod-e` |
+| Code block | `codeBlock` | `Mod-Alt-c` |
+| Blockquote | `blockquote` | `Mod-Shift-b` |
+| Bullet list | `bulletList` | `Mod-Shift-8` |
+| Ordered list | `orderedList` | `Mod-Shift-7` |
+| Horizontal rule | `horizontalRule` | — |
+| Undo / Redo | `undo`, `redo` | `Mod-z`, `Mod-Shift-z` |
+
+## Customize the preset
+
+The default extensions are assembled by `createDefaultExtensions` from
+`@rumahkodingku/editor-core`. Consumers can use them, extend them, or bypass
+them:
+
+```ts
+import { createDefaultExtensions } from "@rumahkodingku/editor-react";
+
+const extensions = createDefaultExtensions();
+```
+
+Every RumahKodingku extension is a named export so unused ones are tree-shaken.
+See [Custom extensions](/docs/guides/custom-extensions).

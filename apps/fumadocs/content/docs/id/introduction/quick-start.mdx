@@ -1,0 +1,75 @@
+---
+title: Mulai Cepat
+description: Render editor yang berfungsi, berikan konten JSON awal, dan terima perubahan melalui onChange.
+---
+
+Halaman ini menuntun Anda dari instalasi hingga editor yang berfungsi dan
+menghasilkan JSON.
+
+## 1. Render sebuah editor
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import "@rumahkodingku/editor-react/styles.css";
+
+export function App() {
+	return <Editor />;
+}
+```
+
+`Editor` me-render toolbar default dan area pengeditan; dokumen dimiliki oleh
+Tiptap/ProseMirror. `editable` bernilai default `true`, `disabled` bernilai
+`false`.
+
+<BasicEditorDemo />
+
+## 2. Berikan konten JSON awal
+
+Lewatkan `defaultValue` untuk konten **uncontrolled** (editor memilikinya setelah
+mount):
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+
+const content = {
+	type: "doc",
+	content: [
+		{
+			type: "paragraph",
+			content: [{ type: "text", text: "Hello world" }],
+		},
+	],
+};
+
+export function App() {
+	return <Editor defaultValue={content} />;
+}
+```
+
+## 3. Terima perubahan
+
+`onChange` dipicu dengan **JSON** kanonik setiap kali sebuah transaksi mengubah
+dokumen:
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { useState } from "react";
+
+export function App() {
+	const [value, setValue] = useState(initialContent);
+
+	return <Editor value={value} onChange={setValue} />;
+}
+```
+
+JSON adalah format konten kanonik. HTML adalah **output** — dapatkan dari instance
+editor dengan `editor.getHTML()`, atau gunakan helper core `toHTML(editor)`.
+Lihat [Konten](/docs/fundamentals/content) dan [JSON](/docs/fundamentals/json).
+
+<ControlledEditorDemo />
+
+## Langkah berikutnya
+
+- [Referensi props Editor](/docs/api/react)
+- [Mode controlled](/docs/guides/controlled) dan [mode uncontrolled](/docs/guides/uncontrolled)
+- [Gambar dan upload](/docs/guides/image-upload)

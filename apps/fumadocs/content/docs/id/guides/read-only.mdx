@@ -1,0 +1,27 @@
+---
+title: Mode Read-only
+description: Tampilkan konten yang dapat dipilih dan disalin tetapi tidak dapat diedit.
+---
+
+Setel `editable={false}` untuk membuat konten menjadi read-only.
+
+```tsx
+<Editor defaultValue={content} editable={false} />;
+```
+
+| Aspek | Perilaku |
+| --- | --- |
+| Pengeditan | Diblokir |
+| Fokus | Diizinkan |
+| Seleksi / salin | Diizinkan |
+| Toolbar | Kontrol pengeditan dinonaktifkan |
+| ARIA | Mengekspos semantik `aria-readonly` |
+
+<ReadOnlyEditorDemo />
+
+## Read-only vs disabled
+
+Read-only mempertahankan fokus dan seleksi sehingga pengguna dapat menyalin
+konten; disabled menghapus interaksi sepenuhnya. Lihat
+[Mode Disabled](/docs/guides/disabled) dan
+[Status editable](/docs/api/react).

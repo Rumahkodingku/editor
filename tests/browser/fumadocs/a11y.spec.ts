@@ -1,23 +1,24 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/docs"];
+const routes = [
+	"/",
+	"/docs",
+	"/docs/introduction/installation",
+	"/docs/guides/custom-toolbar",
+	"/docs/api/react",
+	"/docs/examples/basic-editor",
+	"/id/docs",
+	"/id/docs/guides/theming",
+];
 
 /**
- * Known accessibility findings in the Fumadocs documentation app scaffold.
- * They are NOT in the published editor packages, and Phase 02 only establishes
- * the accessibility testing foundation — the WCAG 2.2 AA audit and the
- * documentation work belong to Phase 07 (Browser & Accessibility) and Phase 08
- * (Documentation).
- *
- * Listing them explicitly keeps this gate meaningful for every other rule,
- * instead of weakening the assertion silently.
+ * Fumadocs UI chrome regions whose default-theme contrast findings are tracked
+ * upstream (navigation sidebar, table of contents, and dialogs). The audit still
+ * covers the documentation content, code examples, and live editors, so the rule
+ * stays enabled instead of being disabled wholesale.
  */
-const KNOWN_SCAFFOLD_VIOLATIONS = [
-	"color-contrast",
-	"document-title",
-	"svg-img-alt",
-];
+const FUMADOCS_CHROME = ["#nd-sidebar", "#nd-toc", "header", "[role='dialog']"];
 
 for (const route of routes) {
 	test(`has no serious or critical accessibility violations on ${route}`, async ({
@@ -25,9 +26,12 @@ for (const route of routes) {
 	}) => {
 		await page.goto(route);
 
-		const results = await new AxeBuilder({ page })
-			.disableRules(KNOWN_SCAFFOLD_VIOLATIONS)
-			.analyze();
+		const builder = new AxeBuilder({ page });
+		for (const selector of FUMADOCS_CHROME) {
+			builder.exclude(selector);
+		}
+
+		const results = await builder.analyze();
 		const severe = results.violations.filter(
 			(violation) =>
 				violation.impact === "serious" || violation.impact === "critical",

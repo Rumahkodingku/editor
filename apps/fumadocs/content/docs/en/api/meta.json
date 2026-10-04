@@ -1,0 +1,13 @@
+{
+	"title": "API Reference",
+	"pages": [
+		"core",
+		"react",
+		"components",
+		"hooks",
+		"types",
+		"extensions",
+		"toolbar",
+		"upload"
+	]
+}

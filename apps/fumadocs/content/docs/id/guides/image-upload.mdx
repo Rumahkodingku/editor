@@ -1,0 +1,63 @@
+---
+title: Upload Gambar
+description: Arahkan upload dari toolbar, paste, dan drag/drop melalui handler yang disediakan konsumen.
+---
+
+Upload menggunakan dependency inversion. Editor memanggil handler yang Anda
+sediakan; editor tidak bergantung pada penyedia penyimpanan mana pun.
+
+```text
+Editor → ImageUpload → ImageUploadHandler → consumer storage/backend
+```
+
+## Kontrak handler
+
+```ts
+type ImageUploadHandler = (ctx: {
+	file: File;
+	signal: AbortSignal;
+	onProgress?: (percent: number) => void;
+}) => Promise<{
+	src: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+}>;
+```
+
+Implementasikan terhadap backend Anda sendiri:
+
+```ts
+const upload: ImageUploadHandler = async ({ file, signal, onProgress }) => {
+	const body = new FormData();
+	body.append("file", file);
+	const response = await fetch("/api/uploads", { method: "POST", body, signal });
+	const { url, alt } = await response.json();
+	onProgress?.(100);
+	return { src: url, alt };
+};
+```
+
+Lalu konfigurasikan extension-nya:
+
+```ts
+ImageUpload.configure({ upload, accept: ["image/png"], maxSize: 5_000_000 });
+```
+
+## Progres, pembatalan, dan error
+
+- `onProgress(percent)` melaporkan progres; toolbar menampilkan status upload.
+- `signal` membatalkan upload yang dibatalkan; pembatalan dilaporkan sebagai
+  error.
+- Kegagalan menghapus placeholder dan dilaporkan melalui `onError` /
+  `EditorUploadError`.
+- Tipe dan ukuran berkas divalidasi untuk umpan balik pengguna; validasi lagi di
+  lapisan penyimpanan Anda.
+
+## Agnostik terhadap penyedia
+
+Paket-paket ini tidak bergantung pada S3, Cloudinary, Supabase, Firebase, atau
+backend maupun HTTP client tertentu. Penyimpanan sepenuhnya menjadi tanggung
+jawab konsumen.
+
+<ImageUploadDemo />

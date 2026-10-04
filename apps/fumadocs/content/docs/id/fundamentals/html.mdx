@@ -1,0 +1,37 @@
+---
+title: HTML
+description: HTML adalah serialisasi keluaran saja dari dokumen JSON kanonik.
+---
+
+HTML adalah format serialisasi/output. Komponen MVP **tidak** menerima HTML
+sebagai `value`; JSON adalah yang kanonik.
+
+## Dari instance editor
+
+```tsx
+const html = editor.getHTML();
+```
+
+## Tanpa editor (aman di server)
+
+`jsonToHTML` me-render JSON yang tersimpan menjadi HTML tanpa instance editor dan
+tanpa DOM browser, sehingga aplikasi dapat menampilkan konten tersimpan di
+server:
+
+```ts
+import { jsonToHTML } from "@rumahkodingku/editor-core";
+
+const html = await jsonToHTML(content);
+```
+
+Rendering di sisi server tanpa DOM memerlukan peer opsional `happy-dom`.
+
+## Keamanan
+
+HTML dari editor adalah data yang tidak tepercaya begitu melintasi batas
+aplikasi. Jangan menganggapnya aman untuk disuntikkan secara langsung. Sanitasi
+HTML sebelum merendernya di konteks yang menafsirkan markup, dan validasi
+protokol URL untuk tautan serta gambar. Library ini tidak menjadikan HTML
+aplikasi yang arbitrer aman hanya dengan melakukan serialisasi terhadapnya. Lihat
+[bagian dokumentasi keamanan](/docs/api/core) dan helper URL aman `isSafeUrl`,
+`DEFAULT_LINK_PROTOCOLS`, serta `DEFAULT_IMAGE_PROTOCOLS`.

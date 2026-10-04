@@ -1,0 +1,52 @@
+---
+title: Konten
+description: "Bagaimana konten masuk dan keluar dari editor: nilai awal, nilai controlled, dan perubahan."
+---
+
+Editor bekerja dengan **JSON Tiptap/ProseMirror** sebagai representasi konten
+kanoniknya. HTML hanya tersedia sebagai format output.
+
+## Konten awal (uncontrolled)
+
+```tsx
+<Editor defaultValue={content} />
+```
+
+Editor memiliki dokumen setelah mount. Bacalah sesuai kebutuhan dari instance:
+`editor.getJSON()`.
+
+## Konten controlled
+
+```tsx
+const [value, setValue] = useState(content);
+
+<Editor value={value} onChange={setValue} />;
+```
+
+Aturan controlled (sudah diimplementasikan dan diuji):
+
+- `onChange` dipicu paling banyak sekali per transaksi yang mengubah dokumen.
+- Pembaruan yang disebabkan oleh prop `value` **tidak** memicu `onChange`.
+- `value` yang masuk akan dibandingkan dengan dokumen saat ini sebelum
+  `setContent` dan diterapkan dengan `emitUpdate: false`, sehingga mencegah loop
+  pembaruan dan lompatan kursor.
+- Dokumen diserialisasi secara lazy; render yang tidak berkaitan tidak memanggil
+  `getJSON()`.
+
+## Output
+
+- JSON: format kanonik — `editor.getJSON()` atau `toJSON(editor)` dari core.
+- HTML: format output — `editor.getHTML()` atau `toHTML(editor)` dari core.
+
+Lihat [JSON](/docs/fundamentals/json) dan [HTML](/docs/fundamentals/html).
+
+## Persistensi konten
+
+Aplikasi membungkus JSON dalam envelope persistensi di batas penyimpanan:
+
+```json
+{ "schemaVersion": 1, "content": { "type": "doc", "content": [] } }
+```
+
+Lihat [Persistensi](/docs/guides/persistence) dan
+[Versioning skema](/docs/guides/schema-versioning).

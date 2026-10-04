@@ -1,0 +1,31 @@
+---
+title: Mode Uncontrolled
+description: Biarkan editor memiliki dokumen dan membacanya sesuai permintaan.
+---
+
+Berikan `defaultValue` dan editor memiliki dokumen setelah mount.
+
+```tsx
+<Editor defaultValue={initialContent} />;
+```
+
+Baca dokumen sesuai kebutuhan melalui instance Tiptap yang diperoleh dari
+`onReady`:
+
+```tsx
+<Editor
+	defaultValue={initialContent}
+	onReady={(editor) => {
+		console.log(editor.getJSON());
+	}}
+/>;
+```
+
+`onReady` dipanggil sekali per instance editor. Instance ini juga merupakan cara
+yang didukung untuk menjalankan perintah; Tiptap/ProseMirror tetap menjadi
+sumber kebenaran.
+
+<UncontrolledEditorDemo />
+
+Jangan memberikan `value` dan `defaultValue` sekaligus; `value` yang menang dan
+peringatan pengembangan akan dikeluarkan.

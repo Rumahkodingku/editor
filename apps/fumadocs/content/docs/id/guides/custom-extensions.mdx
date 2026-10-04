@@ -1,0 +1,40 @@
+---
+title: Extension Kustom
+description: Tambahkan extension Tiptap dan rakit bersama preset default.
+---
+
+Berikan extension konsumen melalui prop `extensions`. Extension tersebut dirakit
+bersama preset default core, sehingga paket tidak pernah dimodifikasi.
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { Mark } from "@tiptap/core";
+
+const Highlight = Mark.create({
+	name: "highlight",
+	parseHTML() {
+		return [{ tag: "mark" }];
+	},
+	renderHTML() {
+		return ["mark", { "data-rk-highlight": "true" }, 0];
+	},
+});
+
+// Keep the array referentially stable between renders.
+const extensions = [Highlight];
+
+<Editor extensions={extensions} defaultValue={content} />;
+```
+
+Array extension harus stabil di antara render; membuatnya ulang menyebabkan
+editor diinisialisasi kembali. Definisikan di lingkup modul atau dengan
+`useMemo`.
+
+<CustomExtensionDemo />
+
+## Komposisi
+
+Lihat [Komposisi extension](/docs/api/extensions) untuk `composeExtensions`,
+`createDefaultExtensions`, dan mode komposisinya. Lihat
+[Toolbar kustom](/docs/guides/custom-toolbar) untuk menambahkan kontrol bagi
+extension tersebut.

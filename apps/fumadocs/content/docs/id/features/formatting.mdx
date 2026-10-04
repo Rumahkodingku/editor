@@ -1,0 +1,38 @@
+---
+title: Pemformatan
+description: Kemampuan pemformatan yang disediakan oleh preset ekstensi dan toolbar default.
+---
+
+Preset default mencakup mark dan blok pemformatan yang umum. Hanya fitur yang
+benar-benar tersedia yang didaftarkan di sini.
+
+| Fitur | ID item toolbar | Pintasan |
+| --- | --- | --- |
+| Paragraf | — (blok default) | — |
+| Judul 1–6 | `heading-1` … `heading-6` | `Mod-Alt-1` … `Mod-Alt-6` |
+| Tebal | `bold` | `Mod-b` |
+| Miring | `italic` | `Mod-i` |
+| Garis bawah | `underline` | `Mod-u` |
+| Coret | `strike` | `Mod-Shift-x` |
+| Kode inline | `code` | `Mod-e` |
+| Blok kode | `codeBlock` | `Mod-Alt-c` |
+| Kutipan blok | `blockquote` | `Mod-Shift-b` |
+| Daftar butir | `bulletList` | `Mod-Shift-8` |
+| Daftar bernomor | `orderedList` | `Mod-Shift-7` |
+| Garis horizontal | `horizontalRule` | — |
+| Urungkan / Ulangi | `undo`, `redo` | `Mod-z`, `Mod-Shift-z` |
+
+## Menyesuaikan preset
+
+Extension default dirakit oleh `createDefaultExtensions` dari
+`@rumahkodingku/editor-core`. Konsumen dapat memakainya, memperluasnya, atau
+melewatinya:
+
+```ts
+import { createDefaultExtensions } from "@rumahkodingku/editor-react";
+
+const extensions = createDefaultExtensions();
+```
+
+Setiap extension RumahKodingku adalah named export sehingga yang tidak terpakai
+akan di-tree-shake. Lihat [Extension kustom](/docs/guides/custom-extensions).

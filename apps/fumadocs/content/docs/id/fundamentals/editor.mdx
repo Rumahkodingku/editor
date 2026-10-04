@@ -1,0 +1,57 @@
+---
+title: Editor
+description: Komponen React Editor, perilaku default-nya, dan cara menyusun surface-nya.
+---
+
+`Editor` adalah komponen React all-in-one. Ia membuat editor Tiptap/ProseMirror,
+me-render toolbar default, dan me-render area pengeditan.
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+
+<Editor placeholder="Write something…" />;
+```
+
+## Default
+
+| Prop | Default | Efek |
+| --- | --- | --- |
+| `editable` | `true` | Dokumen menerima input |
+| `disabled` | `false` | Editor tidak dapat difokuskan atau diinteraksi |
+| `placeholder` | — | Ditampilkan saat dokumen kosong; tidak pernah menjadi bagian dari konten |
+| `immediatelyRender` | — | Lewatkan `false` untuk SSR (lihat [SSR](/docs/guides/ssr)) |
+
+## Surface yang composable
+
+`Editor` adalah wrapper yang praktis. Untuk layout kustom, susun surface yang
+diekspor secara langsung: `EditorProvider` memiliki siklus hidup dan membagikan
+instance melalui context; `EditorToolbar` me-render item toolbar; `EditorContent`
+me-render surface-nya. Lihat [Toolbar kustom](/docs/guides/custom-toolbar).
+
+```tsx
+import {
+	EditorContent,
+	EditorProvider,
+	EditorToolbar,
+} from "@rumahkodingku/editor-react";
+
+<EditorProvider defaultValue={content}>
+	<div className="rk-editor">
+		<EditorToolbar />
+		<EditorContent />
+	</div>
+</EditorProvider>;
+```
+
+## Instance editor
+
+Gunakan `onReady` untuk menerima instance `Editor` dari Tiptap. Ini adalah cara
+yang didukung untuk menjalankan perintah atau membaca output:
+
+```tsx
+<Editor onReady={(editor) => console.log(editor.getJSON())} />
+```
+
+Tiptap tetap menjadi sumber kebenaran untuk dokumen; adapter tidak pernah
+menyimpan salinan keduanya. Daftar prop lengkap ada di
+[Referensi API React](/docs/api/react).

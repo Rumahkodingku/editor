@@ -31,6 +31,18 @@ export default defineConfig({
 			use: { ...devices["Desktop Chrome"], baseURL: FUMADOCS_URL },
 		},
 		{
+			name: "fumadocs-firefox",
+			testMatch: "fumadocs/**/*.spec.ts",
+			grep: CROSS_BROWSER,
+			use: { ...devices["Desktop Firefox"], baseURL: FUMADOCS_URL },
+		},
+		{
+			name: "fumadocs-webkit",
+			testMatch: "fumadocs/**/*.spec.ts",
+			grep: CROSS_BROWSER,
+			use: { ...devices["Desktop Safari"], baseURL: FUMADOCS_URL },
+		},
+		{
 			name: "playground-chromium",
 			testMatch: "playground/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"], baseURL: PLAYGROUND_URL },
@@ -52,13 +64,15 @@ export default defineConfig({
 		{
 			// Browser tests run against the production build of the docs app: the dev
 			// server compiles on demand and races with itself under parallel workers
-			// (and after a production build), which produced broken pages.
+			// (and after a production build), which produced broken pages. The docs app
+			// consumes the workspace editor packages, so build the dependency graph
+			// (editor-core, editor-react, fumadocs) first.
 			command:
-				"pnpm --filter fumadocs run build && pnpm --filter fumadocs run start",
+				"pnpm exec turbo run build --filter=fumadocs && pnpm --filter fumadocs run start",
 			url: FUMADOCS_URL,
 			env: { PORT: "4000" },
 			reuseExistingServer: !process.env.CI,
-			timeout: 180_000,
+			timeout: 240_000,
 		},
 		{
 			// The playground consumes the built workspace packages, so build the

@@ -1,0 +1,38 @@
+---
+title: Custom Extensions
+description: Add Tiptap extensions and compose them with the default preset.
+---
+
+Pass consumer extensions through the `extensions` prop. They are composed with
+the core default preset, so the package is never modified.
+
+```tsx
+import { Editor } from "@rumahkodingku/editor-react";
+import { Mark } from "@tiptap/core";
+
+const Highlight = Mark.create({
+	name: "highlight",
+	parseHTML() {
+		return [{ tag: "mark" }];
+	},
+	renderHTML() {
+		return ["mark", { "data-rk-highlight": "true" }, 0];
+	},
+});
+
+// Keep the array referentially stable between renders.
+const extensions = [Highlight];
+
+<Editor extensions={extensions} defaultValue={content} />;
+```
+
+Extension arrays must be stable between renders; recreating them causes editor
+re-initialization. Define them at module scope or with `useMemo`.
+
+<CustomExtensionDemo />
+
+## Composition
+
+See [Extension composition](/docs/api/extensions) for `composeExtensions`,
+`createDefaultExtensions`, and the composition modes. See
+[Custom toolbar](/docs/guides/custom-toolbar) to add a control for the extension.

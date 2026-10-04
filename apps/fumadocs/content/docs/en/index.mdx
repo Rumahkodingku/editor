@@ -1,0 +1,46 @@
+---
+title: Introduction
+description: RumahKodingku Editor is a reusable, typed, composable WYSIWYG rich text editor built on Tiptap and ProseMirror.
+---
+
+RumahKodingku Editor is a reusable, typed, composable **WYSIWYG rich text
+editor** ecosystem for modern web applications. It is a TypeScript monorepo
+built on **Tiptap + ProseMirror**, with **React** as the first supported UI
+framework and a **framework-independent core** so additional adapters can be
+added later without duplicating editor logic.
+
+## Packages
+
+- `@rumahkodingku/editor-core` — framework-independent editor logic: editor
+  creation, the default extension preset, content utilities, JSON/HTML
+  serialization, schema versioning, toolbar definitions, the upload contract,
+  and labels.
+- `@rumahkodingku/editor-react` — the React adapter: the `Editor` component,
+  composable surfaces, controlled/uncontrolled behavior, the default toolbar,
+  and the published stylesheet.
+- `@rumahkodingku/editor-vue` — planned, not implemented.
+
+## Key facts
+
+| Area | Contract |
+| --- | --- |
+| Editor engine | Tiptap 3.x on ProseMirror |
+| Canonical content | Tiptap/ProseMirror **JSON** |
+| HTML | Output-only serialization |
+| Persistence | `{ schemaVersion, content }` envelope |
+| Framework | React 19 (peer dependency) |
+| Runtime | Node `>=22` for build tooling |
+| Styling | Framework-agnostic CSS with `--rk-editor-*` variables |
+| Storage | Consumer-provided through `ImageUploadHandler` |
+
+## Where to go next
+
+- **Installation** — install the packages, peer dependencies, and the stylesheet.
+- **Quick Start** — render a working editor and read its JSON content.
+- **Guides** — controlled mode, read-only, extensions, uploads, theming, SSR.
+- **API Reference** — the exact public exports of `editor-core` and `editor-react`.
+- **Examples** — runnable examples that use the public package APIs only.
+
+> Documentation describes the API that is actually implemented. The packages are
+> not published to npm yet; the current implementation status lives in the
+> repository roadmap.

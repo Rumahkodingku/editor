@@ -1,0 +1,42 @@
+---
+title: Persistence
+description: Persist canonical JSON wrapped in a versioned envelope.
+---
+
+Persisted content should use the versioned envelope so stored documents outlive
+individual package versions:
+
+```json
+{
+	"schemaVersion": 1,
+	"content": {
+		"type": "doc",
+		"content": []
+	}
+}
+```
+
+The component itself works with plain `JSONContent`; wrap it at the storage
+boundary. `@rumahkodingku/editor-core` provides the envelope type and helpers:
+
+| Helper | Purpose |
+| --- | --- |
+| `PersistenceEnvelope` | The `{ schemaVersion, content }` type |
+| `EDITOR_SCHEMA_VERSION` | The current schema version |
+| `createPersistenceEnvelope(content)` | Wrap content |
+| `parsePersistenceEnvelope(value)` | Validate and unwrap |
+| `isPersistenceEnvelope(value)` | Type guard |
+| `isSupportedSchemaVersion(version)` | Version check |
+
+```ts
+import {
+	createPersistenceEnvelope,
+	parsePersistenceEnvelope,
+} from "@rumahkodingku/editor-core";
+
+const stored = JSON.stringify(createPersistenceEnvelope(editor.getJSON()));
+// later
+const { content } = parsePersistenceEnvelope(JSON.parse(stored));
+```
+
+See [Schema versioning](/docs/guides/schema-versioning) for evolution rules.
