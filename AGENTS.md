@@ -101,6 +101,8 @@ Rules:
 - `fumadocs-ui` is aliased to `npm:@fumadocs/base-ui` — imports use `fumadocs-ui/...`.
 - Fumadocs is the canonical home for public examples and live demos; the playground is for internal validation only (§20.2, §26.1 OQ-9).
 - `src/app/llms*.txt` and `src/app/og/**` routes are generated scaffolds, not hand-edited docs.
+- `next dev` and `next build` share `apps/fumadocs/.next`. Run `pnpm --filter fumadocs run clean` when switching between dev and production builds; otherwise `next dev` can serve modules compiled against a stale route tree (symptom: a page renders blank until you switch locale).
+- Landing entrance animations are CSS-only (`.rk-reveal` in `src/app/global.css`). Never hide landing content with a JS-driven `initial`/`whileInView` opacity: the content would be invisible until hydration, and Playwright still treats `opacity: 0` as visible, so browser tests would not catch it.
 
 ## Repo-local skills
 

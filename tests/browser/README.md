@@ -100,6 +100,11 @@ The a11y spec audits the documentation pages with the Fumadocs chrome regions
 violations. No rules are disabled. The high-contrast Shiki theme
 (`apps/fumadocs/source.config.ts`) keeps code examples AA-compliant.
 
+`smoke.spec.ts` also asserts the **effective opacity** of the landing sections.
+Playwright treats `opacity: 0` elements as visible, so a landing page whose
+entrance animation never ran would pass `toBeVisible()` while showing nothing to
+a reader. See `.rk-reveal` in `apps/fumadocs/src/app/global.css`.
+
 ## Known limitations
 
 - **IME.** Synthetic composition is environment-sensitive. The suite drives

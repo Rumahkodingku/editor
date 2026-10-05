@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 const routes = [
 	"/",
 	"/docs",
-	"/docs/introduction/installation",
+	"/docs/getting-started/installation",
 	"/docs/guides/custom-toolbar",
 	"/docs/api/react",
 	"/docs/examples/basic-editor",

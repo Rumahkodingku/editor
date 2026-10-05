@@ -311,6 +311,36 @@ html {
 }
 
 /*
+ * Landing section entrance animation.
+ *
+ * Content ships visible in the server-rendered HTML and only animates, so a
+ * hydration hiccup can never leave the page blank. `backwards` applies the
+ * first keyframe during the delay, and reduced-motion users get no animation.
+ */
+@keyframes rk-reveal-in {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.rk-reveal {
+	animation: rk-reveal-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+	animation-delay: var(--rk-reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.rk-reveal {
+		animation: none;
+	}
+}
+
+/*
  * Documentation prose must not restyle editor content. The typography plugin
  * sets explicit colors on headings and text; inside a live example the editor's
  * own `--rk-editor-foreground` should win instead. Blockquotes and links keep

@@ -65,7 +65,7 @@ export function CodeShowcase({ lang }: { lang: string }) {
 				<Reveal delay={0.1}>
 					<p className="mt-6 text-rk-ink-muted text-sm">
 						<Link
-							href={`${prefix}/docs/introduction/installation`}
+							href={`${prefix}/docs/getting-started/installation`}
 							className="font-medium text-rk-primary underline-offset-4 hover:underline"
 						>
 							{copy.footer.documentation}

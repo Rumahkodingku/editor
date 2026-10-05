@@ -1,37 +1,31 @@
-"use client";
+import type { CSSProperties, ReactNode } from "react";
 
-import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 type RevealProps = {
 	children: ReactNode;
 	className?: string;
+	/** Entrance delay in seconds, forwarded to the CSS animation. */
 	delay?: number;
 };
 
 /**
- * Enter-on-scroll wrapper.
+ * Entrance-animation wrapper for landing sections.
  *
- * Isolated as a client leaf so the surrounding sections stay server components.
- * `whileInView` fires once and collapses to a static render when the user
- * prefers reduced motion.
+ * The animation is pure CSS (`.rk-reveal` in `global.css`), so the wrapper stays
+ * a server component and the content ships visible in the server-rendered HTML.
+ * A previous JS-driven variant hid the content with an inline `opacity: 0` until
+ * the section hydrated and entered the viewport, which left the whole landing
+ * page invisible whenever hydration was delayed or interrupted. Reduced-motion
+ * preferences are handled in CSS.
  */
 export function Reveal({ children, className, delay = 0 }: RevealProps) {
-	const reduce = useReducedMotion();
-
-	if (reduce) {
-		return <div className={className}>{children}</div>;
-	}
-
 	return (
-		<motion.div
-			className={className}
-			initial={{ opacity: 0, y: 24 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, amount: 0.2 }}
-			transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+		<div
+			className={cn("rk-reveal", className)}
+			style={{ "--rk-reveal-delay": `${delay * 1000}ms` } as CSSProperties}
 		>
 			{children}
-		</motion.div>
+		</div>
 	);
 }
