@@ -17,7 +17,7 @@ export function LabelsScenario() {
 
 	return (
 		<div data-testid="scenario-labels">
-			<p className="mb-3 text-sm text-zinc-500">
+			<p className="mb-3 text-rk-ink-muted text-sm">
 				Only three labels are overridden; the rest fall back to the core
 				defaults through <code>resolveLabels</code>. Inspect the toolbar
 				buttons' accessible names.

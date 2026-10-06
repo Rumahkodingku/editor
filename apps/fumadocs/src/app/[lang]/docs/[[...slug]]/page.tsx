@@ -10,8 +10,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { TryInPlayground } from "@/components/docs/TryInPlayground";
 import { getMDXComponents } from "@/components/mdx";
 import { i18n } from "@/lib/i18n";
+import { scenarioForSlug } from "@/lib/playground";
 import { getPageImageUrl, getPageMarkdownUrl, gitConfig } from "@/lib/shared";
 import { source } from "@/lib/source";
 
@@ -27,6 +29,9 @@ export default async function Page(
 	const docsPrefix =
 		params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
 
+	// Slugs are locale-independent, so one lookup serves every locale.
+	const scenario = scenarioForSlug(params.slug?.join("/") ?? "");
+
 	return (
 		<DocsPage toc={page.data.toc} full={page.data.full}>
 			<DocsTitle className="rk-docs-title">{page.data.title}</DocsTitle>
@@ -39,6 +44,9 @@ export default async function Page(
 					markdownUrl={markdownUrl}
 					githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/fumadocs/content/docs/${page.path}`}
 				/>
+				{scenario ? (
+					<TryInPlayground lang={params.lang} scenario={scenario} />
+				) : null}
 			</div>
 			<DocsBody className="rk-docs">
 				<MDX

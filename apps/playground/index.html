@@ -3,7 +3,31 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>RumahKodingku Editor — Playground</title>
+<script>
+			// Resolve the theme before the first paint. `useTheme` performs the
+			// same resolution for every subsequent change; running it here means
+			// the shell and the published editor stylesheet never paint in the
+			// wrong theme.
+			(() => {
+				try {
+					const stored = localStorage.getItem("rk-playground-theme");
+					const preference =
+						stored === "light" || stored === "dark" ? stored : "system";
+					const resolved =
+						preference === "system"
+							? window.matchMedia("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light"
+							: preference;
+					document.documentElement.dataset.theme = resolved;
+				} catch {
+					document.documentElement.dataset.theme = "light";
+				}
+			})();
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>

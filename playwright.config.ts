@@ -59,6 +59,15 @@ export default defineConfig({
 			grep: CROSS_BROWSER,
 			use: { ...devices["Desktop Safari"], baseURL: PLAYGROUND_URL },
 		},
+		{
+			// Cross-app journey: documentation → Playground → documentation.
+			// These specs address both origins explicitly, which is the single
+			// documented exception to the suite's relative-`goto` convention; see
+			// `tests/browser/README.md`.
+			name: "integration-chromium",
+			testMatch: "integration/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"], baseURL: FUMADOCS_URL },
+		},
 	],
 	webServer: [
 		{
@@ -70,7 +79,12 @@ export default defineConfig({
 			command:
 				"pnpm exec turbo run build --filter=fumadocs && pnpm --filter fumadocs run start",
 			url: FUMADOCS_URL,
-			env: { PORT: "4000" },
+			env: {
+				PORT: "4000",
+				// `NEXT_PUBLIC_*` is inlined at build time. The Playground CTA only
+				// renders when this is set, so the integration specs require it.
+				NEXT_PUBLIC_PLAYGROUND_URL: PLAYGROUND_URL,
+			},
 			reuseExistingServer: !process.env.CI,
 			timeout: 240_000,
 		},

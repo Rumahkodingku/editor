@@ -1,41 +1,23 @@
-import { useCallback, useState } from "react";
-
+import { CodeBlock } from "./CodeBlock";
+import { CopyButton } from "./CopyButton";
 import { Panel } from "./Panel";
 
 type HtmlInspectorProps = {
 	value: string;
 };
 
-const BUTTON_CLASS =
-	"rounded-md border border-zinc-300 px-2 py-0.5 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800";
-
-/** HTML serialization output panel (Task 26). */
+/** HTML serialization output panel. */
 export function HtmlInspector({ value }: HtmlInspectorProps) {
-	const [copied, setCopied] = useState(false);
-
-	const copy = useCallback(() => {
-		void navigator.clipboard?.writeText(value).then(() => {
-			setCopied(true);
-			window.setTimeout(() => setCopied(false), 1500);
-		});
-	}, [value]);
-
 	return (
 		<Panel
-			title="HTML output"
+			description="Output-only serialization of the canonical JSON."
 			testId="html-inspector"
-			actions={
-				<button type="button" onClick={copy} className={BUTTON_CLASS}>
-					{copied ? "Copied" : "Copy"}
-				</button>
-			}
+			title="HTML output"
+			actions={<CopyButton label="Copy HTML output" value={value} />}
 		>
-			<pre
-				data-testid="html-output"
-				className="max-h-72 overflow-auto font-mono text-xs text-zinc-800 dark:text-zinc-200"
-			>
-				{value || "(empty)"}
-			</pre>
+			<CodeBlock emptyFallback="(empty)" testId="html-output">
+				{value}
+			</CodeBlock>
 		</Panel>
 	);
 }

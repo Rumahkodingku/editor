@@ -4,9 +4,11 @@ import {
 	insertImageFromFile,
 } from "@rumahkodingku/editor-core";
 import { Editor, type TiptapEditor } from "@rumahkodingku/editor-react";
+import { ImageUp } from "lucide-react";
 import { type ChangeEvent, useState } from "react";
 
 import { ScenarioLayout } from "../components/ScenarioLayout";
+import { type UploadPhase, UploadStatus } from "../components/UploadStatus";
 import { createMockUploadHandler } from "../lib/mockUpload";
 import { buttonClass } from "../lib/ui";
 
@@ -17,17 +19,16 @@ const imageUploadOptions = {
 } satisfies ImageUploadExtensionOptions;
 const imageExtensions = [ImageUpload.configure(imageUploadOptions)];
 
-type UploadStatus = "idle" | "uploading" | "done" | "error";
-
 /**
- * Mock image upload scenario (Task 30).
+ * Mock image upload scenario.
  *
  * The editor routes toolbar insertion, drag/drop, and paste through the same
- * injected handler. No storage provider is involved.
+ * injected handler. No storage provider is involved, and the upload contract is
+ * exercised exactly as a consumer would receive it.
  */
 export function ImageUploadScenario() {
 	const [editor, setEditor] = useState<TiptapEditor | null>(null);
-	const [status, setStatus] = useState<UploadStatus>("idle");
+	const [status, setStatus] = useState<UploadPhase>("idle");
 	const [progress, setProgress] = useState(0);
 
 	const handleFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,23 +52,26 @@ export function ImageUploadScenario() {
 				controls={
 					<>
 						<label className={buttonClass}>
+							<ImageUp aria-hidden="true" className="size-4" strokeWidth={2} />
 							Insert image
 							<input
-								type="file"
 								accept="image/*"
-								data-testid="upload-input"
 								className="hidden"
+								data-testid="upload-input"
 								onChange={handleFile}
+								type="file"
 							/>
 						</label>
-						<span data-testid="upload-status" className="text-sm text-zinc-500">
-							status: {status} ({progress}%)
-						</span>
+						<UploadStatus
+							progress={progress}
+							status={status}
+							testId="upload-status"
+						/>
 					</>
 				}
 			>
 				<Editor extensions={imageExtensions} onReady={setEditor} />
-				<p className="text-sm text-zinc-500">
+				<p className="text-rk-ink-muted text-sm">
 					Drag and drop or paste an image directly into the editor — both use
 					the same upload pipeline.
 				</p>

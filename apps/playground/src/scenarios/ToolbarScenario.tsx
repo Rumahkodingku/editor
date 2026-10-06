@@ -31,8 +31,8 @@ export function ToolbarScenario() {
 				<div className="flex flex-col gap-3">
 					<Editor defaultValue={defaultFixture} onReady={setEditor} />
 					{editor ? (
-						<div className="rounded-lg border border-zinc-300 border-dashed p-2 dark:border-zinc-700">
-							<p className="mb-2 text-xs text-zinc-500 uppercase tracking-wide">
+						<div className="flex flex-col gap-2 rounded-lg border border-rk-hairline-strong border-dashed p-2 dark:border-rk-brand-dark">
+							<p className="font-semibold text-[0.6875rem] text-rk-ink-muted uppercase tracking-wide">
 								Custom toolbar (first 6 items)
 							</p>
 							<EditorToolbar

@@ -6,7 +6,15 @@ type StatePanelProps = {
 	disabled?: boolean;
 };
 
-/** Development inspector for editor state (Task 16). */
+const ROW_CLASS = "flex items-baseline justify-between gap-4 py-0.5";
+
+/**
+ * Development inspector for editor state.
+ *
+ * Values are read straight from the live editor instance, so the panel is a
+ * debug view rather than a source of truth: nothing here feeds back into the
+ * document.
+ */
 export function StatePanel({ snapshot, disabled = false }: StatePanelProps) {
 	const rows: Array<[string, string]> = [
 		["editable", String(snapshot.editable)],
@@ -19,20 +27,24 @@ export function StatePanel({ snapshot, disabled = false }: StatePanelProps) {
 	];
 
 	return (
-		<Panel title="Editor state" testId="state-panel">
-			<div className="flex flex-col gap-1 text-sm">
+		<Panel
+			description="Live values read from the editor instance."
+			testId="state-panel"
+			title="Editor state"
+		>
+			<dl className="flex flex-col text-sm">
 				{rows.map(([key, value]) => (
-					<div key={key} className="flex justify-between gap-4">
-						<span className="text-zinc-500">{key}</span>
-						<span
+					<div className={ROW_CLASS} key={key}>
+						<dt className="text-rk-ink-muted">{key}</dt>
+						<dd
+							className="font-mono text-rk-ink"
 							data-testid={`state-${key.replace(/\s+/g, "-")}`}
-							className="font-mono"
 						>
 							{value}
-						</span>
+						</dd>
 					</div>
 				))}
-			</div>
+			</dl>
 		</Panel>
 	);
 }

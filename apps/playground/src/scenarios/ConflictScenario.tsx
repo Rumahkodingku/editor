@@ -1,4 +1,5 @@
 import { Editor, type TiptapEditor } from "@rumahkodingku/editor-react";
+import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
 
 import { ScenarioLayout } from "../components/ScenarioLayout";
@@ -18,10 +19,18 @@ export function ConflictScenario() {
 
 	return (
 		<div data-testid="scenario-conflict">
-			<p className="mb-3 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-amber-900 text-sm">
-				Both <code>value</code> and <code>defaultValue</code> are passed. Open
-				the browser console to see the adapter warning; the controlled{" "}
-				<code>value</code> is rendered and <code>defaultValue</code> is ignored.
+			<p className="mb-3 flex items-start gap-2.5 rounded-md border border-rk-warning/40 bg-rk-warning/10 px-3 py-2 text-rk-ink-secondary text-sm">
+				<TriangleAlert
+					aria-hidden="true"
+					className="mt-0.5 size-4 shrink-0 text-rk-warning"
+					strokeWidth={2}
+				/>
+				<span>
+					Both <code>value</code> and <code>defaultValue</code> are passed. Open
+					the browser console to see the adapter warning; the controlled{" "}
+					<code>value</code> is rendered and <code>defaultValue</code> is
+					ignored.
+				</span>
 			</p>
 			<ScenarioLayout inspector={<StatePanel snapshot={snapshot} />}>
 				<Editor

@@ -9,17 +9,24 @@ type ScenarioLayoutProps = {
 	children: ReactNode;
 };
 
-/** Two-column scenario surface: editor on the left, inspectors on the right. */
+/**
+ * Two-column scenario surface.
+ *
+ * The editor takes the remaining width and the inspector gets a fixed rail so
+ * code output stays readable instead of shrinking with the editor. Below `xl`
+ * the inspector stacks underneath, which keeps the editor at full width on
+ * tablet and mobile.
+ */
 export function ScenarioLayout({
 	controls,
 	children,
 	inspector,
 }: ScenarioLayoutProps) {
 	return (
-		<div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+		<div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_22rem] xl:gap-6">
 			<div className="flex min-w-0 flex-col gap-3">
 				{controls ? (
-					<div className="flex flex-wrap items-center gap-3">{controls}</div>
+					<div className="flex flex-wrap items-center gap-2">{controls}</div>
 				) : null}
 				{children}
 			</div>

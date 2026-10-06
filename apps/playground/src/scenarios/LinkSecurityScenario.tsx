@@ -18,7 +18,7 @@ const IMAGE_OPTIONS = {
 	allowRelative: false,
 } as const;
 
-/** URL/security behaviour exposed by the core API (Task 32). */
+/** URL/security behaviour exposed by the core API. */
 export function LinkSecurityScenario() {
 	const [url, setUrl] = useState(PRESETS[0] ?? "");
 
@@ -27,51 +27,58 @@ export function LinkSecurityScenario() {
 
 	return (
 		<div data-testid="scenario-link-security">
-			<div className="mb-3 flex flex-wrap items-center gap-2">
-				<input
-					type="text"
-					data-testid="security-url"
-					className={`${inputClass} w-80`}
-					value={url}
-					onChange={(event) => setUrl(event.target.value)}
-				/>
-			</div>
-			<div className="mb-3 flex flex-wrap gap-2">
-				{PRESETS.map((preset) => (
-					<button
-						key={preset}
-						type="button"
-						className={buttonClass}
-						onClick={() => setUrl(preset)}
-					>
-						{preset}
-					</button>
-				))}
-			</div>
-			<Panel title="isSafeUrl result" testId="security-result">
-				<div className="flex flex-col gap-1 text-sm">
-					<div className="flex justify-between gap-4">
-						<span className="text-zinc-500">link (default protocols)</span>
-						<span
-							data-testid="security-link-result"
-							className={linkResult ? "text-green-600" : "text-red-600"}
+			<div className="flex flex-col gap-3">
+				<label className="flex flex-col gap-1.5 text-sm">
+					<span className="text-rk-ink-muted">URL to test</span>
+					<input
+						className={`${inputClass} font-mono sm:max-w-md`}
+						data-testid="security-url"
+						onChange={(event) => setUrl(event.target.value)}
+						type="text"
+						value={url}
+					/>
+				</label>
+				<div className="flex flex-wrap gap-2">
+					{PRESETS.map((preset) => (
+						<button
+							className={`${buttonClass} font-mono text-xs`}
+							key={preset}
+							onClick={() => setUrl(preset)}
+							type="button"
 						>
-							{String(linkResult)}
-						</span>
-					</div>
-					<div className="flex justify-between gap-4">
-						<span className="text-zinc-500">
-							image (http/https only, no relative)
-						</span>
-						<span
-							data-testid="security-image-result"
-							className={imageResult ? "text-green-600" : "text-red-600"}
-						>
-							{String(imageResult)}
-						</span>
-					</div>
+							{preset}
+						</button>
+					))}
 				</div>
-			</Panel>
+				<Panel
+					description="Core URL validation with the default and image option sets."
+					testId="security-result"
+					title="isSafeUrl result"
+				>
+					<dl className="flex flex-col text-sm">
+						<div className="flex items-baseline justify-between gap-4 py-0.5">
+							<dt className="text-rk-ink-muted">link (default protocols)</dt>
+							<dd
+								className={`font-medium font-mono ${linkResult ? "text-rk-success" : "text-rk-danger"}`}
+								data-testid="security-link-result"
+							>
+								{String(linkResult)}
+							</dd>
+						</div>
+						<div className="flex items-baseline justify-between gap-4 py-0.5">
+							<dt className="text-rk-ink-muted">
+								image (http/https only, no relative)
+							</dt>
+							<dd
+								className={`font-medium font-mono ${imageResult ? "text-rk-success" : "text-rk-danger"}`}
+								data-testid="security-image-result"
+							>
+								{String(imageResult)}
+							</dd>
+						</div>
+					</dl>
+				</Panel>
+			</div>
 		</div>
 	);
 }

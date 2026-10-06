@@ -4,23 +4,23 @@ import {
 	insertImageFromFile,
 } from "@rumahkodingku/editor-core";
 import { Editor, type TiptapEditor } from "@rumahkodingku/editor-react";
+import { CircleAlert, TriangleAlert } from "lucide-react";
 import { type ChangeEvent, useMemo, useState } from "react";
 
 import { ScenarioLayout } from "../components/ScenarioLayout";
+import { type UploadPhase, UploadStatus } from "../components/UploadStatus";
 import { createMockUploadHandler } from "../lib/mockUpload";
 import { buttonClass } from "../lib/ui";
 
-type UploadStatus = "idle" | "uploading" | "error";
-
 /**
- * Upload failure scenario (Task 31).
+ * Upload failure scenario.
  *
  * The handler always fails, so the placeholder must be removed, `onError` must
  * be reported, and the editor must stay stable.
  */
 export function UploadErrorScenario() {
 	const [editor, setEditor] = useState<TiptapEditor | null>(null);
-	const [status, setStatus] = useState<UploadStatus>("idle");
+	const [status, setStatus] = useState<UploadPhase>("idle");
 	const [error, setError] = useState<string | null>(null);
 
 	const uploadOptions = useMemo(
@@ -47,7 +47,7 @@ export function UploadErrorScenario() {
 		setStatus("uploading");
 		setError(null);
 		const result = await insertImageFromFile(editor, file, uploadOptions);
-		setStatus(result ? "idle" : "error");
+		setStatus(result ? "done" : "error");
 	};
 
 	return (
@@ -56,29 +56,44 @@ export function UploadErrorScenario() {
 				controls={
 					<>
 						<label className={buttonClass}>
+							<TriangleAlert
+								aria-hidden="true"
+								className="size-4"
+								strokeWidth={2}
+							/>
 							Trigger failing upload
 							<input
-								type="file"
 								accept="image/*"
-								data-testid="upload-error-input"
 								className="hidden"
+								data-testid="upload-error-input"
 								onChange={handleFile}
+								type="file"
 							/>
 						</label>
-						<span
-							data-testid="upload-error-status"
-							className="text-sm text-zinc-500"
-						>
-							status: {status}
-						</span>
+						<UploadStatus status={status} testId="upload-error-status" />
 					</>
 				}
 				inspector={
 					<div
+						aria-live="polite"
+						className="flex items-start gap-2.5 rounded-lg border border-rk-hairline bg-rk-canvas p-3 text-sm dark:bg-rk-canvas-soft"
 						data-testid="upload-error-message"
-						className="rounded-lg border border-zinc-200 bg-white p-3 text-sm dark:border-zinc-800 dark:bg-zinc-900"
+						role={error ? "alert" : "status"}
 					>
-						{error ? error : "No error reported yet."}
+						<CircleAlert
+							aria-hidden="true"
+							className={`mt-0.5 size-4 shrink-0 ${error ? "text-rk-danger" : "text-rk-ink-muted/50"}`}
+							strokeWidth={2}
+						/>
+						<span
+							className={
+								error
+									? "break-words font-mono text-rk-danger"
+									: "text-rk-ink-muted"
+							}
+						>
+							{error ? error : "No error reported yet."}
+						</span>
 					</div>
 				}
 			>

@@ -1,6 +1,6 @@
 import type { Editor, ToolbarItemDefinition } from "@rumahkodingku/editor-core";
-import { useEditorState } from "@tiptap/react";
 
+import { useEditorRevision } from "../hooks/useEditorRevision";
 import { Panel } from "./Panel";
 
 type ToolbarInspectorProps = {
@@ -8,46 +8,55 @@ type ToolbarInspectorProps = {
 	items: ToolbarItemDefinition[];
 };
 
-type ToolbarRow = {
-	id: string;
-	active: boolean;
-	disabled: boolean;
-};
-
-/** Read-only view of toolbar item state (Task 28). */
+/**
+ * Read-only view of toolbar item state.
+ *
+ * `active` and `disabled` are computed from the live editor on every render
+ * rather than cached in state, so the panel matches the toolbar from the first
+ * paint instead of only after a transaction.
+ */
 export function ToolbarInspector({ editor, items }: ToolbarInspectorProps) {
-	const rows: ToolbarRow[] =
-		useEditorState({
-			editor,
-			selector: ({ editor: current }) =>
-				items.map((item) => ({
-					id: item.id,
-					active: current ? item.isActive(current) : false,
-					disabled: current ? item.isDisabled(current) : true,
-				})),
-		}) ?? [];
+	useEditorRevision(editor);
 
 	return (
-		<Panel title="Toolbar state" testId="toolbar-inspector">
-			<div className="flex flex-col gap-1 text-sm">
-				{rows.map((row) => (
-					<div
-						key={row.id}
-						data-testid={`toolbar-item-${row.id}`}
-						className="flex items-center justify-between gap-4"
-					>
-						<code className="text-xs">{row.id}</code>
-						<span className="flex gap-3 font-mono text-xs">
-							<span className={row.active ? "text-blue-600" : "text-zinc-400"}>
-								active: {String(row.active)}
-							</span>
-							<span className={row.disabled ? "text-zinc-400" : ""}>
-								disabled: {String(row.disabled)}
-							</span>
-						</span>
-					</div>
-				))}
-			</div>
+		<Panel
+			description="Live state of each toolbar item."
+			testId="toolbar-inspector"
+			title="Toolbar state"
+		>
+			<dl className="flex flex-col text-sm">
+				{items.map((item) => {
+					const active = editor ? item.isActive(editor) : false;
+					const disabled = editor ? item.isDisabled(editor) : true;
+					return (
+						<div
+							className="flex items-baseline justify-between gap-4 py-0.5"
+							data-testid={`toolbar-item-${item.id}`}
+							key={item.id}
+						>
+							<dt>
+								<code className="font-mono text-rk-ink text-xs">{item.id}</code>
+							</dt>
+							<dd className="flex gap-3 font-mono text-xs">
+								<span
+									className={
+										active ? "text-rk-success" : "text-rk-ink-muted/60"
+									}
+								>
+									active: {String(active)}
+								</span>
+								<span
+									className={
+										disabled ? "text-rk-ink-muted/60" : "text-rk-ink-secondary"
+									}
+								>
+									disabled: {String(disabled)}
+								</span>
+							</dd>
+						</div>
+					);
+				})}
+			</dl>
 		</Panel>
 	);
 }

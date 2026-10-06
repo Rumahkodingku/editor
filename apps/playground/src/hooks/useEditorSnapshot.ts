@@ -4,7 +4,8 @@ import {
 	toHTML,
 	toJSON,
 } from "@rumahkodingku/editor-core";
-import { useEditorState } from "@tiptap/react";
+
+import { useEditorRevision } from "./useEditorRevision";
 
 /** A point-in-time view of the editor used by the inspectors. */
 export type EditorSnapshot = {
@@ -25,29 +26,29 @@ const EMPTY_SNAPSHOT: EditorSnapshot = {
 	docSize: 0,
 };
 
+function derive(editor: Editor): EditorSnapshot {
+	return {
+		json: toJSON(editor),
+		html: toHTML(editor),
+		editable: editor.isEditable,
+		focused: editor.isFocused,
+		empty: editor.isEmpty,
+		docSize: editor.state.doc.content.size,
+	};
+}
+
 /**
  * Subscribe to editor transactions and derive the values the inspectors show.
  *
- * Uses Tiptap's `useEditorState`, so no global store is involved and the
- * document stays owned by Tiptap/ProseMirror.
+ * The document stays owned by Tiptap/ProseMirror and no global store is
+ * involved: the subscription only turns the editor's own `transaction`/`update`
+ * events into a re-render, and every value is read from the live instance React
+ * is currently rendering with.
  */
 export function useEditorSnapshot(editor: Editor | null): EditorSnapshot {
-	const snapshot = useEditorState({
-		editor,
-		selector: ({ editor: current }) => {
-			if (!current) {
-				return EMPTY_SNAPSHOT;
-			}
-			return {
-				json: toJSON(current),
-				html: toHTML(current),
-				editable: current.isEditable,
-				focused: current.isFocused,
-				empty: current.isEmpty,
-				docSize: current.state.doc.content.size,
-			};
-		},
-	});
+	// The revision is the signal that the editor emitted a transaction; deriving
+	// during render keeps the value consistent with the instance React holds.
+	useEditorRevision(editor);
 
-	return snapshot ?? EMPTY_SNAPSHOT;
+	return editor ? derive(editor) : EMPTY_SNAPSHOT;
 }

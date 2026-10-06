@@ -3,13 +3,131 @@
 /*
  * Playground shell styling only.
  *
+ * This file is the single source of truth for the Playground's visual tokens.
+ * The values mirror the brand tokens in `apps/fumadocs/src/app/global.css` so
+ * the internal workbench and the public documentation share one palette. The
+ * two apps are deployed and built independently, so the block is intentionally
+ * duplicated rather than imported.
+ *
  * Editor styling lives in `@rumahkodingku/editor-react/styles.css` and is
  * imported in `main.tsx`. Nothing here may reach into the published package;
- * the playground only themes through the public `--rk-editor-*` variables.
+ * the Playground only themes through the public `--rk-editor-*` variables.
  */
 
+@theme {
+	--font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-mono:
+		ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+	/* Brand — indigo is the single accent, used for CTA and active state. */
+	--color-rk-primary: #533afd;
+	--color-rk-primary-deep: #4434d4;
+	--color-rk-primary-press: #2e2b8c;
+	--color-rk-primary-soft: #665efd;
+	--color-rk-primary-subdued: #f0efff;
+	--color-rk-brand-dark: #1c1e54;
+
+	/* Ink — deep navy, never pure black. */
+	--color-rk-ink: #0d253d;
+	--color-rk-ink-secondary: #273951;
+	--color-rk-ink-muted: #5b6a7f;
+
+	/* Surface */
+	--color-rk-canvas: #ffffff;
+	--color-rk-canvas-soft: #f6f9fc;
+	--color-rk-canvas-raised: #fbfcfe;
+	--color-rk-hairline: #e3e8ee;
+	--color-rk-hairline-strong: #a8c3de;
+
+	/* Semantic — the brand keeps error/success in product UI, not marketing. */
+	--color-rk-danger: #c02626;
+	--color-rk-success: #157a52;
+	--color-rk-warning: #9b6829;
+
+	/* Elevation */
+	--shadow-rk-1: 0 1px 3px rgba(0, 55, 112, 0.08);
+	--shadow-rk-2:
+		0 8px 24px rgba(0, 55, 112, 0.08), 0 2px 6px rgba(0, 55, 112, 0.04);
+}
+
+/*
+ * Three-state theming.
+ *
+ * `useTheme` always resolves `system` down to a concrete `light`/`dark` before
+ * writing `data-theme`, so a single attribute selector covers all three
+ * preferences. The published editor stylesheet keys off the same
+ * `[data-theme="dark"]` attribute, which keeps the shell and the editor in
+ * lockstep without touching the package.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Dark surfaces flip to the deep-navy palette. */
+:root[data-theme="dark"] {
+	--color-rk-canvas: #0d1028;
+	--color-rk-canvas-soft: #14173a;
+	--color-rk-canvas-raised: #1a1e42;
+	--color-rk-ink: #ffffff;
+	--color-rk-ink-secondary: #cbd2e0;
+	--color-rk-ink-muted: #a8b2c2;
+	--color-rk-hairline: rgba(255, 255, 255, 0.12);
+	--color-rk-hairline-strong: rgba(255, 255, 255, 0.24);
+	--color-rk-primary: #8b83ff;
+	--color-rk-primary-deep: #a29cff;
+	--color-rk-primary-subdued: rgba(102, 94, 253, 0.16);
+	--color-rk-danger: #f87171;
+	--color-rk-success: #4ade80;
+	--color-rk-warning: #e0b062;
+
+	--shadow-rk-1: 0 1px 3px rgba(0, 0, 0, 0.4);
+	--shadow-rk-2: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
 :root {
-	color-scheme: light dark;
+	color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+}
+
+/*
+ * Editor token bridge.
+ *
+ * The published `editor-react/styles.css` ships its own blue/zinc palette.
+ * Mapping its public variables onto the brand tokens keeps the editor visually
+ * consistent with the shell without forking the package or overriding any of
+ * its selectors.
+ */
+:root {
+	--rk-editor-background: #ffffff;
+	--rk-editor-foreground: var(--color-rk-ink);
+	--rk-editor-border: var(--color-rk-hairline);
+	--rk-editor-muted: var(--color-rk-ink-muted);
+	--rk-editor-surface: #ffffff;
+	--rk-editor-toolbar-background: var(--color-rk-canvas-soft);
+	--rk-editor-hover: #eef2f7;
+	--rk-editor-popover-background: #ffffff;
+	--rk-editor-accent: #533afd;
+	--rk-editor-accent-contrast: #ffffff;
+	--rk-editor-link: #533afd;
+	--rk-editor-danger: #c02626;
+	--rk-editor-shadow: 0 8px 24px rgba(13, 37, 61, 0.14);
+}
+
+:root[data-theme="dark"] {
+	--rk-editor-background: #0d1028;
+	--rk-editor-foreground: #ffffff;
+	--rk-editor-border: rgba(255, 255, 255, 0.14);
+	--rk-editor-muted: #a8b2c2;
+	--rk-editor-surface: #0d1028;
+	--rk-editor-toolbar-background: var(--color-rk-brand-dark);
+	--rk-editor-hover: #23265f;
+	--rk-editor-popover-background: var(--color-rk-brand-dark);
+	--rk-editor-accent: #8b83ff;
+	--rk-editor-accent-contrast: #0d1028;
+	--rk-editor-link: #a29cff;
+	--rk-editor-danger: #f87171;
+	--rk-editor-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 html,
@@ -20,9 +138,11 @@ body,
 
 body {
 	margin: 0;
+	-webkit-font-smoothing: antialiased;
 }
 
-.playground-scenarios {
-	--playground-panel: #ffffff;
-	--playground-panel-border: #e4e4e7;
+/* The code surfaces are scroll containers inside a fixed-height layout. */
+.rk-scroll {
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
 }
