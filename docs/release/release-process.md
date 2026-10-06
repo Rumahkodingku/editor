@@ -67,8 +67,8 @@ and publishes with provenance.
 - Workflow permissions: `id-token: write` (OIDC), `contents: write` (tags and
   releases), `pull-requests: write` (Release PR).
 - `publishConfig.provenance: true` is set in both packages.
-- npm CLI must be `>= 11.5.1`; the workflow upgrades npm before publishing
-  (Node 22.18 ships an older npm that cannot do trusted publishing).
+- npm CLI must be `>= 11.5.1`; the release workflow runs on Node 24, which bundles a
+  suitable npm (no global npm upgrade step is needed).
 - Requirements in the repository:
 
   | Item | Where |

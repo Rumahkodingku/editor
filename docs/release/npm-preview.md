@@ -21,10 +21,10 @@ human approval before the first publish (Phase 09 §13).
 
 Both packages share:
 
-- **Repository:** `git+https://github.com/RumahKodingku/editor.git`
+- **Repository:** `git+https://github.com/Rumahkodingku/editor.git`
   (`directory`: the package folder)
-- **Homepage:** `https://github.com/RumahKodingku/editor#readme`
-- **Bugs:** `https://github.com/RumahKodingku/editor/issues`
+- **Homepage:** `https://github.com/Rumahkodingku/editor#readme`
+- **Bugs:** `https://github.com/Rumahkodingku/editor/issues`
 - **Keywords:** `tiptap`, `prosemirror`, `rich-text-editor`, `wysiwyg`, `editor`
   (`editor-react` also `react`)
 - **Engines:** `node >= 22`

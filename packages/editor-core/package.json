@@ -6,12 +6,12 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/RumahKodingku/editor.git",
+		"url": "git+https://github.com/Rumahkodingku/editor.git",
 		"directory": "packages/editor-core"
 	},
-	"homepage": "https://github.com/RumahKodingku/editor#readme",
+	"homepage": "https://github.com/Rumahkodingku/editor#readme",
 	"bugs": {
-		"url": "https://github.com/RumahKodingku/editor/issues"
+		"url": "https://github.com/Rumahkodingku/editor/issues"
 	},
 	"keywords": [
 		"tiptap",
