@@ -1,6 +1,6 @@
 {
 	"name": "@rumahkodingku/editor-react",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "React adapter for RumahKodingku Editor.",
 	"type": "module",
 	"license": "MIT",
