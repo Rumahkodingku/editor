@@ -9,6 +9,17 @@
 		"url": "git+https://github.com/RumahKodingku/editor.git",
 		"directory": "packages/editor-core"
 	},
+	"homepage": "https://github.com/RumahKodingku/editor#readme",
+	"bugs": {
+		"url": "https://github.com/RumahKodingku/editor/issues"
+	},
+	"keywords": [
+		"tiptap",
+		"prosemirror",
+		"rich-text-editor",
+		"wysiwyg",
+		"editor"
+	],
 	"sideEffects": false,
 	"files": [
 		"dist"
@@ -21,6 +32,10 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
 		}
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
 	},
 	"scripts": {
 		"build": "tsdown",

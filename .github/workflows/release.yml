@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    # Publish only from the canonical repository's main branch.
+    if: github.repository == 'RumahKodingku/editor' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.18"
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      # Trusted Publishing (OIDC) requires npm >= 11.5.1.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm run check:ci
+      - run: pnpm run check-types
+      - run: pnpm run check-types:fumadocs
+      - run: pnpm run test
+      - run: pnpm run build
+      - run: pnpm run check:packages
+      - run: pnpm run check:size
+
+      # Opens/updates a Release PR while changesets exist; publishes to npm and
+      # creates GitHub Releases once the Release PR is merged. Authentication is
+      # npm Trusted Publishing (OIDC) — no NPM_TOKEN is used.
+      - uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm changeset publish
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,8 +1,8 @@
 # RumahKodingku Editor — Architecture
 
 > **Status:** Approved
-> **Version:** 1.3
-> **Last Updated:** 2026-10-01
+> **Version:** 1.5
+> **Last Updated:** 2026-10-06
 > **Applies to:** `Rumahkodingku/editor`
 
 This document records the architectural decisions for RumahKodingku Editor and the rules that implementation must follow.
@@ -120,8 +120,10 @@ yet**. `editor-core` now implements the framework-independent core API
 (Phase 03): editor creation, the default extension preset, the RumahKodingku
 image-upload extension, content utilities, JSON/HTML serialization, persistence
 schema versioning, the upload contract, toolbar definitions, and editor labels
-(see ADR 0002–0004). `apps/playground` and `.changeset/` do **not** exist yet.
-`bunfig.toml` and the scaffold Varlock workflow were removed in Phase 00.
+(see ADR 0002–0004). `apps/playground` exists as the internal validation
+environment (Phase 05), and Phase 09 added the release foundation (`.changeset/`,
+the release workflow, and `size-limit`). `bunfig.toml` and the scaffold Varlock
+workflow were removed in Phase 00.
 
 ### 3.2 Target structure (Proposed)
 
@@ -140,7 +142,7 @@ editor/
 ├── ARCHITECTURE.md
 ├── AGENTS.md                # operational rules for AI agents
 ├── CONTRIBUTING.md          # to be created
-├── CHANGELOG.md / .changeset/   # to be created (Phase 09)
+├── CHANGELOG.md / .changeset/   # created in Phase 09
 └── LICENSE                  # MIT
 ```
 
@@ -516,7 +518,7 @@ Future capability. It MUST NOT complicate the MVP architecture.
 | Type tests            | public API types                                                                    | Vitest `expectTypeOf` (`*.test-d.ts`)  |
 | Coverage              | line/branch coverage per package                                                    | `@vitest/coverage-v8`                  |
 | Package validity      | `exports`, types resolution                                                         | `publint`, `@arethetypeswrong/cli`     |
-| Size                  | bundle budget for each package                                                      | `size-limit` (Phase 09)                |
+| Size                  | bundle budget for each package                                                      | `size-limit`                           |
 
 jsdom cannot model layout, selection, or IME reliably, so behavior that depends on them MUST be verified in a real browser. The playground is used for rapid visual validation.
 
@@ -607,6 +609,9 @@ The npm scope availability MUST be verified before the first publish (§26.4). T
 | `pnpm run test:browser`             | Run Playwright browser and accessibility tests   |
 | `pnpm run check`                    | Biome formatting and linting                     |
 | `pnpm run check:ci`                 | Read-only Biome check used by CI                 |
+| `pnpm run check:size` / `size`      | Validate / measure bundle-size budgets           |
+| `pnpm run check:consumer`           | On-demand clean consumer installation test       |
+| `pnpm changeset` / `version` / `release` | Changesets versioning and publishing        |
 
 `pnpm run test` and the other test scripts are implemented (Phase 02). This document MUST use the real script names above.
 
@@ -805,7 +810,7 @@ Phase 01 (build and package infrastructure) ownership:
 Deferred to the phase roadmap (explicitly **not** Phase 01):
 
 8. Vitest is wired so `pnpm run test` exists and CI runs it. — **done (Phase 02)**
-9. Changesets is configured (`.changeset/`, independent versions). — **Phase 09**
+9. Changesets is configured (`.changeset/`, independent versions). — **done (Phase 09)**
 
 Phase 03 (editor core) ownership:
 
@@ -818,11 +823,11 @@ Phase 03 (editor core) ownership:
 
 Completed before the first public release.
 
-1. Package metadata is validated with `publint` and `@arethetypeswrong/cli`.
-2. The published tarball is installed and works in a clean consumer project.
-3. Bundle size budgets are set with `size-limit`.
-4. The npm scope `@rumahkodingku` and the package names are verified as available.
-5. The Changesets release workflow is tested (dry run) before publishing.
+1. Package metadata is validated with `publint` and `@arethetypeswrong/cli`. — **done (Phase 09)**
+2. The published tarball is installed and works in a clean consumer project. — **done (Phase 09)**
+3. Bundle size budgets are set with `size-limit`. — **done (Phase 09)**
+4. The npm scope `@rumahkodingku` and the package names are verified as available. — **pending registry check**
+5. The Changesets release workflow is tested (dry run) before publishing. — **done (Phase 09)**
 
 ### 26.5 Open questions
 
@@ -875,3 +880,4 @@ pnpm run build
 | 1.2     | 2026-09-30 | Approved | Phase 02: documented the testing architecture as implemented (§16 tooling, coverage, type tests), added the test scripts to §19.1/§19.3, and marked the Vitest/CI gate (§26.3 #8) done |
 | 1.3     | 2026-10-01 | Approved | Phase 03: `editor-core` implements the framework-independent core API (§6.1); refreshed §3.1 current state; added the Phase 03 implementation gates to §26.3; recorded ADRs 0002–0004 |
 | 1.4     | 2026-10-04 | Approved | Phase 08: documented the bilingual (English/Indonesian) Fumadocs site and live examples (§20.1); recorded ADR 0006 |
+| 1.5     | 2026-10-06 | Approved | Phase 09: Changesets + independent versions, `size-limit` budgets, npm Trusted Publishing/provenance and the release workflow; refreshed §3.1/§19.1/§26.3/§26.4; recorded ADR 0005 |

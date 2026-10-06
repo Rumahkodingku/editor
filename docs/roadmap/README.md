@@ -17,11 +17,11 @@ Details for each phase will be saved in separate files in this folder.
 | 06    | Editor MVP                              | Done        |
 | 07    | Browser & Accessibility                 | Done        |
 | 08    | Documentation                           | Done        |
-| 09    | Release Engineering                     | ⬜          |
+| 09    | Release Engineering                     | In Progress |
 
 ## Current Phase
 
-**Phase 09 — Release Engineering (next)**
+**Phase 09 — Release Engineering (in progress)**
 
 Phases 00–08 are complete. Phase 06 delivered the React-facing Editor MVP
 (composable surfaces, the default toolbar, link/image popovers, image upload
@@ -33,8 +33,9 @@ disabled states, controlled mode, selection/focus, paste, drag/drop, IME/Unicode
 and responsive viewports. Phase 08 published the public documentation in
 `apps/fumadocs` in English and Indonesian: installation, quick start, fundamentals,
 features, guides, accessibility, API reference, live examples, SEO metadata, and
-LLM endpoints (`/llms.txt`, `/llms-full.txt`, per-page Markdown). Release
-engineering and Changesets remain deferred to Phase 09.
+LLM endpoints (`/llms.txt`, `/llms-full.txt`, per-page Markdown). Phase 09
+implements release engineering and Changesets; the readiness audit and release
+documents live in `docs/release/`.
 
 ## Phase Documents
 
@@ -47,9 +48,7 @@ engineering and Changesets remain deferred to Phase 09.
 - `phase-06-editor-mvp.md`
 - `phase-07-browser-accessibility.md`
 - `phase-08-documentation.md`
-
-Phase 09 (Release Engineering) does not have a phase document yet; it is planned
-and approved separately.
+- `phase-09-release-engineering.md`
 
 ## Rules
 

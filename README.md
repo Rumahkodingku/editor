@@ -11,7 +11,9 @@ is the first supported UI framework.
 > `editor-core` (Phase 03), the React adapter (Phase 04), the playground
 > (Phase 05), the Editor MVP (Phase 06), and the browser/accessibility suite
 > (Phase 07) are all in place, and the public documentation now lives in
-> `apps/fumadocs` in English and Indonesian. See the roadmap below.
+> `apps/fumadocs` in English and Indonesian. **Phase 09 — Release Engineering**
+> is in progress; its readiness audit and documents live in `docs/release/`.
+> See the roadmap below.
 
 ## Repository Structure
 
@@ -26,7 +28,8 @@ editor/
 │   ├── fumadocs/            # documentation app (Next.js + Fumadocs)
 │   └── playground/          # internal validation environment (Vite + React + Tailwind)
 ├── docs/
-│   ├── adr/                 # architecture decision records (ADRs 0002–0004)
+│   ├── adr/                 # architecture decision records (ADRs 0002–0004, 0005, 0006)
+│   ├── release/             # release engineering documents (Phase 09)
 │   └── roadmap/             # implementation roadmap
 ├── packages/
 │   ├── config/              # @editor/config — shared tsconfig (internal, not published)
@@ -68,8 +71,9 @@ Library, Playwright, axe-core); Phase 07 added the browser and accessibility
 suite in `tests/browser/` (Chromium/Firefox/WebKit matrix plus axe-core).
 `apps/playground` (Phase 05) is the internal validation environment and consumes
 the packages through their public exports only. Phase 08 published the
-documentation in `apps/fumadocs` (English + Indonesian). `.changeset/` is
-defined in `ARCHITECTURE.md` §3.2 and is created in a later phase.
+documentation in `apps/fumadocs` (English + Indonesian). Phase 09 introduced
+release engineering: `.changeset/` versioning is configured with independent
+package versions, and the release documents live in `docs/release/`.
 
 ## Development
 

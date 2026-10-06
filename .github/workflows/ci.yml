@@ -26,6 +26,7 @@ jobs:
       - run: pnpm run test:coverage
       - run: pnpm run build
       - run: pnpm run check:packages
+      - run: pnpm run check:size
 
       - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: pnpm run test:browser

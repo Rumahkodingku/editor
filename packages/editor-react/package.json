@@ -9,6 +9,18 @@
 		"url": "git+https://github.com/RumahKodingku/editor.git",
 		"directory": "packages/editor-react"
 	},
+	"homepage": "https://github.com/RumahKodingku/editor#readme",
+	"bugs": {
+		"url": "https://github.com/RumahKodingku/editor/issues"
+	},
+	"keywords": [
+		"tiptap",
+		"prosemirror",
+		"rich-text-editor",
+		"wysiwyg",
+		"react",
+		"editor"
+	],
 	"sideEffects": [
 		"**/*.css"
 	],
@@ -24,6 +36,10 @@
 			"import": "./dist/index.js"
 		},
 		"./styles.css": "./dist/styles.css"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
 	},
 	"scripts": {
 		"build": "tsdown",

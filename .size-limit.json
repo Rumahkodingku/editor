@@ -1,0 +1,12 @@
+[
+	{
+		"name": "@rumahkodingku/editor-core",
+		"path": "packages/editor-core/dist/index.js",
+		"limit": "7 kB"
+	},
+	{
+		"name": "@rumahkodingku/editor-react",
+		"path": "packages/editor-react/dist/index.js",
+		"limit": "10 kB"
+	}
+]
