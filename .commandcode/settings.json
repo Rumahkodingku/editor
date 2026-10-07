@@ -1,6 +1,13 @@
 {
 	"permissions": {
-		"allow": ["Shell(pnpm:*)"],
+		"allow": [
+			"Shell(pnpm:*)",
+			"Shell(curl -sSL -X POST -H Accept: application/vnd.github+json -H Authorization: token  https://api.github.com/repos/RumahKodingku/editor/actions/runs/37475487554/rerun -d {} -w \\nHTTP %{http_code}\\n 2 >& 1)",
+			"Shell(curl -sSL -H Accept: application/vnd.github+json https://api.github.com/repos/RumahKodingku/editor/actions/runs?branch=main&per_page=5)",
+			"Shell(python3 -c import sys,json;runs=json.load(sys.stdin)['workflow_runs'];[print(r['name'],r['status'],r['conclusion'],r['head_sha'][:7],r['run_number']) for r in runs])",
+			"Shell(gh:*)",
+			"Shell(gh pr list --repo RumahKodingku/editor --state open 2>&1; echo \"---\"; gh run list --repo RumahKodingku/editor --branch main --limit 3 2>&1)"
+		],
 		"deny": [],
 		"defaultMode": "default"
 	}

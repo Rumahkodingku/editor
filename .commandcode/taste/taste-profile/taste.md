@@ -24,4 +24,14 @@
 - Requires browser-level verification, not just automated unit/build checks: run the repo's real lint/typecheck/build/test commands, then Playwright regression tests, then exploratory visual/interactive validation (e.g. agent-browser) for hierarchy, spacing, typography, color, responsiveness, and visual regressions. Confidence: 0.85
 - Does not accept "it builds" as done: issues found during testing must be diagnosed, fixed, and the affected tests re-run before the task is declared complete. Confidence: 0.8
 - Wants explanations and questions written in clear, easily understood Bahasa Indonesia, without overusing unexplained technical jargon. Confidence: 0.8
+- Prefers to personally handle OTP/2FA-gated operations (e.g., `npm publish`) rather than delegating; agent provides guidance and orchestration, user inputs credentials/OTP. Confidence: 0.9
 - Wants a structured final report in Bahasa Indonesia with fixed sections: summary, main changes, files changed, testing results, findings and fixes, and remaining notes. Confidence: 0.7
+- Requires an explicit human gate before any irreversible release action: the agent must never run the final npm publish, create the GitHub Release, or merge the Release PR autonomously — even after all automated gates pass. Confidence: 0.9
+- Security policy: no npm credentials, secrets, or tokens committed to the repository; long-lived `NPM_TOKEN` is rejected by default in favor of npm Trusted Publishing (OIDC) with provenance; a one-time token is only a documented fallback that needs explicit human approval. Confidence: 0.9
+- When the recommended/published mechanism fails, expects the agent to STOP and explain the blocker first — never to silently create a token or invent a workaround on its own initiative. Confidence: 0.85
+- Never disable 2FA as a workaround for publish/OTP failures; the account's 2FA stays intact. Confidence: 0.8
+- When the agent is blocked on a credential/OTP/web-console step (npm login, Trusted Publisher setup, GitHub org settings), the user prefers to run that step personally — the agent should hand off the exact commands and stop. Confidence: 0.8
+- Before (re)publishing a package, check the registry state first (e.g. `npm view <pkg> version`) to avoid duplicate publishes. Confidence: 0.7
+- After pushing, expects the agent to monitor the CI/release workflow runs to completion and report failures with their root cause; a green local run is not sufficient. Confidence: 0.7
+- Documentation must be updated in the same change when repo state changes — no stale references (e.g. "does not exist yet", old phase status) left behind. Confidence: 0.7
+- Wants the todo checklist actively maintained: items should be checked off as they are completed (user explicitly asked "Todos nya diceklist jika sudah selesai semua"), so the list reflects real progress rather than staying stale. Confidence: 0.7
